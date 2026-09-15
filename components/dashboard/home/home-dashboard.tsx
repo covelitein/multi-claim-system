@@ -1,76 +1,62 @@
 "use client";
 
-import { HomeCalendar } from "@/components/dashboard/home/home-calendar";
+import { ClaimsOverview } from "@/components/dashboard/home/claims-overview";
+import { FacilityPlanCard } from "@/components/dashboard/home/facility-plan-card";
 import { HomeSkeleton } from "@/components/dashboard/home/home-skeleton";
-import { MySchedule } from "@/components/dashboard/home/my-schedule";
-import { StatCards } from "@/components/dashboard/home/stat-cards";
-import { UpcomingAppointments } from "@/components/dashboard/home/upcoming-appointments";
-import { VisitStats } from "@/components/dashboard/home/visit-stats";
-import { VisitsChart } from "@/components/dashboard/home/visits-chart";
+import { ImportantReminders } from "@/components/dashboard/home/important-reminders";
+import { KpiStatCards } from "@/components/dashboard/home/kpi-stat-cards";
+import { QuickActions } from "@/components/dashboard/home/quick-actions";
+import { RecentSubmissions } from "@/components/dashboard/home/recent-submissions";
+import { SubmissionHistory } from "@/components/dashboard/home/submission-history";
 import { useDashboardHome } from "@/lib/dashboard/use-dashboard-home";
-import { useMemo, useState } from "react";
+import { Calendar } from "@gravity-ui/icons";
+import Link from "next/link";
 
 export function HomeDashboard() {
   const { data, loading } = useDashboardHome();
-  const [visitYear, setVisitYear] = useState<string>();
-  const [month, setMonth] = useState<number>();
-  const [selectedDate, setSelectedDate] = useState<string>();
-  const [scheduleRange, setScheduleRange] = useState("day");
-
-  const resolvedYear = visitYear ?? data?.defaultYear ?? "2023";
-  const resolvedDate = selectedDate ?? data?.defaultDate ?? "2023-08-09";
-  const resolvedMonth = month ?? Number(resolvedDate.slice(5, 7)) - 1;
-  const calendarYear = Number(resolvedDate.slice(0, 4));
-
-  const appointments = useMemo(
-    () => data?.appointments.filter((item) => item.date === resolvedDate) ?? [],
-    [data, resolvedDate],
-  );
 
   if (loading || !data) {
     return <HomeSkeleton />;
   }
 
   return (
-    <div className="flex min-w-0 flex-col gap-4 overflow-x-hidden pb-4 sm:gap-6">
-      <StatCards
-        internExtra={data.internExtra}
-        interns={data.interns}
-        stats={data.stats}
-      />
-
-      <div className="grid min-w-0 gap-4 sm:gap-6 xl:grid-cols-3">
-        <div className="min-w-0 xl:col-span-2">
-          <VisitsChart
-            months={data.months}
-            selectedYear={resolvedYear}
-            years={data.visits}
-            onYearChange={setVisitYear}
-          />
+    <div className="flex min-w-0 flex-col gap-6 overflow-x-hidden pb-4 sm:gap-8">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+            Welcome back, Billing Manager
+          </h1>
+          <p className="mt-1 text-sm text-muted">{data.greetingSubtitle}</p>
         </div>
-        <HomeCalendar
-          events={data.calendarEvents}
-          month={resolvedMonth}
-          selectedDate={resolvedDate}
-          year={calendarYear}
-          onMonthChange={setMonth}
-          onSelectDate={(date) => {
-            setSelectedDate(date);
-            setMonth(Number(date.slice(5, 7)) - 1);
-          }}
-        />
+        <Link
+          className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-2 text-sm text-muted transition-colors hover:border-accent/40 hover:text-foreground"
+          href="/billing"
+        >
+          <Calendar className="size-4 text-accent" />
+          <span>
+            Last submission{" "}
+            <span className="font-medium text-foreground">
+              {data.lastSubmissionDate}
+            </span>
+          </span>
+        </Link>
       </div>
 
-      <div className="grid min-w-0 gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-3">
-        <MySchedule
-          days={data.schedule}
-          range={scheduleRange}
-          selectedDate={resolvedDate}
-          onRangeChange={setScheduleRange}
-          onSelectDate={setSelectedDate}
+      <KpiStatCards kpis={data.kpis} />
+
+      <div className="grid min-w-0 gap-5 xl:grid-cols-3 xl:gap-6">
+        <ClaimsOverview
+          rangeLabel={data.overviewRangeLabel}
+          slices={data.overview}
         />
-        <UpcomingAppointments appointments={appointments} />
-        <VisitStats range={data.visitStatsRange} stats={data.visitStats} />
+        <RecentSubmissions items={data.recentSubmissions} />
+        <QuickActions actions={data.quickActions} />
+      </div>
+
+      <div className="grid min-w-0 gap-5 xl:grid-cols-3 xl:gap-6">
+        <ImportantReminders reminders={data.reminders} />
+        <SubmissionHistory days={data.submissionHistory} />
+        <FacilityPlanCard plan={data.facilityPlan} />
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ type AuthTextFieldProps = {
   autoFocus?: boolean;
   autoComplete?: string;
   value?: string;
+  defaultValue?: string;
   onChange?: (value: string) => void;
   error?: string;
 };
@@ -22,12 +23,14 @@ export function AuthTextField({
   autoFocus,
   autoComplete,
   value,
+  defaultValue,
   onChange,
   error,
 }: AuthTextFieldProps) {
   return (
     <TextField
       autoFocus={autoFocus}
+      defaultValue={defaultValue}
       fullWidth
       isInvalid={Boolean(error)}
       name={name}

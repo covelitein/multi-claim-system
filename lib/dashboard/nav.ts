@@ -7,6 +7,7 @@ import {
   Gear,
   MapPin,
   Persons,
+  Receipt,
   SquareChartColumn,
 } from "@gravity-ui/icons";
 import type { ComponentType, SVGProps } from "react";
@@ -23,6 +24,7 @@ export const HOSPITAL_DASHBOARD_NAV: DashboardNavItem[] = [
   { href: "/patients", label: "Residents", icon: FileText },
   { href: "/appointments", label: "Deadlines", icon: Clock },
   { href: "/billing", label: "Claims", icon: Briefcase },
+  { href: "/invoices", label: "Invoices", icon: Receipt },
   { href: "/locations", label: "Facilities", icon: MapPin },
   { href: "/staff", label: "Team", icon: Persons },
   { href: "/settings", label: "Settings", icon: Gear },
