@@ -108,16 +108,16 @@ export function InvoicesTable({ invoices }: { invoices: Invoice[] }) {
 
   return (
     <Card className={dashboardCardClass}>
-      <Card.Header className="flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <Card.Header className="flex-col items-stretch gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <Card.Title className="text-base font-semibold">All invoices</Card.Title>
-          <p className="mt-0.5 text-sm text-muted">
+          <p className="mt-0.5 text-xs text-muted">
             {filtered.length} of {invoices.length} shown
           </p>
         </div>
         <div className="flex w-full flex-col gap-2 sm:max-w-md sm:flex-row sm:items-center">
-          <div className="flex w-full items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20">
-            <Magnifier className="size-4 shrink-0 text-muted" />
+          <div className="flex w-full items-center gap-2 rounded-lg border border-border bg-surface px-2.5 py-1.5 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20">
+            <Magnifier className="size-3.5 shrink-0 text-muted" />
             <input
               className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
               placeholder="Search invoices..."
@@ -126,7 +126,7 @@ export function InvoicesTable({ invoices }: { invoices: Invoice[] }) {
             />
           </div>
           <button
-            className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-border px-3 text-sm font-medium text-muted transition-colors hover:bg-surface-secondary hover:text-foreground"
+            className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-border px-3 text-sm font-medium text-muted transition-colors hover:bg-surface-secondary hover:text-foreground"
             type="button"
           >
             Filters

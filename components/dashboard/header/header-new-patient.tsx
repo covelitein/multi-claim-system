@@ -3,5 +3,5 @@
 import { NewClaimDrawer } from "@/components/dashboard/drawers/new-claim-drawer";
 
 export function HeaderNewPatient() {
-  return <NewClaimDrawer />;
+  return <NewClaimDrawer mode="new-resident" />;
 }

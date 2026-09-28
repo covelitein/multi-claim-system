@@ -10,21 +10,31 @@ import {
   DocumentUploadZone,
   type UploadedDocument,
 } from "@/components/dashboard/drawers/document-upload-zone";
+import { LTC_INSURERS } from "@/lib/dashboard/claims-data";
 import { Plus } from "@gravity-ui/icons";
-import { Button } from "@heroui/react";
+import { Button, Label } from "@heroui/react";
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
 
+type NewClaimDrawerProps = {
+  trigger?: ReactNode;
+  mode?: "new-resident" | "existing";
+};
+
 export function NewClaimDrawer({
   trigger,
-}: {
-  trigger?: ReactNode;
-}) {
+  mode = "existing",
+}: NewClaimDrawerProps) {
   const [files, setFiles] = useState<UploadedDocument[]>([]);
+  const isNewResident = mode === "new-resident";
 
   return (
     <DashboardDrawer
-      description="Upload the claim packet. Helix fills and reviews forms — you only provide documents."
+      description={
+        isNewResident
+          ? "Add a new resident and upload their first LTC claim packet for Helix review."
+          : "Upload a claim packet for an existing resident. Helix completes CMR forms during review."
+      }
       footer={
         <>
           <DrawerCancelButton />
@@ -32,7 +42,9 @@ export function NewClaimDrawer({
         </>
       }
       sizeClassName="sm:max-w-lg"
-      title="New claim"
+      title={
+        isNewResident ? "Claim: New Resident" : "Claim for Existing Resident"
+      }
       trigger={
         trigger ?? (
           <Button
@@ -40,44 +52,80 @@ export function NewClaimDrawer({
             variant="primary"
           >
             <Plus className="size-4" />
-            <span className="hidden sm:inline">New claim</span>
+            <span className="hidden sm:inline">Claim: New Resident</span>
           </Button>
         )
       }
     >
-      <AuthTextField
-        label="Resident"
-        name="claimResident"
-        placeholder="Ada Okoye"
-      />
-      <AuthTextField
-        label="Payer"
-        name="claimPayer"
-        placeholder="Medicare"
-      />
+      {isNewResident ? (
+        <>
+          <AuthTextField
+            label="Resident first name"
+            name="firstName"
+            placeholder="Ada"
+          />
+          <AuthTextField
+            label="Resident last name"
+            name="lastName"
+            placeholder="Okoye"
+          />
+          <AuthTextField
+            label="Policy ID"
+            name="policyId"
+            placeholder="POL-GNW-0001"
+          />
+        </>
+      ) : (
+        <AuthTextField
+          label="Resident"
+          name="claimResident"
+          placeholder="Ada Okoye"
+        />
+      )}
+
+      <div className="flex flex-col gap-1.5">
+        <Label className="text-sm font-semibold">Client / Insurer</Label>
+        <select
+          className="h-12 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+          defaultValue=""
+          name="insurer"
+        >
+          <option disabled value="">
+            Select insurer / claims processor…
+          </option>
+          {LTC_INSURERS.map((insurer) => (
+            <option key={insurer} value={insurer}>
+              {insurer}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <AuthTextField
         label="Claim period"
         name="claimPeriod"
-        placeholder="August 2026"
+        placeholder="September 2026"
       />
-      <AuthTextField
-        label="Claim type"
-        name="claimType"
-        placeholder="CMR / Monthly residence"
-      />
+
       <DocumentUploadZone
         files={files}
-        hint="Upload invoices, 485s, and supporting docs. Do not fill claim forms in-app."
+        hint="Upload invoices and supporting docs. CMR walkthrough forms will arrive once templates are loaded — for now, upload only."
         title="Upload claim documents"
         onAdd={(next) => setFiles((prev) => [...prev, ...next])}
         onRemove={(id) => setFiles((prev) => prev.filter((f) => f.id !== id))}
       />
-      <p className="text-xs text-muted">
-        Need more room?{" "}
-        <Link className="font-medium text-accent hover:underline" href="/billing/new">
-          Open full upload flow
-        </Link>
-      </p>
+
+      {!isNewResident ? (
+        <p className="text-xs font-medium text-muted">
+          Need more room?{" "}
+          <Link
+            className="font-bold text-accent hover:underline"
+            href="/billing/new"
+          >
+            Open full upload flow
+          </Link>
+        </p>
+      ) : null}
     </DashboardDrawer>
   );
 }

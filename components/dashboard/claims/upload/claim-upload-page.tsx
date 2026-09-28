@@ -45,29 +45,28 @@ export function ClaimUploadPage() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
               {data.title}
             </h1>
             <Chip color="accent" size="sm" variant="soft">
-              <Chip.Label>{data.modeLabel}</Chip.Label>
+              <Chip.Label className="font-bold">{data.modeLabel}</Chip.Label>
             </Chip>
           </div>
-          <p className="mt-1 max-w-2xl text-sm text-muted">{data.subtitle}</p>
+          <p className="mt-1 max-w-2xl text-base font-medium text-muted">
+            {data.subtitle}
+          </p>
         </div>
         <Link
-          className="inline-flex h-9 items-center rounded-xl border border-border px-3 text-sm font-medium hover:bg-surface-secondary"
+          className="inline-flex h-11 items-center rounded-xl border-2 border-border px-4 text-sm font-bold hover:bg-surface-secondary"
           href="/billing"
         >
           Back to claims
         </Link>
       </div>
 
-      <Card className={dashboardCardClass}>
+      <Card className={`${dashboardCardClass} border-2 border-accent/20`}>
         <Card.Content>
-          <UploadPhaseStepper
-            activeIndex={phaseIndex}
-            phases={data.phases}
-          />
+          <UploadPhaseStepper activeIndex={phaseIndex} phases={data.phases} />
         </Card.Content>
       </Card>
 
@@ -76,63 +75,48 @@ export function ClaimUploadPage() {
           <UploadPhaseCard>
             <div className="flex flex-col gap-4">
               <div>
-                <h2 className="text-base font-semibold">Claim basics</h2>
-                <p className="mt-1 text-sm text-muted">
-                  Enough context for reviewers to open the packet — not a full claim form.
+                <h2 className="text-lg font-bold">Claim basics</h2>
+                <p className="mt-1 text-sm font-medium text-muted">
+                  Long-term care context for reviewers — not a Medicare/Medicaid
+                  medical claim form.
                 </p>
               </div>
 
-              <label className="flex flex-col gap-1.5 text-sm">
-                <span className="font-medium">Resident</span>
+              <label className="flex flex-col gap-1.5 text-sm font-bold">
+                Resident
                 <select
-                  className="h-11 rounded-xl border border-border bg-surface px-3 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+                  className="h-12 rounded-xl border-2 border-border bg-surface px-3 font-semibold outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
                   value={basics.residentId}
                   onChange={(e) => updateBasics({ residentId: e.target.value })}
                 >
                   {data.residents.map((resident) => (
                     <option key={resident.id} value={resident.id}>
-                      {resident.name} — {resident.facility}
+                      {resident.name} — {resident.policyId} — {resident.facility}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="flex flex-col gap-1.5 text-sm font-bold">
+                Client / Insurer
+                <select
+                  className="h-12 rounded-xl border-2 border-border bg-surface px-3 font-semibold outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+                  value={basics.insurer}
+                  onChange={(e) => updateBasics({ insurer: e.target.value })}
+                >
+                  {data.insurers.map((insurer) => (
+                    <option key={insurer} value={insurer}>
+                      {insurer}
                     </option>
                   ))}
                 </select>
               </label>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium">Payer</span>
-                  <select
-                    className="h-11 rounded-xl border border-border bg-surface px-3 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-                    value={basics.payer}
-                    onChange={(e) => updateBasics({ payer: e.target.value })}
-                  >
-                    {data.payers.map((payer) => (
-                      <option key={payer} value={payer}>
-                        {payer}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium">Claim type</span>
-                  <select
-                    className="h-11 rounded-xl border border-border bg-surface px-3 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-                    value={basics.claimType}
-                    onChange={(e) => updateBasics({ claimType: e.target.value })}
-                  >
-                    {data.claimTypes.map((type) => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium">Period from</span>
+                <label className="flex flex-col gap-1.5 text-sm font-bold">
+                  Period from
                   <input
-                    className="h-11 rounded-xl border border-border bg-surface px-3 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+                    className="h-12 rounded-xl border-2 border-border bg-surface px-3 font-semibold outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
                     type="date"
                     value={basics.periodFrom}
                     onChange={(e) =>
@@ -140,10 +124,10 @@ export function ClaimUploadPage() {
                     }
                   />
                 </label>
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium">Period to</span>
+                <label className="flex flex-col gap-1.5 text-sm font-bold">
+                  Period to
                   <input
-                    className="h-11 rounded-xl border border-border bg-surface px-3 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+                    className="h-12 rounded-xl border-2 border-border bg-surface px-3 font-semibold outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
                     type="date"
                     value={basics.periodTo}
                     onChange={(e) => updateBasics({ periodTo: e.target.value })}
@@ -151,10 +135,10 @@ export function ClaimUploadPage() {
                 </label>
               </div>
 
-              <label className="flex flex-col gap-1.5 text-sm">
-                <span className="font-medium">Notes for reviewer (optional)</span>
+              <label className="flex flex-col gap-1.5 text-sm font-bold">
+                Notes for reviewer (optional)
                 <textarea
-                  className="min-h-24 rounded-xl border border-border bg-surface px-3 py-2 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+                  className="min-h-24 rounded-xl border-2 border-border bg-surface px-3 py-2 font-medium outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
                   placeholder="Anything Helix should know before reviewing the packet…"
                   value={basics.notes}
                   onChange={(e) => updateBasics({ notes: e.target.value })}
@@ -163,15 +147,16 @@ export function ClaimUploadPage() {
             </div>
           </UploadPhaseCard>
 
-          <Card className={`${dashboardCardClass} h-fit`}>
+          <Card className={`${dashboardCardClass} h-fit border-2 border-accent/30 bg-accent-soft/40`}>
             <Card.Content className="gap-3">
               <div className="flex items-start gap-2">
-                <CircleInfo className="mt-0.5 size-4 shrink-0 text-accent" />
+                <CircleInfo className="mt-0.5 size-5 shrink-0 text-accent" />
                 <div>
-                  <p className="text-sm font-semibold">Upload model</p>
-                  <p className="mt-1 text-sm text-muted">
-                    Facilities upload documents. Helix reviews and completes claim
-                    paperwork — you are not filling CMR Q&amp;A forms in this app.
+                  <p className="text-sm font-bold">Upload model (Gen 1)</p>
+                  <p className="mt-1 text-sm font-medium text-muted">
+                    Facilities upload documents. Helix reviews and completes LTC
+                    claim paperwork. In-app CMR walkthrough arrives after CMR
+                    templates are loaded.
                   </p>
                 </div>
               </div>
@@ -185,15 +170,15 @@ export function ClaimUploadPage() {
           <UploadPhaseCard>
             <div className="flex flex-col gap-4">
               <div>
-                <h2 className="text-base font-semibold">Upload claim documents</h2>
-                <p className="mt-1 text-sm text-muted">
-                  Attach the packet for this period. Missing pieces can be requested
-                  during review.
+                <h2 className="text-lg font-bold">Upload claim documents</h2>
+                <p className="mt-1 text-sm font-medium text-muted">
+                  Attach the packet for this period. Missing pieces can be
+                  requested during review.
                 </p>
               </div>
               <DocumentUploadZone
                 files={files}
-                hint="PDF, images, or Word. Drop the full packet — invoices, census, 485, etc."
+                hint="PDF, images, or Word. Drop the full LTC packet — invoices, CMR, census, etc."
                 title="Choose files to upload"
                 onAdd={addFiles}
                 onRemove={removeFile}
@@ -201,16 +186,16 @@ export function ClaimUploadPage() {
             </div>
           </UploadPhaseCard>
 
-          <Card className={`${dashboardCardClass} h-fit`}>
+          <Card className={`${dashboardCardClass} h-fit border-2 border-success/30 bg-success-soft/30`}>
             <Card.Header>
-              <Card.Title className="text-sm font-semibold">
+              <Card.Title className="text-sm font-bold">
                 Suggested packet
               </Card.Title>
             </Card.Header>
             <Card.Content className="gap-3">
               {data.suggestedDocuments.map((doc) => (
                 <div key={doc.id} className="text-sm">
-                  <p className="font-medium">
+                  <p className="font-bold">
                     {doc.label}
                     {doc.required ? (
                       <span className="ms-1 text-xs text-danger">Required</span>
@@ -218,7 +203,9 @@ export function ClaimUploadPage() {
                       <span className="ms-1 text-xs text-muted">Optional</span>
                     )}
                   </p>
-                  <p className="mt-0.5 text-xs text-muted">{doc.description}</p>
+                  <p className="mt-0.5 text-xs font-medium text-muted">
+                    {doc.description}
+                  </p>
                 </div>
               ))}
             </Card.Content>
@@ -230,45 +217,47 @@ export function ClaimUploadPage() {
         <UploadPhaseCard>
           <div className="flex flex-col gap-5">
             <div>
-              <h2 className="text-base font-semibold">Review & submit</h2>
-              <p className="mt-1 text-sm text-muted">
-                Confirm the packet, then submit for Helix review. Forms are completed
-                by staff after upload.
+              <h2 className="text-lg font-bold">Review & submit</h2>
+              <p className="mt-1 text-sm font-medium text-muted">
+                Confirm the packet, then submit for Helix review.
               </p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-xl border border-border px-4 py-3">
-                <p className="text-xs font-medium text-muted">Resident</p>
-                <p className="mt-1 text-sm font-medium">
+              <div className="rounded-xl border-2 border-accent/30 bg-accent-soft/30 px-4 py-3">
+                <p className="text-xs font-bold uppercase text-muted">Resident</p>
+                <p className="mt-1 text-sm font-bold">
                   {selectedResident?.name ?? "—"}
                 </p>
-                <p className="text-xs text-muted">
-                  {selectedResident?.facility}
+                <p className="text-xs font-medium text-muted">
+                  Policy {selectedResident?.policyId} · {selectedResident?.facility}
                 </p>
               </div>
-              <div className="rounded-xl border border-border px-4 py-3">
-                <p className="text-xs font-medium text-muted">Payer / type</p>
-                <p className="mt-1 text-sm font-medium">{basics.payer}</p>
-                <p className="text-xs text-muted">{basics.claimType}</p>
+              <div className="rounded-xl border-2 border-success/30 bg-success-soft/30 px-4 py-3">
+                <p className="text-xs font-bold uppercase text-muted">
+                  Client / Insurer
+                </p>
+                <p className="mt-1 text-sm font-bold">{basics.insurer}</p>
               </div>
-              <div className="rounded-xl border border-border px-4 py-3">
-                <p className="text-xs font-medium text-muted">Claim period</p>
-                <p className="mt-1 text-sm font-medium">
+              <div className="rounded-xl border-2 border-warning/30 bg-warning-soft/30 px-4 py-3">
+                <p className="text-xs font-bold uppercase text-muted">
+                  Claim period
+                </p>
+                <p className="mt-1 text-sm font-bold">
                   {basics.periodFrom || "—"} → {basics.periodTo || "—"}
                 </p>
               </div>
-              <div className="rounded-xl border border-border px-4 py-3">
-                <p className="text-xs font-medium text-muted">Documents</p>
-                <p className="mt-1 text-sm font-medium">
+              <div className="rounded-xl border-2 border-border px-4 py-3">
+                <p className="text-xs font-bold uppercase text-muted">Documents</p>
+                <p className="mt-1 text-sm font-bold">
                   {files.length} file{files.length === 1 ? "" : "s"} attached
                 </p>
               </div>
             </div>
 
             {basics.notes ? (
-              <div className="rounded-xl bg-surface-secondary px-4 py-3 text-sm">
-                <p className="text-xs font-medium text-muted">Notes</p>
+              <div className="rounded-xl bg-surface-secondary px-4 py-3 text-sm font-medium">
+                <p className="text-xs font-bold text-muted">Notes</p>
                 <p className="mt-1">{basics.notes}</p>
               </div>
             ) : null}
@@ -278,7 +267,7 @@ export function ClaimUploadPage() {
                 {files.map((file) => (
                   <li
                     key={file.id}
-                    className="flex items-center gap-2 text-sm text-muted"
+                    className="flex items-center gap-2 text-sm font-medium text-muted"
                   >
                     <CircleCheck className="size-4 shrink-0 text-success" />
                     <span className="truncate">{file.name}</span>
@@ -287,7 +276,7 @@ export function ClaimUploadPage() {
                 ))}
               </ul>
             ) : (
-              <p className="rounded-xl border border-warning/30 bg-warning-soft/40 px-4 py-3 text-sm text-warning">
+              <p className="rounded-xl border-2 border-warning/40 bg-warning-soft/50 px-4 py-3 text-sm font-bold text-warning">
                 No documents attached yet. Go back to upload a packet before
                 submitting.
               </p>
@@ -297,10 +286,16 @@ export function ClaimUploadPage() {
       ) : null}
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button isDisabled={!canGoBack} variant="outline" onPress={goBack}>
+        <Button
+          className="h-11 font-bold"
+          isDisabled={!canGoBack}
+          variant="outline"
+          onPress={goBack}
+        >
           Back
         </Button>
         <Button
+          className="h-11 font-bold"
           isDisabled={phase === "review" && files.length === 0}
           variant="primary"
           onPress={() => {

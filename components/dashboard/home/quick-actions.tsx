@@ -20,42 +20,56 @@ const ACTION_ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   reports: ChartColumn,
 };
 
-const TONE_SOFT: Record<QuickAction["tone"], string> = {
-  accent: "bg-accent-soft text-accent",
-  success: "bg-success-soft text-success",
-  warning: "bg-warning-soft text-warning",
-  danger: "bg-danger-soft text-danger",
+const TONE_CARD: Record<QuickAction["tone"], string> = {
+  accent:
+    "border-accent/40 bg-accent-soft text-accent hover:border-accent hover:bg-accent hover:text-accent-foreground",
+  success:
+    "border-success/40 bg-success-soft text-success hover:border-success hover:bg-success hover:text-success-foreground",
+  warning:
+    "border-warning/40 bg-warning-soft text-warning hover:border-warning hover:bg-warning hover:text-warning-foreground",
+  danger:
+    "border-danger/40 bg-danger-soft text-danger hover:border-danger hover:bg-danger hover:text-danger-foreground",
+};
+
+const TONE_ICON: Record<QuickAction["tone"], string> = {
+  accent: "bg-accent text-accent-foreground",
+  success: "bg-success text-success-foreground",
+  warning: "bg-warning text-warning-foreground",
+  danger: "bg-danger text-danger-foreground",
 };
 
 export function QuickActions({ actions }: { actions: QuickAction[] }) {
   return (
-    <Card className={`${dashboardCardClass} flex h-full flex-col`}>
-      <Card.Header className="shrink-0">
-        <Card.Title className="text-base font-semibold">Quick Actions</Card.Title>
+    <Card
+      className={`${dashboardCardClass} flex h-full flex-col border border-warning/25 bg-gradient-to-b from-warning-soft/30 to-surface`}
+    >
+      <Card.Header className="py-3">
+        <Card.Title className="text-base font-bold">Quick Actions</Card.Title>
+        <p className="mt-0.5 text-xs text-muted">Color-coded shortcuts</p>
       </Card.Header>
-      <Card.Content className="mt-auto flex flex-1 flex-col justify-end gap-3 pt-4">
+      <Card.Content className="flex flex-col gap-2 pt-1 pb-3">
         {actions.map((action) => {
           const Icon = ACTION_ICONS[action.id] ?? FileText;
           return (
             <Link
               key={action.id}
-              className="group flex items-center gap-3 rounded-2xl border border-border bg-surface px-3.5 py-3.5 transition-colors hover:border-accent/30 hover:bg-surface-secondary"
+              className={`group flex items-center gap-2.5 rounded-xl border px-3 py-2.5 transition-colors ${TONE_CARD[action.tone]}`}
               href={action.href}
             >
               <span
-                className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${TONE_SOFT[action.tone]}`}
+                className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${TONE_ICON[action.tone]}`}
               >
-                <Icon className="size-5" />
+                <Icon className="size-4" />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-sm font-semibold text-foreground">
+                <span className="block truncate text-sm font-semibold leading-snug">
                   {action.label}
                 </span>
-                <span className="mt-0.5 block text-xs text-muted">
+                <span className="mt-0.5 block truncate text-xs opacity-80">
                   {action.description}
                 </span>
               </span>
-              <ArrowRight className="size-4 shrink-0 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-accent" />
+              <ArrowRight className="size-4 shrink-0 opacity-70 transition-transform group-hover:translate-x-0.5" />
             </Link>
           );
         })}

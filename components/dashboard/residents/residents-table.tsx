@@ -1,10 +1,11 @@
 "use client";
 
 import { EditResidentDrawer } from "@/components/dashboard/drawers/add-resident-drawer";
+import { ViewResidentDrawer } from "@/components/dashboard/residents/view-resident-drawer";
 import { DataTable } from "@/components/ui/data-table";
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
 import type { Resident, ResidentStatus } from "@/lib/dashboard/residents-data";
-import { Eye, Funnel, Magnifier } from "@gravity-ui/icons";
+import { Funnel, Magnifier } from "@gravity-ui/icons";
 import { Avatar, Card, Chip } from "@heroui/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
@@ -120,13 +121,7 @@ export function ResidentsTable({ residents }: { residents: Resident[] }) {
         header: "",
         cell: ({ row }) => (
           <div className="flex items-center justify-end gap-1">
-            <button
-              aria-label="View resident"
-              className="rounded-lg p-2 text-muted transition-colors hover:bg-surface-secondary hover:text-foreground"
-              type="button"
-            >
-              <Eye className="size-4" />
-            </button>
+            <ViewResidentDrawer resident={row.original} />
             <EditResidentDrawer resident={row.original} />
           </div>
         ),

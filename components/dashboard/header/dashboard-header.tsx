@@ -19,7 +19,7 @@ export function DashboardHeader() {
     <HeaderAnchorProvider value={headerRef}>
       <header
         ref={headerRef}
-        className="flex items-center gap-2 px-5 pt-5 pb-3 sm:gap-3 lg:px-8"
+        className="flex items-center gap-2 px-5 pt-3 pb-2 sm:gap-3 lg:px-8"
       >
         <IconButton className="md:hidden" label="Open navigation" onPress={openMobile}>
           <Bars className="size-5" />

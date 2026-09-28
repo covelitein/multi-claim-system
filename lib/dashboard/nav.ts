@@ -2,11 +2,10 @@ import {
   ArrowRightFromSquare,
   Briefcase,
   Circles4Square,
-  Clock,
   FileText,
   Gear,
-  MapPin,
   Persons,
+  Handset,
   Receipt,
   SquareChartColumn,
 } from "@gravity-ui/icons";
@@ -18,14 +17,14 @@ export type DashboardNavItem = {
   icon: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
+/** Billing Manager Gen-1 nav — Deadlines and Facilities deferred / admin-only. */
 export const HOSPITAL_DASHBOARD_NAV: DashboardNavItem[] = [
   { href: "/home", label: "Dashboard", icon: Circles4Square },
   { href: "/analytics", label: "Analytics", icon: SquareChartColumn },
   { href: "/patients", label: "Residents", icon: FileText },
-  { href: "/appointments", label: "Deadlines", icon: Clock },
   { href: "/billing", label: "Claims", icon: Briefcase },
   { href: "/invoices", label: "Invoices", icon: Receipt },
-  { href: "/locations", label: "Facilities", icon: MapPin },
+  { href: "/locations", label: "Contacts", icon: Handset },
   { href: "/staff", label: "Team", icon: Persons },
   { href: "/settings", label: "Settings", icon: Gear },
 ];

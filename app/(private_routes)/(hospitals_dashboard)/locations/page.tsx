@@ -1,5 +1,5 @@
-import { FacilitiesPage } from "@/components/dashboard/facilities/facilities-page";
+import { ContactsPage } from "@/components/dashboard/contacts/contacts-page";
 
 export default function LocationsPage() {
-  return <FacilitiesPage />;
+  return <ContactsPage />;
 }

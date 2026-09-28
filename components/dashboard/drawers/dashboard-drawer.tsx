@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Drawer } from "@heroui/react";
+import { Button, Drawer, cn } from "@heroui/react";
 import type { ReactNode } from "react";
 
 type DashboardDrawerProps = {
@@ -9,6 +9,7 @@ type DashboardDrawerProps = {
   description?: string;
   children: ReactNode;
   footer?: ReactNode;
+  /** Applied to the drawer panel (Dialog), not the full-screen content wrapper. */
   sizeClassName?: string;
 };
 
@@ -24,8 +25,8 @@ export function DashboardDrawer({
     <Drawer>
       {trigger}
       <Drawer.Backdrop>
-        <Drawer.Content className={sizeClassName} placement="right">
-          <Drawer.Dialog>
+        <Drawer.Content placement="right">
+          <Drawer.Dialog className={cn("w-full max-w-[85vw]", sizeClassName)}>
             <Drawer.Header>
               <div className="min-w-0 pe-8">
                 <Drawer.Heading>{title}</Drawer.Heading>

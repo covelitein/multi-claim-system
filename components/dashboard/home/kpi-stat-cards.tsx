@@ -24,43 +24,56 @@ const ICON_MAP: Record<
 
 const TONE_STYLES: Record<
   HomeKpiCard["tone"],
-  { icon: string; value: string }
+  { card: string; icon: string; value: string }
 > = {
-  accent: { icon: "bg-accent-soft text-accent", value: "text-foreground" },
-  success: { icon: "bg-success-soft text-success", value: "text-foreground" },
-  warning: { icon: "bg-warning-soft text-warning", value: "text-foreground" },
-  danger: { icon: "bg-danger-soft text-danger", value: "text-foreground" },
+  accent: {
+    card: "border-accent/35 bg-accent-soft/50",
+    icon: "bg-accent text-accent-foreground",
+    value: "text-accent",
+  },
+  success: {
+    card: "border-success/35 bg-success-soft/50",
+    icon: "bg-success text-success-foreground",
+    value: "text-success",
+  },
+  warning: {
+    card: "border-warning/35 bg-warning-soft/50",
+    icon: "bg-warning text-warning-foreground",
+    value: "text-warning",
+  },
+  danger: {
+    card: "border-danger/35 bg-danger-soft/50",
+    icon: "bg-danger text-danger-foreground",
+    value: "text-danger",
+  },
 };
 
 export function KpiStatCards({ kpis }: { kpis: HomeKpiCard[] }) {
   return (
-    <div className="grid min-w-0 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid min-w-0 gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {kpis.map((kpi) => {
         const Icon = ICON_MAP[kpi.icon];
         const tone = TONE_STYLES[kpi.tone];
 
         const body = (
           <Card
-            className={`${dashboardCardClass} h-full transition-shadow hover:shadow-md`}
+            className={`${dashboardCardClass} h-full border transition-shadow hover:shadow-sm ${tone.card}`}
           >
-            <Card.Content className="flex items-start justify-between gap-4">
+            <Card.Content className="flex flex-row items-center justify-between gap-3 py-3">
               <div className="min-w-0">
-                <p className="text-sm font-medium text-muted">{kpi.label}</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+                  {kpi.label}
+                </p>
                 <p
-                  className={`mt-2 text-3xl font-semibold tracking-tight ${tone.value}`}
+                  className={`mt-1 text-2xl font-bold tracking-tight ${tone.value}`}
                 >
                   {kpi.value}
                 </p>
-                {kpi.href ? (
-                  <span className="mt-3 inline-block text-xs font-medium text-accent">
-                    View claims
-                  </span>
-                ) : null}
               </div>
               <span
-                className={`flex size-11 shrink-0 items-center justify-center rounded-2xl ${tone.icon}`}
+                className={`flex size-9 shrink-0 items-center justify-center rounded-xl ${tone.icon}`}
               >
-                <Icon className="size-5" />
+                <Icon className="size-4" />
               </span>
             </Card.Content>
           </Card>

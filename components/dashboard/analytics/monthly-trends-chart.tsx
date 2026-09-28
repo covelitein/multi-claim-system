@@ -7,9 +7,10 @@ import { Card } from "@heroui/react";
 export function MonthlyTrendsChart({ trends }: { trends: MonthlyTrend[] }) {
   const maxValue = Math.max(
     ...trends.flatMap((t) => [t.submitted, t.paid, t.denied]),
+    1,
   );
 
-  const barHeight = 140;
+  const barHeight = 160;
 
   const series = [
     { key: "submitted" as const, label: "Submitted", color: "var(--accent)" },
@@ -18,12 +19,17 @@ export function MonthlyTrendsChart({ trends }: { trends: MonthlyTrend[] }) {
   ];
 
   return (
-    <Card className={dashboardCardClass}>
-      <Card.Header className="flex-row items-center justify-between">
-        <Card.Title className="text-base font-semibold">
-          Monthly Trends
-        </Card.Title>
-        <div className="flex items-center gap-4">
+    <Card
+      className={`${dashboardCardClass} h-full border border-success/25 bg-gradient-to-br from-success-soft/30 to-surface`}
+    >
+      <Card.Header className="flex-col items-start gap-2 !pb-0 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <Card.Title className="text-base font-bold">Monthly Trends</Card.Title>
+          <p className="mt-0.5 text-xs text-muted">
+            Facility submission performance
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
           {series.map((s) => (
             <div key={s.key} className="flex items-center gap-1.5">
               <span
@@ -35,25 +41,28 @@ export function MonthlyTrendsChart({ trends }: { trends: MonthlyTrend[] }) {
           ))}
         </div>
       </Card.Header>
-      <Card.Content>
-        <div className="flex items-end gap-3 overflow-x-auto pb-1">
+      <Card.Content className="pt-3">
+        <div className="flex items-end gap-3 overflow-x-auto pb-1 sm:gap-3">
           {trends.map((t) => (
             <div
               key={t.month}
-              className="flex flex-1 flex-col items-center gap-2"
-              style={{ minWidth: 60 }}
+              className="flex flex-1 flex-col items-center gap-1.5"
+              style={{ minWidth: 56 }}
             >
               <div
-                className="flex w-full items-end justify-center gap-1"
+                className="flex w-full items-end justify-center gap-0.5"
                 style={{ height: barHeight }}
               >
                 {series.map((s) => {
                   const value = t[s.key];
-                  const height = (value / maxValue) * barHeight;
+                  const height = Math.max(
+                    (value / maxValue) * barHeight,
+                    value > 0 ? 4 : 0,
+                  );
                   return (
                     <div
                       key={s.key}
-                      className="w-3 rounded-t-sm transition-all duration-500"
+                      className="w-2.5 rounded-t-sm transition-all duration-500 sm:w-3"
                       style={{
                         height,
                         backgroundColor: s.color,

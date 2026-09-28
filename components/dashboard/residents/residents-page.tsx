@@ -17,14 +17,14 @@ export function ResidentsPage() {
   }
 
   return (
-    <div className="flex min-w-0 flex-col gap-6 pb-4 sm:gap-8">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div className="flex min-w-0 flex-col gap-4 pb-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
             Residents
           </h1>
-          <p className="mt-1 text-sm text-muted">
-            View and manage resident information and billing details.
+          <p className="mt-0.5 text-sm text-muted">
+            Resident profiles with monthly claim submission history.
           </p>
         </div>
         <AddResidentDrawer />

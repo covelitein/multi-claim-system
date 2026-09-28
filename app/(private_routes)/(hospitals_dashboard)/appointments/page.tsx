@@ -1,5 +1,6 @@
-import { DeadlinesPage } from "@/components/dashboard/deadlines/deadlines-page";
+import { redirect } from "next/navigation";
 
+/** Deadlines deferred from Billing Manager Gen-1. */
 export default function AppointmentsPage() {
-  return <DeadlinesPage />;
+  redirect("/home");
 }

@@ -28,8 +28,8 @@ export function ClaimsTable({
       result = result.filter(
         (c) =>
           c.residentName.toLowerCase().includes(lower) ||
-          c.claimId.toLowerCase().includes(lower) ||
-          c.claimType.toLowerCase().includes(lower) ||
+          c.policyId.toLowerCase().includes(lower) ||
+          c.insurer.toLowerCase().includes(lower) ||
           c.facility.toLowerCase().includes(lower),
       );
     }
@@ -39,11 +39,11 @@ export function ClaimsTable({
   const columns: ColumnDef<Claim>[] = useMemo(
     () => [
       {
-        accessorKey: "claimId",
-        header: "Claim ID",
+        accessorKey: "policyId",
+        header: "Policy ID",
         cell: ({ row }) => (
-          <span className="font-mono text-xs font-medium text-accent">
-            {row.original.claimId}
+          <span className="font-mono text-xs font-semibold text-accent">
+            {row.original.policyId}
           </span>
         ),
       },
@@ -53,13 +53,13 @@ export function ClaimsTable({
         cell: ({ row }) => {
           const c = row.original;
           return (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <Avatar className="size-7 shrink-0">
                 <Avatar.Image alt={c.residentName} src={c.residentImage} />
                 <Avatar.Fallback>{c.residentInitials}</Avatar.Fallback>
               </Avatar>
               <div className="min-w-0">
-                <p className="truncate font-medium">{c.residentName}</p>
+                <p className="truncate text-sm font-semibold">{c.residentName}</p>
                 <p className="truncate text-xs text-muted">{c.facility}</p>
               </div>
             </div>
@@ -67,14 +67,18 @@ export function ClaimsTable({
         },
       },
       {
-        accessorKey: "claimType",
-        header: "Claim Type",
-        cell: ({ row }) => <span className="text-muted">{row.original.claimType}</span>,
+        accessorKey: "insurer",
+        header: "Client / Insurer",
+        cell: ({ row }) => (
+          <span className="text-sm text-foreground">{row.original.insurer}</span>
+        ),
       },
       {
         accessorKey: "billingPeriod",
-        header: "Billing Period",
-        cell: ({ row }) => <span className="text-muted">{row.original.billingPeriod}</span>,
+        header: "Period",
+        cell: ({ row }) => (
+          <span className="text-sm text-muted">{row.original.billingPeriod}</span>
+        ),
       },
       {
         accessorKey: "status",
@@ -108,8 +112,10 @@ export function ClaimsTable({
       },
       {
         accessorKey: "lastUpdated",
-        header: "Last Updated",
-        cell: ({ row }) => <span className="text-muted">{row.original.lastUpdated}</span>,
+        header: "Updated",
+        cell: ({ row }) => (
+          <span className="text-sm text-muted">{row.original.lastUpdated}</span>
+        ),
       },
     ],
     [],
@@ -117,27 +123,27 @@ export function ClaimsTable({
 
   return (
     <Card className={dashboardCardClass}>
-      <Card.Header className="flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <Card.Header className="flex-col items-stretch gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <Card.Title className="text-base font-semibold">
             Claims workflow
           </Card.Title>
-          <p className="mt-0.5 text-sm text-muted">
+          <p className="mt-0.5 text-xs text-muted">
             {filtered.length} of {claims.length} shown
           </p>
         </div>
-        <div className="flex w-full items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2 sm:max-w-xs focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20">
-          <Magnifier className="size-4 shrink-0 text-muted" />
+        <div className="flex w-full items-center gap-2 rounded-lg border border-border bg-surface px-2.5 py-1.5 sm:max-w-xs focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20">
+          <Magnifier className="size-3.5 shrink-0 text-muted" />
           <input
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
-            placeholder="Search claims..."
+            placeholder="Search policy, resident…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
       </Card.Header>
       <Card.Content className="-mx-5 overflow-x-auto px-0 pb-0">
-        <div className="min-w-[820px]">
+        <div className="min-w-[800px]">
           <DataTable
             columns={columns}
             data={filtered}

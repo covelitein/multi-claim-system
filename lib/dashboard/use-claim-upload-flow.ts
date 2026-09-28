@@ -10,8 +10,7 @@ import { useEffect, useState } from "react";
 
 export type ClaimUploadBasics = {
   residentId: string;
-  payer: string;
-  claimType: string;
+  insurer: string;
   periodFrom: string;
   periodTo: string;
   notes: string;
@@ -25,10 +24,9 @@ export function useClaimUploadFlow() {
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [basics, setBasics] = useState<ClaimUploadBasics>({
     residentId: "",
-    payer: "",
-    claimType: "",
-    periodFrom: "2026-08-01",
-    periodTo: "2026-08-31",
+    insurer: "",
+    periodFrom: "2026-09-01",
+    periodTo: "2026-09-30",
     notes: "",
   });
   const [files, setFiles] = useState<UploadedDocument[]>([]);
@@ -43,8 +41,7 @@ export function useClaimUploadFlow() {
         setBasics((prev) => ({
           ...prev,
           residentId: result.residents[0]?.id ?? "",
-          payer: result.payers[0] ?? "",
-          claimType: result.claimTypes[0] ?? "",
+          insurer: result.insurers[0] ?? "",
         }));
         setLoading(false);
       })

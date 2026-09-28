@@ -80,7 +80,8 @@ export type DashboardHomeData = {
 };
 
 export const DASHBOARD_HOME: DashboardHomeData = {
-  greetingSubtitle: "Here's what's happening with your claims today.",
+  greetingSubtitle:
+    "Long-term care claims overview — recent submissions first.",
   lastSubmissionDate: "08/18/2026",
   kpis: [
     {
@@ -163,26 +164,46 @@ export const DASHBOARD_HOME: DashboardHomeData = {
       image: "https://i.pravatar.cc/80?img=57",
       initials: "HF",
     },
+    {
+      id: "rs5",
+      residentName: "Lara Mensah",
+      residentId: "RES-2201",
+      submittedAt: "08/14/2026",
+      status: "approved",
+      amount: "$4,450.00",
+      image: "https://i.pravatar.cc/80?img=32",
+      initials: "LM",
+    },
+    {
+      id: "rs6",
+      residentName: "William Patterson",
+      residentId: "RES-1933",
+      submittedAt: "08/13/2026",
+      status: "pending",
+      amount: "$3,780.00",
+      image: "https://i.pravatar.cc/80?img=61",
+      initials: "WP",
+    },
   ],
   quickActions: [
     {
       id: "new-claim",
-      label: "New claim",
-      description: "Upload documents for review",
+      label: "Claim for existing resident",
+      description: "Upload LTC claim packet for review",
       href: "/billing/new",
       tone: "accent",
     },
     {
       id: "upload-invoice",
-      label: "Upload invoice",
-      description: "Attach billing documents for review",
+      label: "Create / upload invoice",
+      description: "Build or attach a facility invoice",
       href: "/invoices",
       tone: "success",
     },
     {
       id: "reports",
-      label: "View reports",
-      description: "Submission analytics",
+      label: "Facility analytics",
+      description: "Submission history & trends",
       href: "/analytics",
       tone: "warning",
     },

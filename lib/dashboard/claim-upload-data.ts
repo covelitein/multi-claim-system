@@ -12,44 +12,53 @@ export type ClaimUploadFlowData = {
   modeLabel: string;
   subtitle: string;
   phases: { id: ClaimUploadPhase; label: string }[];
-  claimTypes: string[];
-  payers: string[];
-  residents: { id: string; name: string; facility: string }[];
+  insurers: string[];
+  residents: { id: string; name: string; facility: string; policyId: string }[];
   suggestedDocuments: SuggestedDocument[];
 };
 
 export const CLAIM_UPLOAD_FLOW: ClaimUploadFlowData = {
-  title: "New claim submission",
+  title: "Claim for existing resident",
   modeLabel: "Upload for review",
   subtitle:
-    "Provide basics and upload the document packet. Helix completes claim forms during review — you do not fill them here.",
+    "Long-term care packets only. Upload documents for Helix review — interactive CMR walkthrough forms will be available once insurer templates are loaded.",
   phases: [
     { id: "basics", label: "Claim basics" },
     { id: "documents", label: "Upload documents" },
     { id: "review", label: "Review & submit" },
   ],
-  claimTypes: [
-    "Continued Monthly Residence (CMR)",
-    "Initial claim",
-    "Resubmission",
-    "Other / supporting packet",
+  insurers: [
+    "Illumifin",
+    "Genworth",
+    "John Hancock",
+    "Mutual of Omaha",
+    "New York Life",
+    "Northwestern Mutual",
+    "AIG / American General Life",
+    "Bankers Life / CNO Financial",
+    "Lincoln Financial Group",
+    "Transamerica",
+    "MassMutual",
+    "Nationwide",
   ],
-  payers: ["Medicare", "Medicaid", "Private pay", "Other"],
   residents: [
     {
       id: "r1",
       name: "Ada Okoye",
       facility: "Sunrise Assisted Living",
+      policyId: "POL-ILM-2001",
     },
     {
       id: "r2",
       name: "Marcus Chen",
       facility: "Oak Ridge SNF",
+      policyId: "POL-GNW-1988",
     },
     {
       id: "r3",
       name: "Helen Foster",
       facility: "Sunrise Assisted Living",
+      policyId: "POL-JHN-2110",
     },
   ],
   suggestedDocuments: [
@@ -60,21 +69,21 @@ export const CLAIM_UPLOAD_FLOW: ClaimUploadFlowData = {
       required: true,
     },
     {
-      id: "485",
-      label: "Plan of care / 485",
-      description: "Upload if available; Helix will flag gaps during review.",
-      required: false,
+      id: "cmr",
+      label: "CMR / monthly residence form",
+      description: "Upload completed paper CMR until in-app walkthrough ships.",
+      required: true,
     },
     {
       id: "census",
       label: "Census / room verification",
-      description: "Any facility census sheet covering the claim period.",
+      description: "Facility census covering the claim period.",
       required: false,
     },
     {
       id: "other",
       label: "Other supporting docs",
-      description: "Letters, prior denials, or notes for the reviewer.",
+      description: "Letters, prior returns, or notes for the reviewer.",
       required: false,
     },
   ],

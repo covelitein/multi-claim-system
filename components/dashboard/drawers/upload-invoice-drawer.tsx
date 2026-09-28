@@ -28,7 +28,7 @@ export function UploadInvoiceDrawer() {
       }
       title="Upload invoice"
       trigger={
-        <Button className="w-fit" size="sm" variant="outline">
+        <Button className="h-9 px-3 text-sm font-semibold" variant="outline">
           Upload Invoice
         </Button>
       }

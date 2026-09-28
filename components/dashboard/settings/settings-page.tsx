@@ -1,11 +1,15 @@
 "use client";
 
+import { InviteMemberDrawer } from "@/components/dashboard/drawers/invite-member-drawer";
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
 import {
   Bell,
+  Envelope,
   Gear,
   Lock,
+  Persons,
   Shield,
+  Smartphone,
 } from "@gravity-ui/icons";
 import {
   Button,
@@ -18,7 +22,7 @@ import {
 } from "@heroui/react";
 import { useState } from "react";
 
-type SettingsTab = "general" | "notifications" | "security";
+type SettingsTab = "general" | "team" | "notifications" | "security";
 
 const TABS: {
   id: SettingsTab;
@@ -26,6 +30,7 @@ const TABS: {
   icon: typeof Gear;
 }[] = [
   { id: "general", label: "General", icon: Gear },
+  { id: "team", label: "Team access", icon: Persons },
   { id: "notifications", label: "Notifications", icon: Bell },
   { id: "security", label: "Security", icon: Lock },
 ];
@@ -50,39 +55,105 @@ function SettingSwitch({
 
 function GeneralTab() {
   return (
-    <Card className={dashboardCardClass}>
-      <Card.Header>
-        <Card.Title className="text-base font-semibold">
-          Organization settings
-        </Card.Title>
-        <Card.Description className="text-sm text-muted">
-          General preferences for your claims workspace.
-        </Card.Description>
+    <div className="grid gap-5">
+      <Card className={`${dashboardCardClass} border-2 border-accent/20`}>
+        <Card.Header>
+          <Card.Title className="text-lg font-bold">
+            Organization settings
+          </Card.Title>
+          <Card.Description className="text-sm font-medium text-muted">
+            Preferences for your long-term care claims workspace.
+          </Card.Description>
+        </Card.Header>
+        <Card.Content className="gap-5">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <TextField defaultValue="Reward Care Solutions" name="orgName">
+              <Label>Organization name</Label>
+              <Input />
+            </TextField>
+            <TextField defaultValue="America/Chicago" name="timezone">
+              <Label>Default timezone</Label>
+              <Input />
+            </TextField>
+            <TextField defaultValue="Illumifin" name="defaultInsurer">
+              <Label>Default client / insurer</Label>
+              <Input />
+            </TextField>
+            <TextField
+              defaultValue="billing@rewardcare.com"
+              name="billingEmail"
+            >
+              <Label>Billing contact email</Label>
+              <Input type="email" />
+            </TextField>
+          </div>
+          <div className="flex justify-end border-t border-separator pt-4">
+            <Button className="font-bold" size="sm" variant="primary">
+              Save changes
+            </Button>
+          </div>
+        </Card.Content>
+      </Card>
+
+      <Card className={`${dashboardCardClass} border-2 border-success/30 bg-success-soft/20`}>
+        <Card.Header>
+          <Card.Title className="text-lg font-bold">Contact RCS support</Card.Title>
+          <Card.Description className="text-sm font-medium text-muted">
+            Reach Reward Care Solutions when you need help. Contact details will
+            be finalized for production.
+          </Card.Description>
+        </Card.Header>
+        <Card.Content className="gap-3 sm:flex-row sm:gap-4">
+          <a
+            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border-2 border-accent/40 bg-accent-soft px-4 text-sm font-bold text-accent hover:border-accent"
+            href="mailto:support@rewardcare.example"
+          >
+            <Envelope className="size-4" />
+            Email RCS support
+          </a>
+          <a
+            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border-2 border-success/40 bg-success-soft px-4 text-sm font-bold text-success hover:border-success"
+            href="tel:+18005550199"
+          >
+            <Smartphone className="size-4" />
+            Call RCS support
+          </a>
+        </Card.Content>
+      </Card>
+    </div>
+  );
+}
+
+function TeamAccessTab() {
+  return (
+    <Card className={`${dashboardCardClass} border-2 border-warning/30`}>
+      <Card.Header className="flex-col items-stretch gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <Card.Title className="text-lg font-bold">
+            Invite team members
+          </Card.Title>
+          <Card.Description className="mt-1 max-w-xl text-sm font-medium text-muted">
+            Billing managers can invite colleagues to this facility’s RCS
+            account, set access level, and remove people who leave or change
+            roles. Single-manager facilities can skip Team until needed.
+          </Card.Description>
+        </div>
+        <InviteMemberDrawer />
       </Card.Header>
-      <Card.Content className="gap-5">
-        <div className="grid gap-5 sm:grid-cols-2">
-          <TextField defaultValue="Reward Care Solutions" name="orgName">
-            <Label>Organization name</Label>
-            <Input />
-          </TextField>
-          <TextField defaultValue="America/Chicago" name="timezone">
-            <Label>Default timezone</Label>
-            <Input />
-          </TextField>
-          <TextField defaultValue="Medicaid Monthly" name="claimType">
-            <Label>Default claim type</Label>
-            <Input />
-          </TextField>
-          <TextField defaultValue="billing@rewardcare.com" name="billingEmail">
-            <Label>Billing contact email</Label>
-            <Input type="email" />
-          </TextField>
+      <Card.Content className="gap-3">
+        <div className="rounded-2xl bg-warning-soft/50 px-4 py-3 text-sm font-medium">
+          Invites are scoped to your facility only — not other facilities in RCS
+          Admin.
         </div>
-        <div className="flex justify-end border-t border-separator pt-4">
-          <Button size="sm" variant="primary">
-            Save changes
-          </Button>
-        </div>
+        <Button
+          className="w-fit font-bold"
+          variant="outline"
+          onPress={() => {
+            window.location.href = "/staff";
+          }}
+        >
+          Manage team roster
+        </Button>
       </Card.Content>
     </Card>
   );
@@ -100,12 +171,6 @@ function NotificationsTab() {
       id: "missing-docs",
       label: "Missing document alerts",
       description: "Alert when required documents are incomplete.",
-      defaultChecked: true,
-    },
-    {
-      id: "deadline-reminder",
-      label: "Deadline reminders",
-      description: "Remind 3 days before a deadline is due.",
       defaultChecked: true,
     },
     {
@@ -131,10 +196,8 @@ function NotificationsTab() {
   return (
     <Card className={dashboardCardClass}>
       <Card.Header>
-        <Card.Title className="text-base font-semibold">
-          Email notifications
-        </Card.Title>
-        <Card.Description className="text-sm text-muted">
+        <Card.Title className="text-lg font-bold">Email notifications</Card.Title>
+        <Card.Description className="text-sm font-medium text-muted">
           Choose which alerts you want to receive.
         </Card.Description>
       </Card.Header>
@@ -145,8 +208,10 @@ function NotificationsTab() {
             className="flex items-center justify-between gap-4 px-5 py-4"
           >
             <div className="min-w-0">
-              <p className="text-sm font-medium">{item.label}</p>
-              <p className="mt-0.5 text-sm text-muted">{item.description}</p>
+              <p className="text-sm font-bold">{item.label}</p>
+              <p className="mt-0.5 text-sm font-medium text-muted">
+                {item.description}
+              </p>
             </div>
             <SettingSwitch
               defaultSelected={item.defaultChecked}
@@ -164,10 +229,8 @@ function SecurityTab() {
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_280px]">
       <Card className={dashboardCardClass}>
         <Card.Header>
-          <Card.Title className="text-base font-semibold">
-            Change password
-          </Card.Title>
-          <Card.Description className="text-sm text-muted">
+          <Card.Title className="text-lg font-bold">Change password</Card.Title>
+          <Card.Description className="text-sm font-medium text-muted">
             Use a strong password you do not reuse elsewhere.
           </Card.Description>
         </Card.Header>
@@ -187,7 +250,7 @@ function SecurityTab() {
             </TextField>
           </div>
           <div className="flex justify-end border-t border-separator pt-4">
-            <Button size="sm" variant="primary">
+            <Button className="font-bold" size="sm" variant="primary">
               Update password
             </Button>
           </div>
@@ -196,11 +259,9 @@ function SecurityTab() {
 
       <Card className={dashboardCardClass}>
         <Card.Header>
-          <Card.Title className="text-base font-semibold">
-            Security tips
-          </Card.Title>
+          <Card.Title className="text-base font-bold">Security tips</Card.Title>
         </Card.Header>
-        <Card.Content className="gap-3 text-sm text-muted">
+        <Card.Content className="gap-3 text-sm font-medium text-muted">
           <div className="flex gap-3 rounded-2xl bg-surface-secondary/80 px-3.5 py-3">
             <Shield className="mt-0.5 size-4 shrink-0 text-accent" />
             <p>Prefer a unique password with at least 12 characters.</p>
@@ -221,11 +282,11 @@ export function SettingsPage() {
   return (
     <div className="flex min-w-0 flex-col gap-6 pb-4 sm:gap-8">
       <div>
-        <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
           Settings
         </h1>
-        <p className="mt-1 text-sm text-muted">
-          Manage organization, notification, and security preferences.
+        <p className="mt-1 text-base font-medium text-muted">
+          Organization preferences, team invites, and RCS support contacts.
         </p>
       </div>
 
@@ -237,10 +298,10 @@ export function SettingsPage() {
             <button
               key={tab.id}
               className={cn(
-                "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                "inline-flex min-h-11 items-center gap-2 rounded-2xl border-2 px-4 py-2.5 text-sm font-bold transition-colors",
                 active
-                  ? "bg-accent text-accent-foreground shadow-sm"
-                  : "border border-border bg-surface text-muted hover:bg-surface-secondary hover:text-foreground",
+                  ? "border-accent bg-accent text-accent-foreground shadow-sm"
+                  : "border-border bg-surface text-muted hover:bg-surface-secondary hover:text-foreground",
               )}
               type="button"
               onClick={() => setActiveTab(tab.id)}
@@ -253,6 +314,7 @@ export function SettingsPage() {
       </div>
 
       {activeTab === "general" ? <GeneralTab /> : null}
+      {activeTab === "team" ? <TeamAccessTab /> : null}
       {activeTab === "notifications" ? <NotificationsTab /> : null}
       {activeTab === "security" ? <SecurityTab /> : null}
     </div>
