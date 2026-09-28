@@ -77,7 +77,7 @@ export function SidebarDonut({
           />
         ))}
       </svg>
-      <span className="absolute inset-0 grid place-items-center font-inter text-3xl font-semibold text-foreground">
+      <span className="absolute inset-0 grid place-items-center px-2 text-center font-inter text-sm font-semibold leading-tight text-foreground sm:text-base">
         {center}
       </span>
     </div>

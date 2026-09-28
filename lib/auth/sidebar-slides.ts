@@ -1,110 +1,116 @@
 export type SlideTone = "accent" | "success" | "danger" | "warning";
 
-export type SlideIcon = "clock" | "pulse" | "persons" | "heart" | "pill" | "layers";
+export type SlideIcon =
+  | "clock"
+  | "pulse"
+  | "persons"
+  | "heart"
+  | "pill"
+  | "layers"
+  | "upload"
+  | "receipt"
+  | "shield";
 
 export type SidebarSlide = {
   id: string;
   title: string;
   actionLabel: string;
   badge: string;
+  /** Short label shown in the visual center — feature name, not live data. */
   center: string;
   copy: string;
-  segments: {
+  highlights: {
     label: string;
-    value: number;
     color: SlideTone;
   }[];
-  metrics: {
+  points: {
     label: string;
-    value: string;
-    delta?: string;
+    detail: string;
     icon: SlideIcon;
     tone: SlideTone;
   }[];
 };
 
+/** Marketing feature slides for auth — not live operational data. */
 export const AUTH_SIDEBAR_SLIDES: SidebarSlide[] = [
   {
-    id: "packets",
-    title: "Packet check",
-    actionLabel: "View live",
-    badge: "12 facilities reporting",
-    center: "86",
-    copy: "See which claim packets are complete before staff submit. Gaps stay flagged until the file is ready.",
-    segments: [
-      { label: "Ready", value: 28, color: "accent" },
-      { label: "Review", value: 46, color: "success" },
-      { label: "Gaps", value: 12, color: "danger" },
+    id: "claims",
+    title: "Long-term care claims",
+    actionLabel: "Next",
+    badge: "Product feature",
+    center: "Claims",
+    copy: "Helix is built for LTC claim packets — upload documents for review, track status, and keep Policy ID and insurer details organized. Nothing on this screen is live facility data.",
+    highlights: [
+      { label: "Upload packets", color: "accent" },
+      { label: "Status tracking", color: "success" },
+      { label: "LTC insurers", color: "warning" },
     ],
-    metrics: [
+    points: [
       {
-        label: "Open claims",
-        value: "1,248",
-        icon: "clock",
+        label: "New or existing resident",
+        detail: "Clear actions for each claim path",
+        icon: "upload",
         tone: "accent",
       },
       {
-        label: "Missing docs",
-        value: "214",
-        delta: "+6% today",
-        icon: "pulse",
-        tone: "danger",
-      },
-    ],
-  },
-  {
-    id: "status",
-    title: "Claim status",
-    actionLabel: "View live",
-    badge: "Fewer returns",
-    center: "142",
-    copy: "Track each claim from intake to paid. Every facility keeps its own filing queue.",
-    segments: [
-      { label: "Draft", value: 64, color: "accent" },
-      { label: "Paid", value: 51, color: "success" },
-      { label: "Denied", value: 27, color: "danger" },
-    ],
-    metrics: [
-      {
-        label: "Submitted",
-        value: "118",
-        icon: "persons",
-        tone: "accent",
-      },
-      {
-        label: "Avg cycle",
-        value: "12d",
-        delta: "−8% today",
-        icon: "heart",
+        label: "Helix review workflow",
+        detail: "Staff complete forms after upload",
+        icon: "shield",
         tone: "success",
       },
     ],
   },
   {
-    id: "network",
-    title: "Facilities",
-    actionLabel: "View live",
-    badge: "Roles stay local",
-    center: "24",
-    copy: "Run ALF, SNF, and agency workspaces from one login. Access follows the facility, not the other way around.",
-    segments: [
-      { label: "ALF", value: 8, color: "accent" },
-      { label: "SNF", value: 11, color: "success" },
-      { label: "Agency", value: 5, color: "danger" },
+    id: "billing",
+    title: "Invoices & residents",
+    actionLabel: "Next",
+    badge: "Product feature",
+    center: "Billing",
+    copy: "Create or upload facility invoices, look up residents, and keep monthly submission history easy to find — designed for billing managers, not a live account preview.",
+    highlights: [
+      { label: "Invoice builder", color: "accent" },
+      { label: "Resident profiles", color: "success" },
+      { label: "Monthly history", color: "warning" },
     ],
-    metrics: [
+    points: [
       {
-        label: "Team online",
-        value: "86",
+        label: "Guided invoice create",
+        detail: "Line items, periods, and totals",
+        icon: "receipt",
+        tone: "accent",
+      },
+      {
+        label: "Resident workspace",
+        detail: "Profiles with claim history at a glance",
+        icon: "persons",
+        tone: "success",
+      },
+    ],
+  },
+  {
+    id: "team",
+    title: "Team, contacts & insights",
+    actionLabel: "Next",
+    badge: "Product feature",
+    center: "Workspace",
+    copy: "Invite facility teammates, keep a searchable client contact list, and review analytics for your submissions. These cards only describe Helix features.",
+    highlights: [
+      { label: "Team invites", color: "accent" },
+      { label: "Contacts", color: "success" },
+      { label: "Analytics", color: "warning" },
+    ],
+    points: [
+      {
+        label: "Facility-scoped access",
+        detail: "Invite and manage billing colleagues",
         icon: "layers",
         tone: "accent",
       },
       {
-        label: "Live alerts",
-        value: "4",
-        delta: "2 resolved",
-        icon: "pill",
-        tone: "danger",
+        label: "Submission analytics",
+        detail: "Trends and status overview for your site",
+        icon: "pulse",
+        tone: "warning",
       },
     ],
   },

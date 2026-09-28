@@ -1,12 +1,15 @@
 "use client";
 
 import {
+  ArrowUpFromSquare,
   Clock,
   HeartPulse,
   Layers,
   Persons,
   Pill,
   Pulse,
+  Receipt,
+  Shield,
 } from "@gravity-ui/icons";
 import { Chip, cn } from "@heroui/react";
 import type { ComponentType, SVGProps } from "react";
@@ -20,6 +23,9 @@ const ICONS: Record<SlideIcon, ComponentType<SVGProps<SVGSVGElement>>> = {
   heart: HeartPulse,
   pill: Pill,
   layers: Layers,
+  upload: ArrowUpFromSquare,
+  receipt: Receipt,
+  shield: Shield,
 };
 
 const ICON_TONE: Record<SlideTone, string> = {
@@ -28,6 +34,13 @@ const ICON_TONE: Record<SlideTone, string> = {
   danger: "bg-danger text-danger-foreground",
   warning: "bg-warning text-warning-foreground",
 };
+
+/** Equal demo segments — decorative only, not real claim volumes. */
+const FEATURE_SEGMENTS: { value: number; color: SlideTone }[] = [
+  { value: 1, color: "accent" },
+  { value: 1, color: "success" },
+  { value: 1, color: "warning" },
+];
 
 export function SidebarPreviewCard({
   badge,
@@ -58,38 +71,35 @@ export function SidebarPreviewCard({
 
       <div className="flex items-center gap-5">
         <div className="flex flex-col items-center gap-3">
-          <SidebarDonut center={slide.center} segments={slide.segments} />
-          <div className="flex flex-wrap justify-center gap-1.5">
-            {slide.segments.map((segment) => (
-              <Chip key={segment.label} color={segment.color} size="sm" variant="soft">
-                {segment.label}
+          <SidebarDonut center={slide.center} segments={FEATURE_SEGMENTS} />
+          <div className="flex max-w-[11rem] flex-wrap justify-center gap-1.5">
+            {slide.highlights.map((item) => (
+              <Chip key={item.label} color={item.color} size="sm" variant="soft">
+                <Chip.Label className="text-[11px]">{item.label}</Chip.Label>
               </Chip>
             ))}
           </div>
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col gap-3">
-          {slide.metrics.map((metric) => {
-            const Icon = ICONS[metric.icon];
+          {slide.points.map((point) => {
+            const Icon = ICONS[point.icon];
 
             return (
               <div
-                key={metric.label}
+                key={point.label}
                 className="auth-glass-tile flex items-center justify-between gap-3 rounded-2xl px-4 py-3"
               >
                 <div className="min-w-0">
-                  <p className="text-xs text-muted">{metric.label}</p>
-                  <p className="font-inter text-xl font-semibold text-foreground">
-                    {metric.value}
+                  <p className="text-sm font-semibold text-foreground">
+                    {point.label}
                   </p>
-                  {metric.delta ? (
-                    <p className="text-xs font-medium text-success">{metric.delta}</p>
-                  ) : null}
+                  <p className="mt-0.5 text-xs text-muted">{point.detail}</p>
                 </div>
                 <span
                   className={cn(
                     "grid size-10 shrink-0 place-items-center rounded-full",
-                    ICON_TONE[metric.tone],
+                    ICON_TONE[point.tone],
                   )}
                 >
                   <Icon className="size-4" />
