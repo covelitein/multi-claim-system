@@ -1,11 +1,11 @@
 "use client";
 
+import type { UploadedDocument } from "@/components/dashboard/drawers/document-upload-zone";
 import {
   fetchClaimUploadFlow,
   type ClaimUploadFlowData,
   type ClaimUploadPhase,
 } from "@/lib/dashboard/claim-upload-data";
-import type { UploadedDocument } from "@/components/dashboard/drawers/document-upload-zone";
 import { useEffect, useState } from "react";
 
 export type ClaimUploadBasics = {
@@ -16,7 +16,7 @@ export type ClaimUploadBasics = {
   notes: string;
 };
 
-/** Plug point: replace local state with claim create / upload API. */
+/** Gen-1: local mock upload flow (no API). */
 export function useClaimUploadFlow() {
   const [data, setData] = useState<ClaimUploadFlowData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -30,6 +30,7 @@ export function useClaimUploadFlow() {
     notes: "",
   });
   const [files, setFiles] = useState<UploadedDocument[]>([]);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -82,6 +83,14 @@ export function useClaimUploadFlow() {
     if (phaseIndex > 0) setPhaseIndex((i) => i - 1);
   }
 
+  async function submitForReview() {
+    setSubmitting(true);
+    setError(null);
+    await new Promise((r) => setTimeout(r, 600));
+    setSubmitting(false);
+    return true;
+  }
+
   return {
     data,
     loading,
@@ -90,6 +99,7 @@ export function useClaimUploadFlow() {
     phaseIndex,
     basics,
     files,
+    submitting,
     updateBasics,
     addFiles,
     removeFile,
@@ -97,5 +107,6 @@ export function useClaimUploadFlow() {
     goBack,
     canGoBack,
     isLastPhase,
+    submitForReview,
   };
 }

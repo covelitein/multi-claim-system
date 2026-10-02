@@ -16,6 +16,7 @@ type InviteMemberDrawerProps = {
   member?: TeamMember;
 };
 
+/** Gen-1: dummy invite UI (no API). */
 export function InviteMemberDrawer({
   trigger,
   member,
@@ -40,7 +41,7 @@ export function InviteMemberDrawer({
       title={isEdit ? "Edit team member" : "Invite team member"}
       trigger={
         trigger ?? (
-          <Button className="w-fit" size="sm" variant="primary">
+          <Button className="w-fit font-bold" size="sm" variant="primary">
             <Plus className="size-4" />
             Invite Member
           </Button>

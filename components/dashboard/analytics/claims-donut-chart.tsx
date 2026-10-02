@@ -10,8 +10,8 @@ export function ClaimsDonutChart({
   breakdown: StatusBreakdown[];
 }) {
   const total = breakdown.reduce((sum, item) => sum + item.value, 0);
-  const size = 160;
-  const strokeWidth = 22;
+  const size = 200;
+  const strokeWidth = 26;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
 
@@ -34,8 +34,8 @@ export function ClaimsDonutChart({
       className={`${dashboardCardClass} h-full border border-accent/25 bg-gradient-to-br from-accent-soft/40 to-surface`}
     >
       <Card.Header className="!pb-0">
-        <Card.Title className="text-base font-bold">Claims by Status</Card.Title>
-        <p className="mt-0.5 text-xs text-muted">
+        <Card.Title className="text-lg font-bold">Claims by Status</Card.Title>
+        <p className="mt-0.5 text-xs font-semibold text-muted">
           Facility-wide long-term care packet status
         </p>
       </Card.Header>

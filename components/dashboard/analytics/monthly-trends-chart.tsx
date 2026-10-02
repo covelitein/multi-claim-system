@@ -10,7 +10,7 @@ export function MonthlyTrendsChart({ trends }: { trends: MonthlyTrend[] }) {
     1,
   );
 
-  const barHeight = 160;
+  const barHeight = 220;
 
   const series = [
     { key: "submitted" as const, label: "Submitted", color: "var(--accent)" },
@@ -24,8 +24,8 @@ export function MonthlyTrendsChart({ trends }: { trends: MonthlyTrend[] }) {
     >
       <Card.Header className="flex-col items-start gap-2 !pb-0 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Card.Title className="text-base font-bold">Monthly Trends</Card.Title>
-          <p className="mt-0.5 text-xs text-muted">
+          <Card.Title className="text-lg font-bold">Monthly Trends</Card.Title>
+          <p className="mt-0.5 text-xs font-semibold text-muted">
             Facility submission performance
           </p>
         </div>

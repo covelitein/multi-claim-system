@@ -11,7 +11,7 @@ import { Card, Chip } from "@heroui/react";
 import { useEffect, useMemo, useState } from "react";
 
 const ROLE_COLOR: Record<
-  ClientContact["role"],
+  string,
   "accent" | "success" | "warning" | "danger" | "default"
 > = {
   "Insurer claims": "accent",
@@ -58,7 +58,7 @@ export function ContactsPage() {
         <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
           Client contacts
         </h1>
-        <p className="mt-0.5 text-sm text-muted">
+        <p className="mt-0.5 text-sm font-semibold text-muted">
           Searchable contact list for insurers, family, and facility partners.
         </p>
       </div>
@@ -66,7 +66,7 @@ export function ContactsPage() {
       <div className="flex w-full max-w-md items-center gap-2 rounded-lg border border-border bg-surface px-2.5 py-1.5 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20">
         <Magnifier className="size-3.5 shrink-0 text-muted" />
         <input
-          className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
+          className="flex-1 bg-transparent text-sm font-medium outline-none placeholder:text-muted"
           placeholder="Search name, insurer, phone, or notes…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -74,7 +74,7 @@ export function ContactsPage() {
       </div>
 
       <div className="grid min-w-0 gap-4 sm:grid-cols-2">
-        {contacts.map((contact) => (
+        {contacts.map((contact: ClientContact) => (
           <Card
             key={contact.id}
             className={`${dashboardCardClass} border-l-4 border-l-accent`}
@@ -88,23 +88,27 @@ export function ContactsPage() {
                   {contact.organization}
                 </p>
               </div>
-              <Chip color={ROLE_COLOR[contact.role]} size="sm" variant="soft">
+              <Chip
+                color={ROLE_COLOR[contact.role] ?? "default"}
+                size="sm"
+                variant="soft"
+              >
                 <Chip.Label>{contact.role}</Chip.Label>
               </Chip>
             </Card.Header>
             <Card.Content className="gap-2.5">
-              <div className="flex items-center gap-2 text-sm font-medium">
+              <div className="flex items-center gap-2 text-sm font-semibold">
                 <Envelope className="size-4 shrink-0 text-accent" />
                 <span className="truncate">{contact.email}</span>
               </div>
-              <div className="flex items-center gap-2 text-sm font-medium">
+              <div className="flex items-center gap-2 text-sm font-semibold">
                 <Smartphone className="size-4 shrink-0 text-success" />
                 <span>{contact.phone}</span>
               </div>
-              <p className="rounded-xl bg-surface-secondary px-3 py-2 text-sm text-muted">
+              <p className="rounded-xl bg-surface-secondary px-3 py-2 text-sm font-medium text-muted">
                 {contact.notes}
               </p>
-              <p className="text-xs font-semibold text-muted">
+              <p className="text-xs font-bold text-muted">
                 Last contacted {contact.lastContacted}
               </p>
             </Card.Content>
@@ -113,7 +117,7 @@ export function ContactsPage() {
       </div>
 
       {contacts.length === 0 ? (
-        <p className="py-10 text-center text-base font-semibold text-muted">
+        <p className="py-10 text-center text-base font-bold text-muted">
           No contacts match your search.
         </p>
       ) : null}

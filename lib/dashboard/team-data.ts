@@ -11,7 +11,7 @@ export type TeamMember = {
   lastName: string;
   initials: string;
   image: string;
-  role: TeamMemberRole;
+  role: TeamMemberRole | string;
   email: string;
   facility: string;
   status: "active" | "inactive";

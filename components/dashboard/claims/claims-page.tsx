@@ -32,26 +32,29 @@ export function ClaimsPage() {
           <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
             Claims
           </h1>
-          <p className="mt-0.5 text-sm text-muted">
+          <p className="mt-0.5 text-sm font-medium text-muted">
             Upload LTC packets for Helix review. CMR walkthrough comes later.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2.5">
           <NewClaimDrawer
             mode="new-resident"
             trigger={
-              <Button className="h-9 px-3 text-sm font-semibold" variant="outline">
+              <Button
+                className="h-11 gap-2 px-4 text-sm font-bold border-2 border-accent/40 bg-accent-soft text-accent hover:bg-accent hover:text-accent-foreground"
+                variant="outline"
+              >
                 <Plus className="size-4" />
-                New Resident
+                Claim: New Resident
               </Button>
             }
           />
           <Link
-            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-accent px-3 text-sm font-semibold text-accent-foreground"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-accent px-4 text-sm font-bold text-accent-foreground shadow-sm hover:opacity-95"
             href="/billing/new"
           >
             <Plus className="size-4" />
-            Existing Resident
+            Claim for Existing Resident
           </Link>
         </div>
       </div>

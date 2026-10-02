@@ -17,10 +17,12 @@ export function ClaimUploadPage() {
   const {
     data,
     loading,
+    error,
     phase,
     phaseIndex,
     basics,
     files,
+    submitting,
     updateBasics,
     addFiles,
     removeFile,
@@ -28,6 +30,7 @@ export function ClaimUploadPage() {
     goBack,
     canGoBack,
     isLastPhase,
+    submitForReview,
   } = useClaimUploadFlow();
 
   if (loading || !data) {
@@ -288,7 +291,7 @@ export function ClaimUploadPage() {
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Button
           className="h-11 font-bold"
-          isDisabled={!canGoBack}
+          isDisabled={!canGoBack || submitting}
           variant="outline"
           onPress={goBack}
         >
@@ -296,19 +299,32 @@ export function ClaimUploadPage() {
         </Button>
         <Button
           className="h-11 font-bold"
-          isDisabled={phase === "review" && files.length === 0}
+          isDisabled={
+            submitting || (phase === "review" && files.length === 0)
+          }
           variant="primary"
           onPress={() => {
             if (isLastPhase) {
-              router.push("/billing");
+              void submitForReview().then((ok) => {
+                if (ok) router.push("/billing");
+              });
               return;
             }
             goNext();
           }}
         >
-          {isLastPhase ? "Submit for review" : "Continue"}
+          {submitting
+            ? "Submitting..."
+            : isLastPhase
+              ? "Submit for review"
+              : "Continue"}
         </Button>
       </div>
+      {error ? (
+        <p className="text-sm font-medium text-danger" role="alert">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }

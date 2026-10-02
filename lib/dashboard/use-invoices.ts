@@ -3,7 +3,7 @@
 import { fetchInvoices, type InvoicesPageData } from "@/lib/dashboard/invoices-data";
 import { useEffect, useState } from "react";
 
-/** Plug point: swap for invoices list API later. */
+/** Gen-1: local mock data. */
 export function useInvoices() {
   const [data, setData] = useState<InvoicesPageData | null>(null);
   const [loading, setLoading] = useState(true);

@@ -53,10 +53,10 @@ export function ResidentsTable({ residents }: { residents: Resident[] }) {
                 <Avatar.Fallback>{r.initials}</Avatar.Fallback>
               </Avatar>
               <div className="min-w-0">
-                <p className="truncate font-medium">
+                <p className="truncate font-bold">
                   {r.firstName} {r.lastName}
                 </p>
-                <p className="truncate text-xs text-muted">{r.facility}</p>
+                <p className="truncate text-xs font-semibold text-muted">{r.facility}</p>
               </div>
             </div>
           );
@@ -87,7 +87,7 @@ export function ResidentsTable({ residents }: { residents: Resident[] }) {
         accessorKey: "activeClaims",
         header: "Active claims",
         cell: ({ row }) => (
-          <span className="font-medium tabular-nums">
+          <span className="font-bold tabular-nums">
             {row.original.activeClaims}
           </span>
         ),
@@ -134,10 +134,10 @@ export function ResidentsTable({ residents }: { residents: Resident[] }) {
     <Card className={dashboardCardClass}>
       <Card.Header className="flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Card.Title className="text-base font-semibold">
+          <Card.Title className="text-base font-bold">
             All residents
           </Card.Title>
-          <p className="mt-0.5 text-sm text-muted">
+          <p className="mt-0.5 text-sm font-semibold text-muted">
             {filtered.length} of {residents.length} shown
           </p>
         </div>

@@ -10,10 +10,11 @@ import {
   DocumentUploadZone,
   type UploadedDocument,
 } from "@/components/dashboard/drawers/document-upload-zone";
-import { Plus } from "@gravity-ui/icons";
-import { Button } from "@heroui/react";
+import { RESIDENTS_DATA } from "@/lib/dashboard/residents-data";
+import { Button, Label } from "@heroui/react";
 import { useState } from "react";
 
+/** Gen-1: dummy upload invoice drawer. */
 export function UploadInvoiceDrawer() {
   const [files, setFiles] = useState<UploadedDocument[]>([]);
 
@@ -28,16 +29,28 @@ export function UploadInvoiceDrawer() {
       }
       title="Upload invoice"
       trigger={
-        <Button className="h-9 px-3 text-sm font-semibold" variant="outline">
+        <Button
+          className="h-11 gap-2 border border-accent/35 bg-accent-soft px-4 text-sm font-bold text-accent"
+          variant="outline"
+        >
           Upload Invoice
         </Button>
       }
     >
-      <AuthTextField
-        label="Resident"
-        name="invoiceResident"
-        placeholder="Ada Okoye"
-      />
+      <div className="flex flex-col gap-1.5">
+        <Label className="text-sm font-bold">Resident</Label>
+        <select
+          className="h-11 w-full rounded-xl border border-border bg-surface px-3 text-sm font-semibold"
+          defaultValue={RESIDENTS_DATA.residents[0]?.id}
+          name="invoiceResidentId"
+        >
+          {RESIDENTS_DATA.residents.map((r) => (
+            <option key={r.id} value={r.id}>
+              {r.firstName} {r.lastName}
+            </option>
+          ))}
+        </select>
+      </div>
       <AuthTextField
         label="Claim / invoice period"
         name="invoicePeriod"
@@ -47,57 +60,6 @@ export function UploadInvoiceDrawer() {
         files={files}
         hint="Attach the signed invoice and supporting pages. Staff will review."
         title="Upload invoice documents"
-        onAdd={(next) => setFiles((prev) => [...prev, ...next])}
-        onRemove={(id) => setFiles((prev) => prev.filter((f) => f.id !== id))}
-      />
-    </DashboardDrawer>
-  );
-}
-
-export function NewInvoiceDrawer() {
-  const [files, setFiles] = useState<UploadedDocument[]>([]);
-
-  return (
-    <DashboardDrawer
-      description="Create an invoice record and attach documents for Helix review."
-      footer={
-        <>
-          <DrawerCancelButton />
-          <DrawerPrimaryCloseButton label="Create invoice" />
-        </>
-      }
-      title="New invoice"
-      trigger={
-        <Button className="w-fit" size="sm" variant="primary">
-          <Plus className="size-4" />
-          New Invoice
-        </Button>
-      }
-    >
-      <AuthTextField
-        label="Resident"
-        name="newInvoiceResident"
-        placeholder="Ada Okoye"
-      />
-      <AuthTextField
-        label="Amount"
-        name="newInvoiceAmount"
-        placeholder="$4,200.00"
-      />
-      <AuthTextField
-        label="Period"
-        name="newInvoicePeriod"
-        placeholder="August 2026"
-      />
-      <AuthTextField
-        label="Payer"
-        name="newInvoicePayer"
-        placeholder="Medicare"
-      />
-      <DocumentUploadZone
-        files={files}
-        hint="Optional attachments for the invoice packet."
-        title="Attach documents"
         onAdd={(next) => setFiles((prev) => [...prev, ...next])}
         onRemove={(id) => setFiles((prev) => prev.filter((f) => f.id !== id))}
       />

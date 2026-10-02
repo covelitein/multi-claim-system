@@ -95,29 +95,45 @@ function GeneralTab() {
         </Card.Content>
       </Card>
 
-      <Card className={`${dashboardCardClass} border-2 border-success/30 bg-success-soft/20`}>
+      <Card className={`${dashboardCardClass} border border-success/30 bg-success-soft/20`}>
         <Card.Header>
           <Card.Title className="text-lg font-bold">Contact RCS support</Card.Title>
-          <Card.Description className="text-sm font-medium text-muted">
-            Reach Reward Care Solutions when you need help. Contact details will
-            be finalized for production.
+          <Card.Description className="text-sm font-semibold text-muted">
+            Reach Reward Care Solutions when you need help. Production numbers
+            will replace these placeholders.
           </Card.Description>
         </Card.Header>
-        <Card.Content className="gap-3 sm:flex-row sm:gap-4">
-          <a
-            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border-2 border-accent/40 bg-accent-soft px-4 text-sm font-bold text-accent hover:border-accent"
-            href="mailto:support@rewardcare.example"
-          >
-            <Envelope className="size-4" />
-            Email RCS support
-          </a>
-          <a
-            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border-2 border-success/40 bg-success-soft px-4 text-sm font-bold text-success hover:border-success"
-            href="tel:+18005550199"
-          >
-            <Smartphone className="size-4" />
-            Call RCS support
-          </a>
+        <Card.Content className="gap-3">
+          <div className="grid gap-2 rounded-xl border border-border bg-surface px-4 py-3 text-sm sm:grid-cols-2">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wide text-muted">
+                Email
+              </p>
+              <p className="mt-0.5 font-bold">support@rewardcare.example</p>
+            </div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wide text-muted">
+                Phone
+              </p>
+              <p className="mt-0.5 font-bold">(800) 555-0199</p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+            <a
+              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-accent/35 bg-accent-soft px-4 text-sm font-bold text-accent hover:border-accent"
+              href="mailto:support@rewardcare.example"
+            >
+              <Envelope className="size-4" />
+              Email RCS support
+            </a>
+            <a
+              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-success/35 bg-success-soft px-4 text-sm font-bold text-success hover:border-success"
+              href="tel:+18005550199"
+            >
+              <Smartphone className="size-4" />
+              Call RCS support
+            </a>
+          </div>
         </Card.Content>
       </Card>
     </div>

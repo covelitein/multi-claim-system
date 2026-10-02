@@ -6,7 +6,7 @@ import { Dropdown } from "@heroui/react";
 
 const NOTIFICATIONS = [
   { id: "gap", title: "Face sheet missing", detail: "Sunrise Villa · 12m ago" },
-  { id: "deny", title: "Claim returned", detail: "Medicare · 28m ago" },
+  { id: "deny", title: "Claim returned", detail: "Genworth · 28m ago" },
   { id: "due", title: "Appeal due tomorrow", detail: "Riverbend SNF · 1h ago" },
 ];
 

@@ -3,7 +3,7 @@
 import { fetchDashboardHome, type DashboardHomeData } from "@/lib/dashboard/home-data";
 import { useEffect, useState } from "react";
 
-/** Plug point: swap `fetchDashboardHome` for an RTK Query / API client later. */
+/** Gen-1: local mock data. Swap for RTK Query when API is live. */
 export function useDashboardHome() {
   const [data, setData] = useState<DashboardHomeData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -11,7 +11,6 @@ export function useDashboardHome() {
 
   useEffect(() => {
     let active = true;
-
     setLoading(true);
     setError(null);
     fetchDashboardHome()
@@ -25,7 +24,6 @@ export function useDashboardHome() {
         setError(err instanceof Error ? err.message : "Failed to load dashboard");
         setLoading(false);
       });
-
     return () => {
       active = false;
     };

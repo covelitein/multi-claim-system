@@ -8,6 +8,7 @@ export type UploadedDocument = {
   name: string;
   sizeLabel: string;
   type: string;
+  file?: File;
 };
 
 type DocumentUploadZoneProps = {
@@ -42,6 +43,7 @@ export function DocumentUploadZone({
       name: file.name,
       sizeLabel: formatSize(file.size),
       type: file.type || "document",
+      file,
     }));
     onAdd(next);
     if (inputRef.current) inputRef.current.value = "";

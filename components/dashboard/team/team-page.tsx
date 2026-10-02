@@ -27,7 +27,7 @@ export function TeamPage() {
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Team
           </h1>
-          <p className="mt-1 max-w-2xl text-base font-medium text-muted">
+          <p className="mt-1 max-w-2xl text-base font-semibold text-muted">
             Facility-scoped access for billing colleagues. Invite, set
             permissions, or remove members when roles change. Skip this if you
             are the only billing manager.

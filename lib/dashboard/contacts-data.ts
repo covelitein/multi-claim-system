@@ -9,7 +9,7 @@ export type ClientContact = {
   id: string;
   name: string;
   organization: string;
-  role: ContactRole;
+  role: ContactRole | string;
   email: string;
   phone: string;
   notes: string;

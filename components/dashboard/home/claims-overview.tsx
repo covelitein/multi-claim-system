@@ -33,9 +33,11 @@ export function ClaimsOverview({
   });
 
   return (
-    <Card className={`${dashboardCardClass} flex h-full flex-col`}>
+    <Card
+      className={`${dashboardCardClass} flex h-full flex-col border border-accent/25 bg-gradient-to-br from-accent-soft/25 to-surface`}
+    >
       <Card.Header className="shrink-0 flex-row items-center justify-between gap-3">
-        <Card.Title className="text-base font-semibold">
+        <Card.Title className="text-base font-bold">
           Claims Overview
         </Card.Title>
         <span className="rounded-full bg-surface-secondary px-3 py-1 text-xs font-medium text-muted">

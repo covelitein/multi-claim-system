@@ -21,6 +21,7 @@ type NewClaimDrawerProps = {
   mode?: "new-resident" | "existing";
 };
 
+/** Gen-1: dummy claim drawer (no API). */
 export function NewClaimDrawer({
   trigger,
   mode = "existing",
@@ -38,7 +39,13 @@ export function NewClaimDrawer({
       footer={
         <>
           <DrawerCancelButton />
-          <DrawerPrimaryCloseButton label="Submit for review" />
+          {isNewResident ? (
+            <DrawerPrimaryCloseButton label="Submit for review" />
+          ) : (
+            <Button variant="primary">
+              <Link href="/billing/new">Open upload flow</Link>
+            </Button>
+          )}
         </>
       }
       sizeClassName="sm:max-w-lg"
@@ -59,73 +66,56 @@ export function NewClaimDrawer({
     >
       {isNewResident ? (
         <>
+          <AuthTextField label="First name" name="firstName" placeholder="Ada" />
+          <AuthTextField label="Last name" name="lastName" placeholder="Okoye" />
           <AuthTextField
-            label="Resident first name"
-            name="firstName"
-            placeholder="Ada"
+            label="Phone"
+            name="phone"
+            placeholder="(555) 234-5678"
           />
+          <div className="flex flex-col gap-1.5">
+            <Label className="text-sm font-bold">Client / Insurer</Label>
+            <select
+              className="h-11 rounded-xl border border-border bg-surface px-3 text-sm font-semibold"
+              defaultValue={LTC_INSURERS[0]}
+              name="insurer"
+            >
+              {LTC_INSURERS.map((insurer) => (
+                <option key={insurer} value={insurer}>
+                  {insurer}
+                </option>
+              ))}
+            </select>
+          </div>
           <AuthTextField
-            label="Resident last name"
-            name="lastName"
-            placeholder="Okoye"
+            label="Billing period"
+            name="billingPeriod"
+            placeholder="08/01/2026 – 08/31/2026"
           />
-          <AuthTextField
-            label="Policy ID"
-            name="policyId"
-            placeholder="POL-GNW-0001"
+          <DocumentUploadZone
+            files={files}
+            hint="Upload invoices and supporting docs. CMR walkthrough forms will arrive once templates are loaded — for now, upload only."
+            title="Claim documents"
+            onAdd={(next) => setFiles((prev) => [...prev, ...next])}
+            onRemove={(id) =>
+              setFiles((prev) => prev.filter((f) => f.id !== id))
+            }
           />
         </>
       ) : (
-        <AuthTextField
-          label="Resident"
-          name="claimResident"
-          placeholder="Ada Okoye"
-        />
-      )}
-
-      <div className="flex flex-col gap-1.5">
-        <Label className="text-sm font-semibold">Client / Insurer</Label>
-        <select
-          className="h-12 w-full rounded-xl border border-border bg-surface px-3 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-          defaultValue=""
-          name="insurer"
-        >
-          <option disabled value="">
-            Select insurer / claims processor…
-          </option>
-          {LTC_INSURERS.map((insurer) => (
-            <option key={insurer} value={insurer}>
-              {insurer}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <AuthTextField
-        label="Claim period"
-        name="claimPeriod"
-        placeholder="September 2026"
-      />
-
-      <DocumentUploadZone
-        files={files}
-        hint="Upload invoices and supporting docs. CMR walkthrough forms will arrive once templates are loaded — for now, upload only."
-        title="Upload claim documents"
-        onAdd={(next) => setFiles((prev) => [...prev, ...next])}
-        onRemove={(id) => setFiles((prev) => prev.filter((f) => f.id !== id))}
-      />
-
-      {!isNewResident ? (
-        <p className="text-xs font-medium text-muted">
-          Need more room?{" "}
+        <div className="flex flex-col gap-3 text-sm font-medium text-muted">
+          <p>
+            Use the full upload flow to pick an existing resident, attach the
+            packet, and submit for Helix review.
+          </p>
           <Link
-            className="font-bold text-accent hover:underline"
+            className="font-bold text-accent underline-offset-2 hover:underline"
             href="/billing/new"
           >
             Open full upload flow
           </Link>
-        </p>
-      ) : null}
+        </div>
+      )}
     </DashboardDrawer>
   );
 }

@@ -9,6 +9,7 @@ import { Button, Form } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 
+/** Gen-1: dummy sign-in (no API). */
 export default function LoginForm() {
   const router = useRouter();
   const showLoader = useNavigationLoader((state) => state.show);

@@ -58,7 +58,7 @@ export function ClaimsStatusTabs({
   onSelect: (id: string) => void;
 }) {
   return (
-    <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5">
+    <div className="flex w-full gap-2">
       {stats.map((stat) => {
         const tone = TAB_TONES[stat.id] ?? TAB_TONES.all;
         const isActive = active === stat.id;
@@ -66,16 +66,16 @@ export function ClaimsStatusTabs({
           <button
             key={stat.id}
             className={cn(
-              "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-colors",
+              "inline-flex min-w-0 flex-1 items-center justify-center gap-2 rounded-full border px-3 py-2.5 text-sm font-bold whitespace-nowrap transition-colors",
               isActive ? tone.active : tone.idle,
             )}
             type="button"
             onClick={() => onSelect(stat.id)}
           >
-            <span>{SHORT_LABEL[stat.id] ?? stat.label}</span>
+            <span className="truncate">{SHORT_LABEL[stat.id] ?? stat.label}</span>
             <span
               className={cn(
-                "flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-bold tabular-nums",
+                "flex min-w-6 shrink-0 items-center justify-center rounded-full px-2 py-0.5 text-xs font-bold tabular-nums",
                 isActive ? tone.badge : "bg-surface/80 text-inherit",
               )}
             >

@@ -6,6 +6,7 @@ import {
   DrawerCancelButton,
   DrawerPrimaryCloseButton,
 } from "@/components/dashboard/drawers/dashboard-drawer";
+import { RESIDENTS_DATA } from "@/lib/dashboard/residents-data";
 import { Plus, TrashBin } from "@gravity-ui/icons";
 import { Button, Label } from "@heroui/react";
 import { useMemo, useState } from "react";
@@ -16,26 +17,14 @@ type LineItem = {
   amount: string;
 };
 
-const RESIDENT_LOOKUP = [
-  {
-    id: "r1",
-    name: "Mary Johnson",
-    billTo: "1200 Wellness Blvd, Austin, TX 78701",
-    room: "214-B",
-  },
-  {
-    id: "r2",
-    name: "Robert Williams",
-    billTo: "88 Oakview Lane, Round Rock, TX 78664",
-    room: "108-A",
-  },
-  {
-    id: "r3",
-    name: "Gloria Chen",
-    billTo: "45 Maple Ridge Dr, Cedar Park, TX 78613",
-    room: "301-C",
-  },
-];
+/** Client reference database — pull saved resident details into invoices. */
+const CLIENT_REFERENCE = RESIDENTS_DATA.residents.map((r) => ({
+  id: r.id,
+  name: `${r.firstName} ${r.lastName}`,
+  billTo: `${r.facility}, Austin, TX`,
+  room: r.id === "r1" ? "214-B" : r.id === "r2" ? "108-A" : "301-C",
+  payer: r.payer,
+}));
 
 function currencyTotal(lines: LineItem[]) {
   const sum = lines.reduce((acc, line) => {
@@ -48,16 +37,17 @@ function currencyTotal(lines: LineItem[]) {
   });
 }
 
-/** Guided Create Invoice builder for facility billing managers. */
+/** Guided Create Invoice builder for facility billing managers (dummy Gen-1). */
 export function CreateInvoiceDrawer() {
-  const [residentId, setResidentId] = useState(RESIDENT_LOOKUP[0]?.id ?? "");
+  const [residentId, setResidentId] = useState(CLIENT_REFERENCE[0]?.id ?? "");
+  const [logoName, setLogoName] = useState<string | null>(null);
   const [lines, setLines] = useState<LineItem[]>([
     { id: "room", description: "Room & board", amount: "3200.00" },
     { id: "adl", description: "ADL / care service level", amount: "850.00" },
   ]);
 
   const resident = useMemo(
-    () => RESIDENT_LOOKUP.find((r) => r.id === residentId),
+    () => CLIENT_REFERENCE.find((r) => r.id === residentId),
     [residentId],
   );
 
@@ -68,7 +58,7 @@ export function CreateInvoiceDrawer() {
       ...prev,
       {
         id: `extra-${Date.now()}`,
-        description: "Additional charge",
+        description: "Guest meals / additional charge",
         amount: "0.00",
       },
     ]);
@@ -86,7 +76,7 @@ export function CreateInvoiceDrawer() {
 
   return (
     <DashboardDrawer
-      description="Guided invoice builder with resident lookup. Generates a complete facility invoice for LTC billing."
+      description="Guided invoice builder with client reference lookup. Generates a complete facility invoice for LTC billing."
       footer={
         <>
           <DrawerCancelButton />
@@ -96,15 +86,15 @@ export function CreateInvoiceDrawer() {
       sizeClassName="sm:max-w-xl"
       title="Create invoice"
       trigger={
-        <Button className="h-9 px-3 text-sm font-semibold" variant="primary">
+        <Button className="h-11 gap-2 px-4 text-sm font-bold" variant="primary">
           <Plus className="size-4" />
           Create Invoice
         </Button>
       }
     >
-      <div className="rounded-xl border-2 border-accent/30 bg-accent-soft/40 px-3 py-3 text-sm font-medium">
+      <div className="rounded-xl border border-accent/30 bg-accent-soft/40 px-3 py-3 text-sm font-semibold text-foreground">
         Include facility letterhead/logo, billing manager address, and service
-        dates. Resident lookup fills bill-to details.
+        dates. Client reference fills resident details.
       </div>
 
       <AuthTextField
@@ -112,6 +102,26 @@ export function CreateInvoiceDrawer() {
         label="Facility name / letterhead"
         name="facilityName"
       />
+
+      <div className="flex flex-col gap-1.5">
+        <Label className="text-sm font-bold">Facility logo</Label>
+        <label className="flex h-12 cursor-pointer items-center justify-between gap-3 rounded-xl border border-dashed border-border bg-surface-secondary/40 px-3 text-sm font-semibold transition-colors hover:border-accent/40">
+          <span className="truncate text-muted">
+            {logoName ?? "Upload logo (PNG or SVG)"}
+          </span>
+          <span className="shrink-0 text-accent">Browse</span>
+          <input
+            accept="image/png,image/jpeg,image/svg+xml"
+            className="hidden"
+            type="file"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              setLogoName(file?.name ?? null);
+            }}
+          />
+        </label>
+      </div>
+
       <AuthTextField
         defaultValue="1200 Wellness Blvd, Austin, TX 78701"
         label="Billing manager address"
@@ -125,15 +135,17 @@ export function CreateInvoiceDrawer() {
       />
 
       <div className="flex flex-col gap-1.5">
-        <Label className="text-sm font-bold">Resident lookup</Label>
+        <Label className="text-sm font-bold">
+          Client reference (resident)
+        </Label>
         <select
-          className="h-12 w-full rounded-xl border-2 border-border bg-surface px-3 text-sm font-semibold outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+          className="h-12 w-full rounded-xl border border-border bg-surface px-3 text-sm font-semibold outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
           value={residentId}
           onChange={(e) => setResidentId(e.target.value)}
         >
-          {RESIDENT_LOOKUP.map((r) => (
+          {CLIENT_REFERENCE.map((r) => (
             <option key={r.id} value={r.id}>
-              {r.name}
+              {r.name} — {r.payer}
             </option>
           ))}
         </select>
@@ -155,22 +167,22 @@ export function CreateInvoiceDrawer() {
       <div className="grid grid-cols-2 gap-3">
         <AuthTextField
           defaultValue="2026-09-01"
-          label="Service start"
+          label="Billing period start"
           name="serviceFrom"
         />
         <AuthTextField
           defaultValue="2026-09-30"
-          label="Service end"
+          label="Billing period end"
           name="serviceTo"
         />
       </div>
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-bold">Line items</p>
+          <p className="text-sm font-bold">Charges & care level</p>
           <Button size="sm" variant="outline" onPress={addLine}>
             <Plus className="size-3.5" />
-            Add line
+            Add charge
           </Button>
         </div>
         {lines.map((line) => (
@@ -181,7 +193,7 @@ export function CreateInvoiceDrawer() {
             <label className="flex flex-col gap-1 text-xs font-bold">
               Description
               <input
-                className="h-11 rounded-xl border border-border bg-surface px-3 text-sm font-medium outline-none focus:border-accent"
+                className="h-11 rounded-xl border border-border bg-surface px-3 text-sm font-semibold outline-none focus:border-accent"
                 value={line.description}
                 onChange={(e) =>
                   updateLine(line.id, { description: e.target.value })
@@ -208,7 +220,7 @@ export function CreateInvoiceDrawer() {
             </button>
           </div>
         ))}
-        <div className="mt-1 flex items-center justify-between rounded-xl border-2 border-success/40 bg-success-soft/40 px-4 py-3">
+        <div className="mt-1 flex items-center justify-between rounded-xl border border-success/35 bg-success-soft/40 px-4 py-3">
           <span className="text-sm font-bold">Total</span>
           <span className="text-lg font-bold tabular-nums">{total}</span>
         </div>

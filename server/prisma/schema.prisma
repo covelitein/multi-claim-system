@@ -1,0 +1,221 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum FacilityType {
+  alf
+  snf
+  home_health
+  agency
+}
+
+enum UserRole {
+  admin
+  billing_manager
+  staff
+}
+
+enum UserStatus {
+  active
+  inactive
+}
+
+enum ResidentStatus {
+  active
+  inactive
+  pending
+  on_hold
+}
+
+enum ClaimStatus {
+  in_progress
+  missing_docs
+  ready_for_review
+  submitted
+  denied
+  paid
+}
+
+enum InvoiceStatus {
+  matched
+  pending_review
+  missing
+  overdue
+}
+
+enum DocumentOwnerType {
+  claim
+  invoice
+}
+
+model Facility {
+  id           String       @id @default(cuid())
+  legalName    String
+  displayName  String
+  type         FacilityType
+  licenseNumber String
+  country      String
+  city         String
+  address      String
+  plan         String       @default("Professional")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  users      User[]
+  residents  Resident[]
+  claims     Claim[]
+  invoices   Invoice[]
+  contacts   Contact[]
+  documents  Document[]
+  invites    TeamInvite[]
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  jobTitle     String
+  phone        String
+  role         UserRole   @default(admin)
+  status       UserStatus @default(active)
+  image        String?
+  facilityId   String
+  lastActiveAt DateTime   @default(now())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  facility  Facility   @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  documents Document[]
+  invites   TeamInvite[] @relation("InvitedBy")
+}
+
+model Resident {
+  id          String         @id @default(cuid())
+  facilityId  String
+  residentId  String
+  firstName   String
+  lastName    String
+  dob         DateTime
+  phone       String
+  payer       String
+  room        String?
+  status      ResidentStatus @default(active)
+  admitDate   DateTime
+  image       String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  facility Facility  @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  claims   Claim[]
+  invoices Invoice[]
+
+  @@unique([facilityId, residentId])
+  @@index([facilityId])
+}
+
+model Claim {
+  id            String      @id @default(cuid())
+  facilityId    String
+  residentId    String
+  policyId      String
+  insurer       String
+  billingPeriod String
+  status        ClaimStatus @default(in_progress)
+  missingItems  Int         @default(0)
+  notes         String      @default("")
+  amountCents   Int         @default(0)
+  submittedAt   DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  facility Facility   @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  resident Resident   @relation(fields: [residentId], references: [id], onDelete: Cascade)
+  invoices Invoice[]
+
+  @@index([facilityId])
+  @@index([status])
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  facilityId    String
+  residentId    String
+  invoiceId     String
+  invoiceDate   DateTime
+  servicePeriod String
+  amountCents   Int
+  status        InvoiceStatus @default(pending_review)
+  matchedClaimId String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  facility     Facility  @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  resident     Resident  @relation(fields: [residentId], references: [id], onDelete: Cascade)
+  matchedClaim Claim?    @relation(fields: [matchedClaimId], references: [id], onDelete: SetNull)
+
+  @@unique([facilityId, invoiceId])
+  @@index([facilityId])
+}
+
+model Contact {
+  id            String   @id @default(cuid())
+  facilityId    String
+  name          String
+  organization  String
+  role          String
+  email         String
+  phone         String
+  notes         String   @default("")
+  lastContacted DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  facility Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+
+  @@index([facilityId])
+}
+
+model TeamInvite {
+  id          String   @id @default(cuid())
+  facilityId  String
+  email       String
+  role        UserRole @default(staff)
+  token       String   @unique @default(cuid())
+  invitedById String
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  createdAt   DateTime @default(now())
+
+  facility  Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  invitedBy User     @relation("InvitedBy", fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@index([facilityId])
+}
+
+model Document {
+  id           String            @id @default(cuid())
+  facilityId   String
+  ownerType    DocumentOwnerType
+  ownerId      String
+  filename     String
+  originalName String
+  mime         String
+  size         Int
+  path         String
+  uploadedById String
+  createdAt    DateTime          @default(now())
+
+  facility   Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  uploadedBy User     @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+
+  @@index([facilityId])
+  @@index([ownerType, ownerId])
+}

@@ -3,7 +3,7 @@
 import { fetchResidents, type ResidentsPageData } from "@/lib/dashboard/residents-data";
 import { useEffect, useState } from "react";
 
-/** Plug point: swap for residents list API later. */
+/** Gen-1: local mock data. */
 export function useResidents() {
   const [data, setData] = useState<ResidentsPageData | null>(null);
   const [loading, setLoading] = useState(true);

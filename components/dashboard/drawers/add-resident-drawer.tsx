@@ -75,7 +75,7 @@ export function AddResidentDrawer({
         defaultValue={resident?.payer}
         label="Primary payer"
         name="payer"
-        placeholder="Medicare"
+        placeholder="Genworth / Illumifin"
       />
       <AuthTextField
         defaultValue={resident?.phone}

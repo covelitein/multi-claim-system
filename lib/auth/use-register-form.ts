@@ -14,6 +14,7 @@ import { useState, type FormEvent } from "react";
 
 const LAST_STEP = 4;
 
+/** Gen-1: dummy register (no API). */
 export function useRegisterForm() {
   const router = useRouter();
   const showLoader = useNavigationLoader((state) => state.show);
@@ -21,10 +22,12 @@ export function useRegisterForm() {
   const [values, setValues] = useState<RegisterDraft>(REGISTER_DEFAULTS);
   const [errors, setErrors] = useState<RegisterFieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   function update<K extends keyof RegisterDraft>(key: K, value: RegisterDraft[K]) {
     setValues((current) => ({ ...current, [key]: value }));
     setErrors((current) => ({ ...current, [key]: undefined }));
+    setFormError(null);
   }
 
   function validateStep(current: number) {
@@ -48,6 +51,7 @@ export function useRegisterForm() {
 
   function goBack() {
     setErrors({});
+    setFormError(null);
     setStep((current) => Math.max(1, current - 1));
   }
 
@@ -67,6 +71,7 @@ export function useRegisterForm() {
     }
 
     setSubmitting(true);
+    setFormError(null);
     showLoader("Creating your facility workspace...");
     window.setTimeout(() => {
       router.push("/login");
@@ -78,6 +83,7 @@ export function useRegisterForm() {
     values,
     errors,
     submitting,
+    formError,
     copy: REGISTER_STEP_COPY[step - 1],
     update,
     goBack,
