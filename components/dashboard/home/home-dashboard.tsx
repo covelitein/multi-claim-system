@@ -27,15 +27,15 @@ export function HomeDashboard() {
     <div className="flex min-w-0 flex-col gap-4 overflow-x-hidden pb-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          <h1 className="type-page">
             Welcome back, Billing Manager
           </h1>
-          <p className="mt-1 text-base font-semibold text-muted">
+          <p className="mt-1 type-meta text-muted">
             {data.greetingSubtitle}
           </p>
         </div>
         <Link
-          className="inline-flex w-fit items-center gap-2 rounded-full border-2 border-signal-blue bg-signal-blue-soft px-4 py-2 text-sm font-bold text-signal-blue-ink"
+          className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 type-meta text-muted hover:bg-surface-secondary"
           href="/billing"
         >
           <Calendar className="size-4" />
@@ -48,7 +48,7 @@ export function HomeDashboard() {
 
       <KpiStatCards kpis={data.kpis} />
 
-      <div className="grid min-w-0 gap-4 xl:grid-cols-12">
+      <div className="grid min-w-0 items-start gap-4 xl:grid-cols-12">
         <div className="min-w-0 xl:col-span-8">
           <RecentSubmissions
             items={data.recentSubmissions}
@@ -63,7 +63,7 @@ export function HomeDashboard() {
         </div>
       </div>
 
-      <div className="grid min-w-0 gap-4 xl:grid-cols-3">
+      <div className="grid min-w-0 gap-4 xl:grid-cols-[repeat(3,minmax(0,1fr))]">
         <ClaimsOverview
           rangeLabel={data.overviewRangeLabel}
           slices={data.overview}

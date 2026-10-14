@@ -21,7 +21,7 @@ export function SubmissionHistory({ days }: { days: SubmissionHistoryDay[] }) {
   return (
     <Card className={`${dashboardCardClass} flex h-full flex-col`}>
       <Card.Header className="shrink-0 flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Card.Title className="text-base font-semibold">
+        <Card.Title className="type-card-title">
           Submission History
         </Card.Title>
         <div className="flex flex-wrap items-center gap-3">

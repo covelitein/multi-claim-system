@@ -26,10 +26,10 @@ export function TeamPage() {
     <div className="flex min-w-0 flex-col gap-6 pb-4 sm:gap-8">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          <h1 className="type-page">
             Team
           </h1>
-          <p className="mt-1 max-w-2xl text-base font-semibold text-muted">
+          <p className="mt-1 max-w-2xl type-meta text-muted">
             Billing colleagues at {data.facility}. Invite and manage people who
             work at this facility.
           </p>
@@ -42,10 +42,10 @@ export function TeamPage() {
       ) : (
         <Card className={dashboardCardClass}>
           <Card.Header>
-            <Card.Title className="text-lg font-bold">
+            <Card.Title className="type-card-title">
               You are the only person at {data.facility}
             </Card.Title>
-            <Card.Description className="text-base font-medium text-muted">
+            <Card.Description className="type-meta text-muted">
               Team appears in the menu when another billing colleague joins this
               facility. Invites stay limited to {data.facility}.
             </Card.Description>

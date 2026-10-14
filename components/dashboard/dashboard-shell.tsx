@@ -13,7 +13,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         <DashboardHeader />
         <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           <ScrollShadow
-            className="min-h-0 min-w-0 flex-1 overflow-x-hidden px-5 pt-3 pb-4 lg:px-8"
+            className="min-h-0 min-w-0 flex-1 overflow-x-hidden px-5 pt-10 pb-4 lg:px-8"
             isEnabled={false}
             orientation="vertical"
           >

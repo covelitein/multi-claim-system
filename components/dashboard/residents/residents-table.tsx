@@ -54,7 +54,7 @@ export function ResidentsTable({ residents }: { residents: Resident[] }) {
                 <Avatar.Fallback>{r.initials}</Avatar.Fallback>
               </Avatar>
               <div className="min-w-0">
-                <p className="truncate text-base font-bold">
+                <p className="truncate type-row">
                   {r.firstName} {r.lastName}
                 </p>
                 <p className="truncate text-sm font-semibold text-muted">
@@ -140,7 +140,7 @@ export function ResidentsTable({ residents }: { residents: Resident[] }) {
     <Card className={dashboardCardClass}>
       <Card.Header className="flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Card.Title className="text-base font-bold">
+          <Card.Title className="type-card-title">
             All residents
           </Card.Title>
           <p className="mt-0.5 text-sm font-semibold text-muted">

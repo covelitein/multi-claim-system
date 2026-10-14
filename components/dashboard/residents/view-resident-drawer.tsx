@@ -70,16 +70,12 @@ export function ViewResidentDrawer({ resident }: { resident: Resident }) {
       }
     >
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-xl border-2 border-signal-blue bg-signal-blue-soft px-3 py-3">
-          <p className="text-sm font-bold uppercase text-signal-blue-ink">
-            Policy
-          </p>
+        <div className="rounded-xl border border-border px-3 py-3">
+          <p className="text-sm font-bold uppercase text-muted">Policy</p>
           <p className="mt-1 text-base font-bold">{resident.policyId}</p>
         </div>
-        <div className="rounded-xl border-2 border-signal-purple bg-signal-purple-soft px-3 py-3">
-          <p className="text-sm font-bold uppercase text-signal-purple-ink">
-            Carrier
-          </p>
+        <div className="rounded-xl border border-border px-3 py-3">
+          <p className="text-sm font-bold uppercase text-muted">Carrier</p>
           <p className="mt-1 text-base font-bold">{resident.payer}</p>
         </div>
       </div>

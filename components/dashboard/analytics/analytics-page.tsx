@@ -29,17 +29,17 @@ export function AnalyticsPage() {
   return (
     <div className="flex min-w-0 flex-col gap-5 pb-2">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+        <h1 className="type-page">
           Analytics
         </h1>
-        <p className="mt-1 text-base font-semibold text-muted">
+        <p className="mt-1 type-meta text-muted">
           Facility submission history, claim status, and trends — built for
           quick scanning.
         </p>
       </div>
 
       <AnalyticsStatRow stats={data.stats} />
-      <div className="grid min-w-0 gap-4 lg:grid-cols-5">
+      <div className="grid min-w-0 gap-4 lg:grid-cols-[repeat(5,minmax(0,1fr))]">
         <div className="min-w-0 lg:col-span-2">
           <ClaimsDonutChart breakdown={data.statusBreakdown} />
         </div>

@@ -109,8 +109,8 @@ export function InvoicesTable({ invoices }: { invoices: Invoice[] }) {
     <Card className={dashboardCardClass}>
       <Card.Header className="flex-col items-stretch gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Card.Title className="text-lg font-bold">All invoices</Card.Title>
-          <p className="mt-0.5 text-base font-semibold text-muted">
+          <Card.Title className="type-card-title">All invoices</Card.Title>
+          <p className="mt-0.5 type-meta text-muted">
             {filtered.length} of {invoices.length} shown
           </p>
         </div>

@@ -1,7 +1,8 @@
 "use client";
 
-import type { StatusBreakdown } from "@/lib/dashboard/analytics-data";
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
+import { StatusDonut } from "@/components/dashboard/status-donut";
+import type { StatusBreakdown } from "@/lib/dashboard/analytics-data";
 import { Card } from "@heroui/react";
 
 export function ClaimsDonutChart({
@@ -9,85 +10,19 @@ export function ClaimsDonutChart({
 }: {
   breakdown: StatusBreakdown[];
 }) {
-  const total = breakdown.reduce((sum, item) => sum + item.value, 0);
-  const size = 200;
-  const strokeWidth = 26;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-
-  let cumulativeOffset = 0;
-  const arcs = breakdown.map((item) => {
-    const fraction = item.value / total;
-    const dashLength = fraction * circumference;
-    const gapLength = circumference - dashLength;
-    const offset = cumulativeOffset;
-    cumulativeOffset += fraction;
-    return {
-      ...item,
-      dashArray: `${dashLength} ${gapLength}`,
-      dashOffset: -(offset * circumference),
-    };
-  });
-
   return (
-    <Card
-      className={`${dashboardCardClass} h-full border-2 border-signal-purple bg-signal-purple-soft/40`}
-    >
-      <Card.Header className="!pb-0">
-        <Card.Title className="text-lg font-bold">Claims by Status</Card.Title>
-        <p className="mt-0.5 text-sm font-semibold text-muted">
+    <Card className={`${dashboardCardClass} flex h-full flex-col`}>
+      <Card.Header>
+        <Card.Title className="type-card-title">Claims by Status</Card.Title>
+        <p className="mt-0.5 type-meta text-muted">
           Facility-wide long-term care packet status
         </p>
       </Card.Header>
-      <Card.Content className="flex flex-col items-center gap-4 pt-3 sm:flex-row sm:items-center">
-        <div className="relative shrink-0">
-          <svg
-            className="block"
-            height={size}
-            viewBox={`0 0 ${size} ${size}`}
-            width={size}
-          >
-            {arcs.map((arc) => (
-              <circle
-                key={arc.label}
-                className="transition-all duration-500"
-                cx={size / 2}
-                cy={size / 2}
-                fill="none"
-                r={radius}
-                stroke={arc.color}
-                strokeDasharray={arc.dashArray}
-                strokeDashoffset={arc.dashOffset}
-                strokeLinecap="round"
-                strokeWidth={strokeWidth}
-                transform={`rotate(-90 ${size / 2} ${size / 2})`}
-              />
-            ))}
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-3xl font-bold">{total}</span>
-            <span className="text-sm font-bold text-muted">Total</span>
-          </div>
-        </div>
-        <div className="flex w-full flex-1 flex-col gap-2">
-          {breakdown.map((item) => (
-            <div key={item.label} className="flex items-center gap-2.5">
-              <span
-                className="size-3.5 shrink-0 rounded-full"
-                style={{ backgroundColor: item.color }}
-              />
-              <span className="flex-1 truncate text-base font-semibold text-foreground">
-                {item.label}
-              </span>
-              <span className="text-base font-bold tabular-nums">
-                {item.value}
-              </span>
-              <span className="w-12 text-right text-sm font-bold text-muted">
-                {((item.value / total) * 100).toFixed(0)}%
-              </span>
-            </div>
-          ))}
-        </div>
+      <Card.Content className="flex flex-1 flex-col pt-1">
+        <StatusDonut
+          centerLabel="Total"
+          slices={breakdown.map((item) => ({ ...item, id: item.label }))}
+        />
       </Card.Content>
     </Card>
   );

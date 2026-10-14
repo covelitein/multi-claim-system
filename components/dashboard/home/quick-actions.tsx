@@ -29,49 +29,56 @@ export function QuickActions({
   resident: RecentSubmission | null;
 }) {
   return (
-    <Card className={`${dashboardCardClass} flex h-full flex-col border-2 border-signal-amber bg-signal-amber-soft/40`}>
+    <Card className={`${dashboardCardClass} flex h-full flex-col`}>
       <Card.Header className="py-4">
-        <Card.Title className="text-lg font-bold">Quick Actions</Card.Title>
-        <p className="mt-1 text-base font-semibold text-muted">
-          {resident
-            ? `Working on ${resident.residentName}`
-            : "Select a resident to create or upload an invoice."}
+        <Card.Title className="type-card-title">Quick Actions</Card.Title>
+        <p className="mt-1 type-meta text-muted">
+          {resident ? (
+            <>
+              Working on{" "}
+              <span className="font-bold text-foreground">
+                {resident.residentName}
+              </span>
+            </>
+          ) : (
+            "Select a resident to see invoice actions."
+          )}
         </p>
       </Card.Header>
-      <Card.Content className="flex flex-col gap-3 pt-1 pb-4">
+      <Card.Content className="flex flex-col gap-3 pb-2">
         {actions.map((action) => {
           if (action.requiresResident && !resident) return null;
           const Icon = ACTION_ICONS[action.id] ?? FileText;
           const tone = signalStyles(action.tone);
-          const href =
-            action.requiresResident && resident
-              ? `${action.href}?resident=${resident.residentId}`
-              : action.href;
-          const description =
-            action.requiresResident && resident
-              ? resident.residentName
-              : action.description;
+          const scoped = action.requiresResident && resident;
+          const href = scoped
+            ? `${action.href}?resident=${resident.residentId}`
+            : action.href;
 
           return (
             <Link
               key={action.id}
-              className={`group flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:brightness-95 ${tone.card}`}
+              className={`group flex items-center gap-3 rounded-xl px-3.5 py-3.5 transition-shadow hover:shadow-md ${tone.tile}`}
               href={href}
             >
               <span
-                className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${tone.icon}`}
+                className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${tone.icon}`}
               >
                 <Icon className="size-5" />
               </span>
               <span className="min-w-0 flex-1">
-                <span className={`block text-base font-bold leading-snug ${tone.ink}`}>
+                <span
+                  className={`block type-row ${tone.ink}`}
+                >
                   {action.label}
                 </span>
-                <span className="mt-0.5 block text-sm font-semibold text-foreground/75">
-                  {description}
+                <span className="mt-0.5 block type-meta text-foreground/70">
+                  {scoped ? `For ${resident.residentName}` : action.description}
                 </span>
               </span>
-              <ArrowRight className={`size-5 shrink-0 ${tone.ink}`} />
+              <ArrowRight
+                className={`size-5 shrink-0 transition-transform group-hover:translate-x-0.5 ${tone.ink}`}
+              />
             </Link>
           );
         })}

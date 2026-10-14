@@ -10,7 +10,7 @@ export function StatusBadge({
 }) {
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 text-sm font-bold leading-none ${SIGNAL[signal].badge}`}
+      className={`inline-flex items-center whitespace-nowrap rounded-full px-2.5 py-1 type-badge ${SIGNAL[signal].badge}`}
     >
       {children}
     </span>

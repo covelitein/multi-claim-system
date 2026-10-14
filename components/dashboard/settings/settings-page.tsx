@@ -55,7 +55,7 @@ function GeneralTab() {
     <div className="grid gap-5">
       <Card className={`${dashboardCardClass} border-2 border-accent/20`}>
         <Card.Header>
-          <Card.Title className="text-lg font-bold">
+          <Card.Title className="type-card-title">
             Organization settings
           </Card.Title>
           <Card.Description className="text-sm font-medium text-muted">
@@ -94,7 +94,7 @@ function GeneralTab() {
 
       <Card className={`${dashboardCardClass} border border-success/30 bg-success-soft/20`}>
         <Card.Header>
-          <Card.Title className="text-lg font-bold">Contact RCS support</Card.Title>
+          <Card.Title className="type-card-title">Contact RCS support</Card.Title>
           <Card.Description className="text-sm font-semibold text-muted">
             Reach Reward Care Solutions when you need help. Production numbers
             will replace these placeholders.
@@ -174,7 +174,7 @@ function NotificationsTab() {
   return (
     <Card className={dashboardCardClass}>
       <Card.Header>
-        <Card.Title className="text-lg font-bold">Email notifications</Card.Title>
+        <Card.Title className="type-card-title">Email notifications</Card.Title>
         <Card.Description className="text-sm font-medium text-muted">
           Choose which alerts you want to receive.
         </Card.Description>
@@ -207,7 +207,7 @@ function SecurityTab() {
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_280px]">
       <Card className={dashboardCardClass}>
         <Card.Header>
-          <Card.Title className="text-lg font-bold">Change password</Card.Title>
+          <Card.Title className="type-card-title">Change password</Card.Title>
           <Card.Description className="text-sm font-medium text-muted">
             Use a strong password you do not reuse elsewhere.
           </Card.Description>
@@ -237,7 +237,7 @@ function SecurityTab() {
 
       <Card className={dashboardCardClass}>
         <Card.Header>
-          <Card.Title className="text-base font-bold">Security tips</Card.Title>
+          <Card.Title className="type-card-title">Security tips</Card.Title>
         </Card.Header>
         <Card.Content className="gap-3 text-sm font-medium text-muted">
           <div className="flex gap-3 rounded-2xl bg-surface-secondary/80 px-3.5 py-3">
@@ -260,10 +260,10 @@ export function SettingsPage() {
   return (
     <div className="flex min-w-0 flex-col gap-6 pb-4 sm:gap-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+        <h1 className="type-page">
           Settings
         </h1>
-        <p className="mt-1 text-base font-medium text-muted">
+        <p className="mt-1 type-meta text-muted">
           Account preferences, notifications, and security.
         </p>
       </div>

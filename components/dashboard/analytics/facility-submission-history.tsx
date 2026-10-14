@@ -1,6 +1,7 @@
 "use client";
 
 import type { FacilitySubmissionMonth } from "@/lib/dashboard/analytics-data";
+import { ChartLegend } from "@/components/dashboard/chart-legend";
 import { CHART } from "@/lib/dashboard/signal-colors";
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
 import { Card } from "@heroui/react";
@@ -30,36 +31,26 @@ export function FacilitySubmissionHistory({
 
   return (
     <Card
-      className={`${dashboardCardClass} border-2 border-signal-amber bg-signal-amber-soft/50`}
+      className={dashboardCardClass}
     >
       <Card.Header className="flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Card.Title className="text-lg font-bold">
+          <Card.Title className="type-card-title">
             Facility submission history
           </Card.Title>
-          <p className="mt-0.5 text-sm font-medium text-muted">
+          <p className="mt-0.5 type-meta text-muted">
             Overall facility monthly submissions (resident-level history lives
             on each resident profile)
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          {SERIES.map((s) => (
-            <div key={s.key} className="flex items-center gap-1.5">
-              <span
-                className="size-2.5 rounded-full"
-                style={{ backgroundColor: s.color }}
-              />
-              <span className="text-sm font-bold text-foreground">{s.label}</span>
-            </div>
-          ))}
-        </div>
+        <ChartLegend items={SERIES} />
       </Card.Header>
       <Card.Content>
-        <div className="flex items-end gap-3 overflow-x-auto pb-1 sm:gap-4">
+        <div className="flex items-end gap-2 pb-1 sm:gap-4">
           {months.map((month) => (
             <div
               key={month.month}
-              className="flex min-w-16 flex-1 flex-col items-center gap-2"
+              className="flex min-w-0 flex-1 flex-col items-center gap-2"
             >
               <div
                 className="flex w-full items-end justify-center gap-0.5"
@@ -81,7 +72,9 @@ export function FacilitySubmissionHistory({
                   );
                 })}
               </div>
-              <span className="text-sm font-bold text-muted">{month.month}</span>
+              <span className="type-meta font-bold text-foreground">
+                {month.month}
+              </span>
             </div>
           ))}
         </div>

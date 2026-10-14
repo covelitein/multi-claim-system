@@ -71,7 +71,7 @@ export function TopIssuesTable({ issues }: { issues: TopIssue[] }) {
   return (
     <Card className={dashboardCardClass}>
       <Card.Header>
-        <Card.Title className="text-base font-semibold">Top Issues</Card.Title>
+        <Card.Title className="type-card-title">Top Issues</Card.Title>
         <Card.Description className="text-sm text-muted">
           Most common missing items and errors across all claims
         </Card.Description>

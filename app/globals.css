@@ -30,6 +30,56 @@
   --color-signal-purple-ink: var(--signal-purple-ink);
 }
 
+/*
+ * Type scale. One place to tune legibility for the whole app.
+ * Floor is 13px. Primary reading text is 14-15px. Weight carries
+ * hierarchy, so sizes can stay modest.
+ */
+@utility type-page {
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+@utility type-card-title {
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 700;
+}
+@utility type-stat {
+  font-size: 1.75rem;
+  line-height: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+@utility type-row {
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  font-weight: 700;
+}
+@utility type-body {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+}
+@utility type-meta {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+}
+@utility type-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+@utility type-badge {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+}
+
 @layer base {
   /* HeroUI Default Theme */
   :root,

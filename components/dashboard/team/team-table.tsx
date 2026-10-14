@@ -57,7 +57,7 @@ export function TeamTable({
                 <Avatar.Fallback>{m.initials}</Avatar.Fallback>
               </Avatar>
               <div className="min-w-0">
-                <p className="truncate text-base font-bold">
+                <p className="truncate type-row">
                   {m.firstName} {m.lastName}
                 </p>
                 <p className="truncate text-sm font-semibold text-muted">
@@ -135,8 +135,8 @@ export function TeamTable({
     <Card className={dashboardCardClass}>
       <Card.Header className="flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Card.Title className="text-lg font-bold">Colleagues</Card.Title>
-          <p className="mt-0.5 text-base font-semibold text-muted">
+          <Card.Title className="type-card-title">Colleagues</Card.Title>
+          <p className="mt-0.5 type-meta text-muted">
             {filtered.length} of {members.length} at {facility}
           </p>
         </div>

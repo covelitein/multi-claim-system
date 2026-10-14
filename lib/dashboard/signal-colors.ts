@@ -1,62 +1,73 @@
-/** Shared status colors for dashboard, invoices, and analytics. */
+/**
+ * Shared status colors for dashboard, invoices, and analytics.
+ *
+ * Design rule: color encodes meaning, not decoration.
+ * - Surfaces (section cards, tables) stay neutral.
+ * - `tile`  : soft tint + hairline border. Only for KPI / action tiles.
+ * - `edge`  : neutral row with a colored left stripe. For list rows.
+ * - `badge` : status pill. Same color = same meaning everywhere.
+ */
 
 export const SIGNAL = {
   blue: {
-    card: "border-2 border-signal-blue bg-signal-blue-soft",
+    tile: "border border-signal-blue/30 bg-signal-blue-soft",
+    edge: "border-l-4 border-l-signal-blue",
     icon: "bg-signal-blue text-white",
-    value: "text-signal-blue-ink",
     ink: "text-signal-blue-ink",
-    badge: "border border-signal-blue bg-signal-blue-soft text-signal-blue-ink",
+    badge: "bg-signal-blue-soft text-signal-blue-ink ring-1 ring-signal-blue/40",
     swatch: "var(--signal-blue)",
   },
   green: {
-    card: "border-2 border-signal-green bg-signal-green-soft",
+    tile: "border border-signal-green/30 bg-signal-green-soft",
+    edge: "border-l-4 border-l-signal-green",
     icon: "bg-signal-green text-white",
-    value: "text-signal-green-ink",
     ink: "text-signal-green-ink",
-    badge: "border border-signal-green bg-signal-green-soft text-signal-green-ink",
+    badge:
+      "bg-signal-green-soft text-signal-green-ink ring-1 ring-signal-green/40",
     swatch: "var(--signal-green)",
   },
   amber: {
-    card: "border-2 border-signal-amber bg-signal-amber-soft",
+    tile: "border border-signal-amber/40 bg-signal-amber-soft",
+    edge: "border-l-4 border-l-signal-amber",
     icon: "bg-signal-amber text-signal-amber-ink",
-    value: "text-signal-amber-ink",
     ink: "text-signal-amber-ink",
-    badge: "border border-signal-amber bg-signal-amber-soft text-signal-amber-ink",
+    badge:
+      "bg-signal-amber-soft text-signal-amber-ink ring-1 ring-signal-amber/50",
     swatch: "var(--signal-amber)",
   },
   orange: {
-    card: "border-2 border-signal-orange bg-signal-orange-soft",
-    icon: "bg-signal-orange text-signal-orange-ink",
-    value: "text-signal-orange-ink",
+    tile: "border border-signal-orange/35 bg-signal-orange-soft",
+    edge: "border-l-4 border-l-signal-orange",
+    icon: "bg-signal-orange text-white",
     ink: "text-signal-orange-ink",
     badge:
-      "border border-signal-orange bg-signal-orange-soft text-signal-orange-ink",
+      "bg-signal-orange-soft text-signal-orange-ink ring-1 ring-signal-orange/50",
     swatch: "var(--signal-orange)",
   },
   red: {
-    card: "border-2 border-signal-red bg-signal-red-soft",
+    tile: "border border-signal-red/30 bg-signal-red-soft",
+    edge: "border-l-4 border-l-signal-red",
     icon: "bg-signal-red text-white",
-    value: "text-signal-red-ink",
     ink: "text-signal-red-ink",
-    badge: "border border-signal-red bg-signal-red-soft text-signal-red-ink",
+    badge: "bg-signal-red-soft text-signal-red-ink ring-1 ring-signal-red/40",
     swatch: "var(--signal-red)",
   },
   rose: {
-    card: "border-2 border-signal-rose bg-signal-rose-soft",
+    tile: "border border-signal-rose/30 bg-signal-rose-soft",
+    edge: "border-l-4 border-l-signal-rose",
     icon: "bg-signal-rose text-white",
-    value: "text-signal-rose-ink",
     ink: "text-signal-rose-ink",
-    badge: "border border-signal-rose bg-signal-rose-soft text-signal-rose-ink",
+    badge:
+      "bg-signal-rose-soft text-signal-rose-ink ring-1 ring-signal-rose/40",
     swatch: "var(--signal-rose)",
   },
   purple: {
-    card: "border-2 border-signal-purple bg-signal-purple-soft",
+    tile: "border border-signal-purple/30 bg-signal-purple-soft",
+    edge: "border-l-4 border-l-signal-purple",
     icon: "bg-signal-purple text-white",
-    value: "text-signal-purple-ink",
     ink: "text-signal-purple-ink",
     badge:
-      "border border-signal-purple bg-signal-purple-soft text-signal-purple-ink",
+      "bg-signal-purple-soft text-signal-purple-ink ring-1 ring-signal-purple/40",
     swatch: "var(--signal-purple)",
   },
 } as const;

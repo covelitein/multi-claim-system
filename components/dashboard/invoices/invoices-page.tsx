@@ -30,10 +30,10 @@ export function InvoicesPage() {
     <div className="flex min-w-0 flex-col gap-4 pb-2">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          <h1 className="type-page">
             Invoices
           </h1>
-          <p className="mt-1 text-base font-semibold text-muted">
+          <p className="mt-1 type-meta text-muted">
             {focused
               ? `Invoice for ${focused.firstName} ${focused.lastName} · ${focused.policyId} · ${focused.payer}`
               : "Upload a signed invoice or create one with the guided builder."}
