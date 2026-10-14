@@ -20,10 +20,10 @@ export function ResidentsPage() {
     <div className="flex min-w-0 flex-col gap-4 pb-2">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Residents
           </h1>
-          <p className="mt-0.5 text-sm text-muted">
+          <p className="mt-1 text-base font-semibold text-muted">
             Resident profiles with monthly claim submission history.
           </p>
         </div>

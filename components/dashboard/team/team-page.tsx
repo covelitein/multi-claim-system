@@ -1,8 +1,10 @@
 "use client";
 
 import { InviteMemberDrawer } from "@/components/dashboard/drawers/invite-member-drawer";
+import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
 import { TeamTable } from "@/components/dashboard/team/team-table";
 import { fetchTeam, type TeamPageData } from "@/lib/dashboard/team-data";
+import { Card } from "@heroui/react";
 import { useEffect, useState } from "react";
 
 export function TeamPage() {
@@ -28,15 +30,28 @@ export function TeamPage() {
             Team
           </h1>
           <p className="mt-1 max-w-2xl text-base font-semibold text-muted">
-            Facility-scoped access for billing colleagues. Invite, set
-            permissions, or remove members when roles change. Skip this if you
-            are the only billing manager.
+            Billing colleagues at {data.facility}. Invite and manage people who
+            work at this facility.
           </p>
         </div>
         <InviteMemberDrawer />
       </div>
 
-      <TeamTable members={data.members} />
+      {data.relevant ? (
+        <TeamTable facility={data.facility} members={data.members} />
+      ) : (
+        <Card className={dashboardCardClass}>
+          <Card.Header>
+            <Card.Title className="text-lg font-bold">
+              You are the only person at {data.facility}
+            </Card.Title>
+            <Card.Description className="text-base font-medium text-muted">
+              Team appears in the menu when another billing colleague joins this
+              facility. Invites stay limited to {data.facility}.
+            </Card.Description>
+          </Card.Header>
+        </Card>
+      )}
     </div>
   );
 }

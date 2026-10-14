@@ -1,7 +1,8 @@
 "use client";
 
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
-import type { QuickAction } from "@/lib/dashboard/home-data";
+import type { QuickAction, RecentSubmission } from "@/lib/dashboard/home-data";
+import { signalStyles } from "@/lib/dashboard/signal-colors";
 import {
   ArrowRight,
   ArrowUpFromSquare,
@@ -20,56 +21,57 @@ const ACTION_ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   reports: ChartColumn,
 };
 
-const TONE_CARD: Record<QuickAction["tone"], string> = {
-  accent:
-    "border-accent/40 bg-accent-soft text-accent hover:border-accent hover:bg-accent hover:text-accent-foreground",
-  success:
-    "border-success/40 bg-success-soft text-success hover:border-success hover:bg-success hover:text-success-foreground",
-  warning:
-    "border-warning/40 bg-warning-soft text-warning hover:border-warning hover:bg-warning hover:text-warning-foreground",
-  danger:
-    "border-danger/40 bg-danger-soft text-danger hover:border-danger hover:bg-danger hover:text-danger-foreground",
-};
-
-const TONE_ICON: Record<QuickAction["tone"], string> = {
-  accent: "bg-accent text-accent-foreground",
-  success: "bg-success text-success-foreground",
-  warning: "bg-warning text-warning-foreground",
-  danger: "bg-danger text-danger-foreground",
-};
-
-export function QuickActions({ actions }: { actions: QuickAction[] }) {
+export function QuickActions({
+  actions,
+  resident,
+}: {
+  actions: QuickAction[];
+  resident: RecentSubmission | null;
+}) {
   return (
-    <Card
-      className={`${dashboardCardClass} flex h-full flex-col border border-warning/25 bg-gradient-to-b from-warning-soft/30 to-surface`}
-    >
-      <Card.Header className="py-3">
-        <Card.Title className="text-base font-bold">Quick Actions</Card.Title>
-        <p className="mt-0.5 text-xs text-muted">Color-coded shortcuts</p>
+    <Card className={`${dashboardCardClass} flex h-full flex-col border-2 border-signal-amber bg-signal-amber-soft/40`}>
+      <Card.Header className="py-4">
+        <Card.Title className="text-lg font-bold">Quick Actions</Card.Title>
+        <p className="mt-1 text-base font-semibold text-muted">
+          {resident
+            ? `Working on ${resident.residentName}`
+            : "Select a resident to create or upload an invoice."}
+        </p>
       </Card.Header>
-      <Card.Content className="flex flex-col gap-2 pt-1 pb-3">
+      <Card.Content className="flex flex-col gap-3 pt-1 pb-4">
         {actions.map((action) => {
+          if (action.requiresResident && !resident) return null;
           const Icon = ACTION_ICONS[action.id] ?? FileText;
+          const tone = signalStyles(action.tone);
+          const href =
+            action.requiresResident && resident
+              ? `${action.href}?resident=${resident.residentId}`
+              : action.href;
+          const description =
+            action.requiresResident && resident
+              ? resident.residentName
+              : action.description;
+
           return (
             <Link
               key={action.id}
-              className={`group flex items-center gap-2.5 rounded-xl border px-3 py-2.5 transition-colors ${TONE_CARD[action.tone]}`}
-              href={action.href}
+              className={`group flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:brightness-95 ${tone.card}`}
+              href={href}
             >
               <span
-                className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${TONE_ICON[action.tone]}`}
+                className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${tone.icon}`}
               >
-                <Icon className="size-4" />
+                <Icon className="size-5" />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-semibold leading-snug">
+                <span className={`block text-base font-bold leading-snug ${tone.ink}`}>
                   {action.label}
                 </span>
-                <span className="mt-0.5 block truncate text-xs opacity-80">
-                  {action.description}
+                <span className="mt-0.5 block text-sm font-semibold text-foreground/75">
+                  {description}
                 </span>
               </span>
-              <ArrowRight className="size-4 shrink-0 opacity-70 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className={`size-5 shrink-0 ${tone.ink}`} />
             </Link>
           );
         })}

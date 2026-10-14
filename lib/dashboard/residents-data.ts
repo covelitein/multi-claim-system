@@ -3,6 +3,7 @@ export type ResidentStatus = "active" | "inactive" | "pending" | "on-hold";
 export type Resident = {
   id: string;
   residentId: string;
+  policyId: string;
   firstName: string;
   lastName: string;
   dob: string;
@@ -47,6 +48,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
     {
       id: "r1",
       residentId: "RES-2048",
+      policyId: "POL-GNW-2048",
       firstName: "Mary",
       lastName: "Johnson",
       dob: "1945-03-12",
@@ -65,6 +67,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
     {
       id: "r2",
       residentId: "RES-1982",
+      policyId: "POL-JHN-1982",
       firstName: "Robert",
       lastName: "Williams",
       dob: "1941-08-24",
@@ -83,6 +86,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
     {
       id: "r3",
       residentId: "RES-2110",
+      policyId: "POL-ILM-2110",
       firstName: "Gloria",
       lastName: "Chen",
       dob: "1944-02-28",
@@ -101,6 +105,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
     {
       id: "r4",
       residentId: "RES-1875",
+      policyId: "POL-JHN-1875",
       firstName: "Harold",
       lastName: "Freeman",
       dob: "1942-01-07",
@@ -119,6 +124,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
     {
       id: "r5",
       residentId: "RES-1760",
+      policyId: "POL-GNW-1760",
       firstName: "Lara",
       lastName: "Mensah",
       dob: "1949-06-30",
@@ -137,6 +143,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
     {
       id: "r6",
       residentId: "RES-1654",
+      policyId: "POL-GNW-1654",
       firstName: "Amanda",
       lastName: "Brown",
       dob: "1945-03-12",
@@ -155,6 +162,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
     {
       id: "r7",
       residentId: "RES-1540",
+      policyId: "POL-JHN-1540",
       firstName: "Chidi",
       lastName: "Okonkwo",
       dob: "1941-08-24",
@@ -173,6 +181,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
     {
       id: "r8",
       residentId: "RES-1422",
+      policyId: "POL-ILM-1422",
       firstName: "Sofia",
       lastName: "Alvarez",
       dob: "1950-09-22",
@@ -190,6 +199,15 @@ export const RESIDENTS_DATA: ResidentsPageData = {
     },
   ],
 };
+
+export function residentByKey(key: string | null | undefined) {
+  if (!key) return null;
+  return (
+    RESIDENTS_DATA.residents.find(
+      (resident) => resident.residentId === key || resident.id === key,
+    ) ?? null
+  );
+}
 
 export async function fetchResidents(): Promise<ResidentsPageData> {
   await new Promise((resolve) => setTimeout(resolve, 600));

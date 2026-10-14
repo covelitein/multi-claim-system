@@ -1,14 +1,15 @@
 "use client";
 
 import type { FacilitySubmissionMonth } from "@/lib/dashboard/analytics-data";
+import { CHART } from "@/lib/dashboard/signal-colors";
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
 import { Card } from "@heroui/react";
 
 const SERIES = [
-  { key: "submitted" as const, label: "Submitted", color: "var(--accent)" },
-  { key: "approved" as const, label: "Approved", color: "var(--success)" },
-  { key: "pending" as const, label: "Pending", color: "var(--warning)" },
-  { key: "rejected" as const, label: "Rejected", color: "var(--danger)" },
+  { key: "submitted" as const, label: "Submitted", color: CHART.submitted },
+  { key: "approved" as const, label: "Approved", color: CHART.approved },
+  { key: "pending" as const, label: "Pending", color: CHART.pending },
+  { key: "rejected" as const, label: "Rejected", color: CHART.rejected },
 ];
 
 export function FacilitySubmissionHistory({
@@ -29,7 +30,7 @@ export function FacilitySubmissionHistory({
 
   return (
     <Card
-      className={`${dashboardCardClass} border-2 border-warning/30 bg-gradient-to-br from-warning-soft/30 to-surface`}
+      className={`${dashboardCardClass} border-2 border-signal-amber bg-signal-amber-soft/50`}
     >
       <Card.Header className="flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -48,7 +49,7 @@ export function FacilitySubmissionHistory({
                 className="size-2.5 rounded-full"
                 style={{ backgroundColor: s.color }}
               />
-              <span className="text-xs font-bold text-muted">{s.label}</span>
+              <span className="text-sm font-bold text-foreground">{s.label}</span>
             </div>
           ))}
         </div>
@@ -73,7 +74,7 @@ export function FacilitySubmissionHistory({
                   return (
                     <div
                       key={s.key}
-                      className="w-2.5 rounded-t-sm sm:w-3"
+                      className="w-3 rounded-t-md sm:w-4"
                       style={{ height, backgroundColor: s.color }}
                       title={`${s.label}: ${value}`}
                     />

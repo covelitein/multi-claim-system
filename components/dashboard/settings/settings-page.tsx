@@ -1,13 +1,11 @@
 "use client";
 
-import { InviteMemberDrawer } from "@/components/dashboard/drawers/invite-member-drawer";
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
 import {
   Bell,
   Envelope,
   Gear,
   Lock,
-  Persons,
   Shield,
   Smartphone,
 } from "@gravity-ui/icons";
@@ -22,7 +20,7 @@ import {
 } from "@heroui/react";
 import { useState } from "react";
 
-type SettingsTab = "general" | "team" | "notifications" | "security";
+type SettingsTab = "general" | "notifications" | "security";
 
 const TABS: {
   id: SettingsTab;
@@ -30,7 +28,6 @@ const TABS: {
   icon: typeof Gear;
 }[] = [
   { id: "general", label: "General", icon: Gear },
-  { id: "team", label: "Team access", icon: Persons },
   { id: "notifications", label: "Notifications", icon: Bell },
   { id: "security", label: "Security", icon: Lock },
 ];
@@ -137,41 +134,6 @@ function GeneralTab() {
         </Card.Content>
       </Card>
     </div>
-  );
-}
-
-function TeamAccessTab() {
-  return (
-    <Card className={`${dashboardCardClass} border-2 border-warning/30`}>
-      <Card.Header className="flex-col items-stretch gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <Card.Title className="text-lg font-bold">
-            Invite team members
-          </Card.Title>
-          <Card.Description className="mt-1 max-w-xl text-sm font-medium text-muted">
-            Billing managers can invite colleagues to this facility’s RCS
-            account, set access level, and remove people who leave or change
-            roles. Single-manager facilities can skip Team until needed.
-          </Card.Description>
-        </div>
-        <InviteMemberDrawer />
-      </Card.Header>
-      <Card.Content className="gap-3">
-        <div className="rounded-2xl bg-warning-soft/50 px-4 py-3 text-sm font-medium">
-          Invites are scoped to your facility only — not other facilities in RCS
-          Admin.
-        </div>
-        <Button
-          className="w-fit font-bold"
-          variant="outline"
-          onPress={() => {
-            window.location.href = "/staff";
-          }}
-        >
-          Manage team roster
-        </Button>
-      </Card.Content>
-    </Card>
   );
 }
 
@@ -302,7 +264,7 @@ export function SettingsPage() {
           Settings
         </h1>
         <p className="mt-1 text-base font-medium text-muted">
-          Organization preferences, team invites, and RCS support contacts.
+          Account preferences, notifications, and security.
         </p>
       </div>
 
@@ -330,7 +292,6 @@ export function SettingsPage() {
       </div>
 
       {activeTab === "general" ? <GeneralTab /> : null}
-      {activeTab === "team" ? <TeamAccessTab /> : null}
       {activeTab === "notifications" ? <NotificationsTab /> : null}
       {activeTab === "security" ? <SecurityTab /> : null}
     </div>

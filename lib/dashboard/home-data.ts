@@ -40,6 +40,7 @@ export type QuickAction = {
   description: string;
   href: string;
   tone: ChartTone;
+  requiresResident?: boolean;
 };
 
 export type HomeReminder = {
@@ -118,9 +119,9 @@ export const DASHBOARD_HOME: DashboardHomeData = {
     },
   ],
   overview: [
-    { id: "approved", label: "Approved", value: 24, percent: 65, color: "var(--success)" },
-    { id: "pending", label: "Pending", value: 6, percent: 16, color: "var(--warning)" },
-    { id: "rejected", label: "Rejected", value: 2, percent: 6, color: "var(--danger)" },
+    { id: "approved", label: "Approved", value: 24, percent: 65, color: "var(--signal-green)" },
+    { id: "pending", label: "Pending", value: 6, percent: 16, color: "var(--signal-amber)" },
+    { id: "rejected", label: "Rejected", value: 2, percent: 6, color: "var(--signal-rose)" },
   ],
   overviewRangeLabel: "This Month",
   recentSubmissions: [
@@ -196,9 +197,10 @@ export const DASHBOARD_HOME: DashboardHomeData = {
     {
       id: "upload-invoice",
       label: "Create / upload invoice",
-      description: "Build or attach a facility invoice",
+      description: "For the resident you select",
       href: "/invoices",
       tone: "success",
+      requiresResident: true,
     },
     {
       id: "reports",

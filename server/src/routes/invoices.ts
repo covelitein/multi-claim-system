@@ -35,7 +35,7 @@ invoicesRouter.get("/", async (req, res, next) => {
         { id: "matched", label: "Matched to Claims", value: byStatus("matched"), tone: "success" },
         { id: "pending", label: "Pending Review", value: byStatus("pending-review"), tone: "warning" },
         { id: "missing", label: "Missing Invoices", value: byStatus("missing"), tone: "danger" },
-        { id: "overdue", label: "Overdue Invoices", value: byStatus("overdue"), tone: "danger" },
+        { id: "overdue", label: "Overdue Invoices", value: byStatus("overdue"), tone: "orange" },
       ],
       invoices: serialized,
     });

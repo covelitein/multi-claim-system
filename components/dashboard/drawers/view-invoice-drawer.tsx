@@ -8,8 +8,8 @@ import {
   INVOICE_STATUS_CONFIG,
   type Invoice,
 } from "@/lib/dashboard/invoices-data";
+import { StatusBadge } from "@/components/dashboard/status-badge";
 import { Eye } from "@gravity-ui/icons";
-import { Chip } from "@heroui/react";
 
 export function ViewInvoiceDrawer({ invoice }: { invoice: Invoice }) {
   const status = INVOICE_STATUS_CONFIG[invoice.status];
@@ -58,9 +58,7 @@ export function ViewInvoiceDrawer({ invoice }: { invoice: Invoice }) {
             Matched claim: {invoice.matchedClaim ?? "—"}
           </p>
         </div>
-        <Chip color={status.color} size="sm" variant="soft">
-          <Chip.Label>{status.label}</Chip.Label>
-        </Chip>
+        <StatusBadge signal={status.signal}>{status.label}</StatusBadge>
       </div>
     </DashboardDrawer>
   );

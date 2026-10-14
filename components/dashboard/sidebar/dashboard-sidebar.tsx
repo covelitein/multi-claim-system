@@ -4,7 +4,7 @@ import { HelixLogo } from "@/components/brand/helix-logo";
 import { SidebarCollapseButton } from "@/components/dashboard/sidebar/sidebar-collapse-button";
 import { SidebarDrawerClose } from "@/components/dashboard/sidebar/sidebar-drawer-close";
 import { SidebarNavItem } from "@/components/dashboard/sidebar/sidebar-nav-item";
-import { DASHBOARD_LOGOUT, DASHBOARD_NAV } from "@/lib/dashboard/nav";
+import { DASHBOARD_LOGOUT, visibleDashboardNav } from "@/lib/dashboard/nav";
 import { useSidebarStore } from "@/lib/dashboard/sidebar-store";
 import { cn } from "@heroui/react";
 import { usePathname } from "next/navigation";
@@ -83,7 +83,7 @@ export function DashboardSidebar() {
           </div>
 
           <nav className="flex w-full flex-1 flex-col items-center gap-1">
-            {DASHBOARD_NAV.map((item) => (
+            {visibleDashboardNav().map((item) => (
               <SidebarNavItem
                 key={item.href}
                 active={isActivePath(pathname, item.href)}

@@ -15,8 +15,16 @@ import { Button, Label } from "@heroui/react";
 import { useState } from "react";
 
 /** Gen-1: dummy upload invoice drawer. */
-export function UploadInvoiceDrawer() {
+export function UploadInvoiceDrawer({
+  residentKey,
+}: {
+  residentKey?: string;
+}) {
   const [files, setFiles] = useState<UploadedDocument[]>([]);
+  const [residentId, setResidentId] = useState(
+    RESIDENTS_DATA.residents.find((resident) => resident.residentId === residentKey)
+      ?.id ?? RESIDENTS_DATA.residents[0]?.id ?? "",
+  );
 
   return (
     <DashboardDrawer
@@ -30,7 +38,7 @@ export function UploadInvoiceDrawer() {
       title="Upload invoice"
       trigger={
         <Button
-          className="h-11 gap-2 border border-accent/35 bg-accent-soft px-4 text-sm font-bold text-accent"
+          className="h-12 gap-2 border-2 border-signal-blue bg-signal-blue-soft px-4 text-base font-bold text-signal-blue-ink"
           variant="outline"
         >
           Upload Invoice
@@ -40,9 +48,10 @@ export function UploadInvoiceDrawer() {
       <div className="flex flex-col gap-1.5">
         <Label className="text-sm font-bold">Resident</Label>
         <select
-          className="h-11 w-full rounded-xl border border-border bg-surface px-3 text-sm font-semibold"
-          defaultValue={RESIDENTS_DATA.residents[0]?.id}
+          className="h-12 w-full rounded-xl border border-border bg-surface px-3 text-base font-semibold"
           name="invoiceResidentId"
+          value={residentId}
+          onChange={(event) => setResidentId(event.target.value)}
         >
           {RESIDENTS_DATA.residents.map((r) => (
             <option key={r.id} value={r.id}>

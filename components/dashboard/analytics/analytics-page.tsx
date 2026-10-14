@@ -29,10 +29,10 @@ export function AnalyticsPage() {
   return (
     <div className="flex min-w-0 flex-col gap-5 pb-2">
       <div>
-        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
           Analytics
         </h1>
-        <p className="mt-0.5 text-sm font-semibold text-muted">
+        <p className="mt-1 text-base font-semibold text-muted">
           Facility submission history, claim status, and trends — built for
           quick scanning.
         </p>

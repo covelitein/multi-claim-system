@@ -1,97 +1,99 @@
 "use client";
 
+import { StatusBadge } from "@/components/dashboard/status-badge";
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
 import type { RecentSubmission } from "@/lib/dashboard/home-data";
+import { SIGNAL, type SignalName } from "@/lib/dashboard/signal-colors";
 import { ArrowDownToLine } from "@gravity-ui/icons";
-import { Avatar, Card, Chip } from "@heroui/react";
+import { Avatar, Card } from "@heroui/react";
 import Link from "next/link";
 
 const STATUS: Record<
   RecentSubmission["status"],
-  { label: string; color: "success" | "warning" | "danger" | "accent"; card: string }
+  { label: string; signal: SignalName }
 > = {
-  approved: {
-    label: "Approved",
-    color: "success",
-    card: "border-success/30 bg-success-soft/35",
-  },
-  pending: {
-    label: "Pending",
-    color: "warning",
-    card: "border-warning/30 bg-warning-soft/35",
-  },
-  rejected: {
-    label: "Rejected",
-    color: "danger",
-    card: "border-danger/30 bg-danger-soft/35",
-  },
-  submitted: {
-    label: "Submitted",
-    color: "accent",
-    card: "border-accent/30 bg-accent-soft/35",
-  },
+  approved: { label: "Approved", signal: "green" },
+  pending: { label: "Pending", signal: "amber" },
+  rejected: { label: "Rejected", signal: "rose" },
+  submitted: { label: "Submitted", signal: "blue" },
 };
 
-export function RecentSubmissions({ items }: { items: RecentSubmission[] }) {
+export function RecentSubmissions({
+  items,
+  selectedId,
+  onSelect,
+}: {
+  items: RecentSubmission[];
+  selectedId: string | null;
+  onSelect: (id: string) => void;
+}) {
   const visible = items.slice(0, 5);
 
   return (
-    <Card
-      className={`${dashboardCardClass} flex h-full flex-col border border-accent/20 bg-gradient-to-br from-accent-soft/20 to-surface`}
-    >
-      <Card.Header className="flex-row items-center justify-between gap-3 py-3">
+    <Card className={`${dashboardCardClass} flex h-full flex-col border-2 border-signal-blue bg-surface`}>
+      <Card.Header className="flex-row items-center justify-between gap-3 py-4">
         <div>
-          <Card.Title className="text-base font-bold">
+          <Card.Title className="text-lg font-bold">
             Recent Submissions
           </Card.Title>
-          <p className="mt-0.5 text-xs text-muted">Most-used workspace</p>
+          <p className="mt-1 text-base font-semibold text-muted">
+            Select a resident to create or upload an invoice.
+          </p>
         </div>
         <Link
-          className="shrink-0 rounded-lg bg-accent px-2.5 py-1.5 text-xs font-semibold text-accent-foreground"
+          className="shrink-0 rounded-xl bg-signal-blue px-3 py-2 text-sm font-bold text-white"
           href="/billing"
         >
           View all
         </Link>
       </Card.Header>
-      <Card.Content className="flex flex-col gap-2 p-0 pt-1 pb-3">
+      <Card.Content className="flex flex-col gap-2 p-0 pt-1 pb-4">
         {visible.map((item) => {
           const status = STATUS[item.status];
+          const selected = item.id === selectedId;
           return (
             <div
               key={item.id}
-              className={`mx-1 flex items-center gap-3 rounded-xl border px-3 py-2.5 ${status.card}`}
+              className={`mx-1 flex items-center gap-2 rounded-xl px-2 py-2 ${SIGNAL[status.signal].card} ${
+                selected
+                  ? "shadow-[inset_0_0_0_3px_var(--foreground)]"
+                  : ""
+              }`}
             >
-              <Avatar className="size-9 shrink-0">
-                <Avatar.Image alt={item.residentName} src={item.image} />
-                <Avatar.Fallback>{item.initials}</Avatar.Fallback>
-              </Avatar>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="truncate text-sm font-semibold">
-                    {item.residentName}
-                  </p>
-                  <span className="shrink-0 text-sm font-bold tabular-nums">
-                    {item.amount}
+              <button
+                aria-pressed={selected}
+                className="flex min-w-0 flex-1 items-center gap-3 rounded-lg px-1 py-1 text-left"
+                type="button"
+                onClick={() => onSelect(item.id)}
+              >
+                <Avatar className="size-11 shrink-0">
+                  <Avatar.Image alt={item.residentName} src={item.image} />
+                  <Avatar.Fallback>{item.initials}</Avatar.Fallback>
+                </Avatar>
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center justify-between gap-2">
+                    <span className="truncate text-base font-bold">
+                      {item.residentName}
+                    </span>
+                    <span className="shrink-0 text-base font-bold tabular-nums">
+                      {item.amount}
+                    </span>
                   </span>
-                </div>
-                <div className="mt-1 flex items-center justify-between gap-2">
-                  <p className="truncate text-xs text-muted">
-                    {item.residentId} · {item.submittedAt}
-                  </p>
-                  <div className="flex shrink-0 items-center gap-1">
-                    <Chip color={status.color} size="sm" variant="soft">
-                      <Chip.Label>{status.label}</Chip.Label>
-                    </Chip>
-                    <button
-                      aria-label={`Download submission for ${item.residentName}`}
-                      className="rounded-md p-1 text-muted hover:bg-surface/80 hover:text-foreground"
-                      type="button"
-                    >
-                      <ArrowDownToLine className="size-3.5" />
-                    </button>
-                  </div>
-                </div>
-              </div>
+                  <span className="mt-1 flex items-center justify-between gap-2">
+                    <span className="truncate text-sm font-semibold text-foreground/70">
+                      {item.submittedAt}
+                    </span>
+                    <StatusBadge signal={status.signal}>{status.label}</StatusBadge>
+                  </span>
+                </span>
+              </button>
+              <button
+                aria-label={`Download submission for ${item.residentName}`}
+                className="rounded-lg p-2 text-foreground/70 hover:bg-white/70 hover:text-foreground"
+                type="button"
+              >
+                <ArrowDownToLine className="size-5" />
+              </button>
             </div>
           );
         })}

@@ -4,10 +4,19 @@ import { CreateInvoiceDrawer } from "@/components/dashboard/drawers/create-invoi
 import { UploadInvoiceDrawer } from "@/components/dashboard/drawers/upload-invoice-drawer";
 import { InvoicesStatCards } from "@/components/dashboard/invoices/invoices-stat-cards";
 import { InvoicesTable } from "@/components/dashboard/invoices/invoices-table";
+import { residentByKey } from "@/lib/dashboard/residents-data";
 import { useInvoices } from "@/lib/dashboard/use-invoices";
+import { useEffect, useState } from "react";
 
 export function InvoicesPage() {
   const { data, loading } = useInvoices();
+  const [residentKey, setResidentKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    setResidentKey(new URLSearchParams(window.location.search).get("resident"));
+  }, []);
+
+  const focused = residentByKey(residentKey);
 
   if (loading || !data) {
     return (
@@ -21,16 +30,24 @@ export function InvoicesPage() {
     <div className="flex min-w-0 flex-col gap-4 pb-2">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Invoices
           </h1>
-          <p className="mt-0.5 text-sm text-muted">
-            Upload a signed invoice or create one with the guided builder.
+          <p className="mt-1 text-base font-semibold text-muted">
+            {focused
+              ? `Invoice for ${focused.firstName} ${focused.lastName} · ${focused.policyId} · ${focused.payer}`
+              : "Upload a signed invoice or create one with the guided builder."}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <UploadInvoiceDrawer />
-          <CreateInvoiceDrawer />
+          <UploadInvoiceDrawer
+            key={focused?.id ?? "upload"}
+            residentKey={focused?.residentId}
+          />
+          <CreateInvoiceDrawer
+            key={focused?.id ?? "create"}
+            residentKey={focused?.residentId}
+          />
         </div>
       </div>
 

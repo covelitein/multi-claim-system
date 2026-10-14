@@ -31,6 +31,7 @@ export function ResidentsTable({ residents }: { residents: Resident[] }) {
       (r) =>
         `${r.firstName} ${r.lastName}`.toLowerCase().includes(lower) ||
         r.residentId.toLowerCase().includes(lower) ||
+        r.policyId.toLowerCase().includes(lower) ||
         r.payer.toLowerCase().includes(lower) ||
         r.facility.toLowerCase().includes(lower),
     );
@@ -53,22 +54,27 @@ export function ResidentsTable({ residents }: { residents: Resident[] }) {
                 <Avatar.Fallback>{r.initials}</Avatar.Fallback>
               </Avatar>
               <div className="min-w-0">
-                <p className="truncate font-bold">
+                <p className="truncate text-base font-bold">
                   {r.firstName} {r.lastName}
                 </p>
-                <p className="truncate text-xs font-semibold text-muted">{r.facility}</p>
+                <p className="truncate text-sm font-semibold text-muted">
+                  {r.facility}
+                </p>
               </div>
             </div>
           );
         },
       },
       {
-        accessorKey: "residentId",
-        header: "ID",
+        id: "policy",
+        header: "Policy / Carrier",
         cell: ({ row }) => (
-          <span className="font-mono text-xs text-muted">
-            {row.original.residentId}
-          </span>
+          <div className="min-w-0">
+            <p className="font-bold">{row.original.policyId}</p>
+            <p className="text-sm font-semibold text-muted">
+              {row.original.payer}
+            </p>
+          </div>
         ),
       },
       {

@@ -6,6 +6,28 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-inter: var(--font-inter-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --color-signal-blue: var(--signal-blue);
+  --color-signal-blue-soft: var(--signal-blue-soft);
+  --color-signal-blue-ink: var(--signal-blue-ink);
+  --color-signal-green: var(--signal-green);
+  --color-signal-green-soft: var(--signal-green-soft);
+  --color-signal-green-ink: var(--signal-green-ink);
+  --color-signal-amber: var(--signal-amber);
+  --color-signal-amber-soft: var(--signal-amber-soft);
+  --color-signal-amber-ink: var(--signal-amber-ink);
+  --color-signal-orange: var(--signal-orange);
+  --color-signal-orange-soft: var(--signal-orange-soft);
+  --color-signal-orange-ink: var(--signal-orange-ink);
+  --color-signal-red: var(--signal-red);
+  --color-signal-red-soft: var(--signal-red-soft);
+  --color-signal-red-ink: var(--signal-red-ink);
+  --color-signal-rose: var(--signal-rose);
+  --color-signal-rose-soft: var(--signal-rose-soft);
+  --color-signal-rose-ink: var(--signal-rose-ink);
+  --color-signal-purple: var(--signal-purple);
+  --color-signal-purple-soft: var(--signal-purple-soft);
+  --color-signal-purple-ink: var(--signal-purple-ink);
 }
 
 @layer base {
@@ -84,6 +106,29 @@
     --field-foreground: oklch(0.2103 0.0059 285.89);
     --field-placeholder: var(--muted);
     --field-border: color-mix(in oklab, var(--foreground) 7%, transparent);
+
+    /* Brighter status colors for dashboard, invoices, and analytics. */
+    --signal-blue: oklch(0.52 0.2 255);
+    --signal-blue-soft: oklch(0.93 0.055 255);
+    --signal-blue-ink: oklch(0.4 0.16 255);
+    --signal-green: oklch(0.55 0.18 152);
+    --signal-green-soft: oklch(0.94 0.065 152);
+    --signal-green-ink: oklch(0.38 0.12 152);
+    --signal-amber: oklch(0.78 0.16 88);
+    --signal-amber-soft: oklch(0.96 0.055 92);
+    --signal-amber-ink: oklch(0.42 0.12 70);
+    --signal-orange: oklch(0.68 0.19 48);
+    --signal-orange-soft: oklch(0.95 0.055 55);
+    --signal-orange-ink: oklch(0.45 0.15 45);
+    --signal-red: oklch(0.55 0.23 25);
+    --signal-red-soft: oklch(0.95 0.04 25);
+    --signal-red-ink: oklch(0.44 0.18 25);
+    --signal-rose: oklch(0.55 0.22 350);
+    --signal-rose-soft: oklch(0.95 0.04 350);
+    --signal-rose-ink: oklch(0.42 0.16 350);
+    --signal-purple: oklch(0.5 0.2 305);
+    --signal-purple-soft: oklch(0.95 0.045 305);
+    --signal-purple-ink: oklch(0.4 0.16 305);
 
     /* Status Colors */
     --success: oklch(0.7329 0.1935 150.81);
@@ -284,6 +329,28 @@
     --field-background: oklch(0.2103 0.0059 285.89);
     --field-foreground: var(--foreground);
     --field-border: color-mix(in oklab, var(--foreground) 12%, transparent);
+
+    --signal-blue: oklch(0.78 0.14 255);
+    --signal-blue-soft: oklch(0.32 0.06 255);
+    --signal-blue-ink: oklch(0.9 0.06 255);
+    --signal-green: oklch(0.78 0.16 152);
+    --signal-green-soft: oklch(0.32 0.06 152);
+    --signal-green-ink: oklch(0.92 0.06 152);
+    --signal-amber: oklch(0.86 0.14 88);
+    --signal-amber-soft: oklch(0.34 0.05 85);
+    --signal-amber-ink: oklch(0.94 0.06 90);
+    --signal-orange: oklch(0.78 0.16 50);
+    --signal-orange-soft: oklch(0.34 0.06 50);
+    --signal-orange-ink: oklch(0.94 0.05 60);
+    --signal-red: oklch(0.72 0.18 25);
+    --signal-red-soft: oklch(0.32 0.07 25);
+    --signal-red-ink: oklch(0.92 0.05 25);
+    --signal-rose: oklch(0.74 0.16 350);
+    --signal-rose-soft: oklch(0.32 0.06 350);
+    --signal-rose-ink: oklch(0.92 0.05 350);
+    --signal-purple: oklch(0.74 0.16 305);
+    --signal-purple-soft: oklch(0.32 0.07 305);
+    --signal-purple-ink: oklch(0.92 0.05 305);
 
     /* Status Colors */
     --warning: oklch(0.8203 0.1388 76.34);

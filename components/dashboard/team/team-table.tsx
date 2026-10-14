@@ -20,7 +20,13 @@ const ROLE_COLOR: Record<
   Administrator: "danger",
 };
 
-export function TeamTable({ members }: { members: TeamMember[] }) {
+export function TeamTable({
+  members,
+  facility,
+}: {
+  members: TeamMember[];
+  facility: string;
+}) {
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -30,8 +36,7 @@ export function TeamTable({ members }: { members: TeamMember[] }) {
       (m) =>
         `${m.firstName} ${m.lastName}`.toLowerCase().includes(lower) ||
         m.role.toLowerCase().includes(lower) ||
-        m.email.toLowerCase().includes(lower) ||
-        m.facility.toLowerCase().includes(lower),
+        m.email.toLowerCase().includes(lower),
     );
   }, [members, query]);
 
@@ -52,10 +57,12 @@ export function TeamTable({ members }: { members: TeamMember[] }) {
                 <Avatar.Fallback>{m.initials}</Avatar.Fallback>
               </Avatar>
               <div className="min-w-0">
-                <p className="truncate font-medium">
+                <p className="truncate text-base font-bold">
                   {m.firstName} {m.lastName}
                 </p>
-                <p className="truncate text-xs text-muted">{m.email}</p>
+                <p className="truncate text-sm font-semibold text-muted">
+                  {m.email}
+                </p>
               </div>
             </div>
           );
@@ -76,13 +83,6 @@ export function TeamTable({ members }: { members: TeamMember[] }) {
             </Chip>
           );
         },
-      },
-      {
-        accessorKey: "facility",
-        header: "Facility",
-        cell: ({ row }) => (
-          <span className="text-muted">{row.original.facility}</span>
-        ),
       },
       {
         accessorKey: "status",
@@ -135,11 +135,9 @@ export function TeamTable({ members }: { members: TeamMember[] }) {
     <Card className={dashboardCardClass}>
       <Card.Header className="flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <Card.Title className="text-base font-semibold">
-            All members
-          </Card.Title>
-          <p className="mt-0.5 text-sm text-muted">
-            {filtered.length} of {members.length} shown
+          <Card.Title className="text-lg font-bold">Colleagues</Card.Title>
+          <p className="mt-0.5 text-base font-semibold text-muted">
+            {filtered.length} of {members.length} at {facility}
           </p>
         </div>
         <div className="flex w-full flex-col gap-2 sm:max-w-md sm:flex-row sm:items-center">
@@ -162,7 +160,7 @@ export function TeamTable({ members }: { members: TeamMember[] }) {
         </div>
       </Card.Header>
       <Card.Content className="-mx-5 overflow-x-auto px-0 pb-0">
-        <div className="min-w-[760px]">
+          <div className="min-w-[680px]">
           <DataTable
             columns={columns}
             data={filtered}

@@ -81,14 +81,14 @@ export function DataTable<TData, TValue>({
   return (
     <div className="flex w-full flex-col">
       <div className="w-full overflow-x-auto bg-transparent p-0">
-        <table className="w-full min-w-max table-auto border-collapse text-left text-sm">
+        <table className="w-full min-w-max table-auto border-collapse text-left text-base">
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="group/row">
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="whitespace-nowrap border-b border-separator bg-transparent px-3 py-3 font-medium text-muted first:pl-5 last:pr-5"
+                    className="whitespace-nowrap border-b border-separator bg-transparent px-3 py-3.5 text-sm font-bold text-foreground/70 first:pl-5 last:pr-5"
                   >
                     {header.isPlaceholder
                       ? null

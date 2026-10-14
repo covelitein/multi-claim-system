@@ -20,6 +20,7 @@ type LineItem = {
 /** Client reference database — pull saved resident details into invoices. */
 const CLIENT_REFERENCE = RESIDENTS_DATA.residents.map((r) => ({
   id: r.id,
+  residentId: r.residentId,
   name: `${r.firstName} ${r.lastName}`,
   billTo: `${r.facility}, Austin, TX`,
   room: r.id === "r1" ? "214-B" : r.id === "r2" ? "108-A" : "301-C",
@@ -38,8 +39,17 @@ function currencyTotal(lines: LineItem[]) {
 }
 
 /** Guided Create Invoice builder for facility billing managers (dummy Gen-1). */
-export function CreateInvoiceDrawer() {
-  const [residentId, setResidentId] = useState(CLIENT_REFERENCE[0]?.id ?? "");
+export function CreateInvoiceDrawer({
+  residentKey,
+}: {
+  residentKey?: string;
+}) {
+  const matched = CLIENT_REFERENCE.find(
+    (resident) => resident.residentId === residentKey,
+  );
+  const [residentId, setResidentId] = useState(
+    matched?.id ?? CLIENT_REFERENCE[0]?.id ?? "",
+  );
   const [logoName, setLogoName] = useState<string | null>(null);
   const [lines, setLines] = useState<LineItem[]>([
     { id: "room", description: "Room & board", amount: "3200.00" },
@@ -86,7 +96,7 @@ export function CreateInvoiceDrawer() {
       sizeClassName="sm:max-w-xl"
       title="Create invoice"
       trigger={
-        <Button className="h-11 gap-2 px-4 text-sm font-bold" variant="primary">
+        <Button className="h-12 gap-2 px-4 text-base font-bold" variant="primary">
           <Plus className="size-4" />
           Create Invoice
         </Button>

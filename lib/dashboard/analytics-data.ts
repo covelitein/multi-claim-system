@@ -3,7 +3,7 @@ export type AnalyticsStat = {
   label: string;
   value: string;
   change: string;
-  tone: "success" | "danger" | "accent" | "warning";
+  tone: "success" | "danger" | "accent" | "warning" | "purple";
 };
 
 export type StatusBreakdown = {
@@ -71,15 +71,15 @@ export const ANALYTICS_DATA: AnalyticsPageData = {
       label: "Revenue Tracked",
       value: "$284,500",
       change: "+8.4%",
-      tone: "success",
+      tone: "purple",
     },
   ],
   statusBreakdown: [
-    { label: "In Progress", value: 38, color: "var(--warning)" },
-    { label: "Missing Docs", value: 24, color: "var(--danger)" },
-    { label: "Ready for Review", value: 31, color: "var(--accent)" },
-    { label: "Submitted", value: 37, color: "var(--success)" },
-    { label: "Denied", value: 12, color: "oklch(0.55 0.15 350)" },
+    { label: "In Progress", value: 38, color: "var(--signal-amber)" },
+    { label: "Missing Docs", value: 24, color: "var(--signal-red)" },
+    { label: "Ready for Review", value: 31, color: "var(--signal-blue)" },
+    { label: "Submitted", value: 37, color: "var(--signal-green)" },
+    { label: "Denied", value: 12, color: "var(--signal-rose)" },
   ],
   monthlyTrends: [
     { month: "Jan", submitted: 98, paid: 82, denied: 12 },

@@ -31,11 +31,11 @@ export function ClaimsDonutChart({
 
   return (
     <Card
-      className={`${dashboardCardClass} h-full border border-accent/25 bg-gradient-to-br from-accent-soft/40 to-surface`}
+      className={`${dashboardCardClass} h-full border-2 border-signal-purple bg-signal-purple-soft/40`}
     >
       <Card.Header className="!pb-0">
         <Card.Title className="text-lg font-bold">Claims by Status</Card.Title>
-        <p className="mt-0.5 text-xs font-semibold text-muted">
+        <p className="mt-0.5 text-sm font-semibold text-muted">
           Facility-wide long-term care packet status
         </p>
       </Card.Header>
@@ -65,24 +65,24 @@ export function ClaimsDonutChart({
             ))}
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-xl font-bold">{total}</span>
-            <span className="text-xs text-muted">Total</span>
+            <span className="text-3xl font-bold">{total}</span>
+            <span className="text-sm font-bold text-muted">Total</span>
           </div>
         </div>
         <div className="flex w-full flex-1 flex-col gap-2">
           {breakdown.map((item) => (
             <div key={item.label} className="flex items-center gap-2.5">
               <span
-                className="size-2.5 shrink-0 rounded-full"
+                className="size-3.5 shrink-0 rounded-full"
                 style={{ backgroundColor: item.color }}
               />
-              <span className="flex-1 truncate text-sm text-foreground">
+              <span className="flex-1 truncate text-base font-semibold text-foreground">
                 {item.label}
               </span>
-              <span className="text-sm font-semibold tabular-nums">
+              <span className="text-base font-bold tabular-nums">
                 {item.value}
               </span>
-              <span className="w-10 text-right text-xs text-muted">
+              <span className="w-12 text-right text-sm font-bold text-muted">
                 {((item.value / total) * 100).toFixed(0)}%
               </span>
             </div>

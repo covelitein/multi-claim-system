@@ -10,28 +10,35 @@ import { RecentSubmissions } from "@/components/dashboard/home/recent-submission
 import { useDashboardHome } from "@/lib/dashboard/use-dashboard-home";
 import { Calendar } from "@gravity-ui/icons";
 import Link from "next/link";
+import { useState } from "react";
 
 export function HomeDashboard() {
   const { data, loading } = useDashboardHome();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   if (loading || !data) {
     return <HomeSkeleton />;
   }
 
+  const selected =
+    data.recentSubmissions.find((item) => item.id === selectedId) ?? null;
+
   return (
     <div className="flex min-w-0 flex-col gap-4 overflow-x-hidden pb-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Welcome back, Billing Manager
           </h1>
-          <p className="mt-0.5 text-sm text-muted">{data.greetingSubtitle}</p>
+          <p className="mt-1 text-base font-semibold text-muted">
+            {data.greetingSubtitle}
+          </p>
         </div>
         <Link
-          className="inline-flex w-fit items-center gap-1.5 rounded-full border border-accent/30 bg-accent-soft px-3 py-1.5 text-xs font-semibold text-accent hover:border-accent"
+          className="inline-flex w-fit items-center gap-2 rounded-full border-2 border-signal-blue bg-signal-blue-soft px-4 py-2 text-sm font-bold text-signal-blue-ink"
           href="/billing"
         >
-          <Calendar className="size-3.5" />
+          <Calendar className="size-4" />
           Last submission{" "}
           <span className="font-bold text-foreground">
             {data.lastSubmissionDate}
@@ -43,10 +50,16 @@ export function HomeDashboard() {
 
       <div className="grid min-w-0 gap-4 xl:grid-cols-12">
         <div className="min-w-0 xl:col-span-8">
-          <RecentSubmissions items={data.recentSubmissions} />
+          <RecentSubmissions
+            items={data.recentSubmissions}
+            selectedId={selectedId}
+            onSelect={(id) =>
+              setSelectedId((current) => (current === id ? null : id))
+            }
+          />
         </div>
         <div className="min-w-0 xl:col-span-4">
-          <QuickActions actions={data.quickActions} />
+          <QuickActions actions={data.quickActions} resident={selected} />
         </div>
       </div>
 

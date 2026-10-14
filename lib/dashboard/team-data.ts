@@ -18,11 +18,31 @@ export type TeamMember = {
   lastActive: string;
 };
 
+/** Billing workspace. Team never lists people from other facilities. */
+export const CURRENT_FACILITY = "Sunrise Assisted Living";
+
+export function colleaguesAtFacility(
+  members: TeamMember[],
+  facility = CURRENT_FACILITY,
+) {
+  return members.filter((member) => member.facility === facility);
+}
+
+/** The Team menu is for a shared facility, not a solo billing manager. */
+export function teamSectionRelevant(
+  members: TeamMember[] = TEAM_DATA.members,
+  facility = CURRENT_FACILITY,
+) {
+  return colleaguesAtFacility(members, facility).length > 1;
+}
+
 export type TeamPageData = {
+  facility: string;
   members: TeamMember[];
+  relevant: boolean;
 };
 
-export const TEAM_DATA: TeamPageData = {
+export const TEAM_DATA: { members: TeamMember[] } = {
   members: [
     {
       id: "t1",
@@ -113,5 +133,10 @@ export const TEAM_DATA: TeamPageData = {
 
 export async function fetchTeam(): Promise<TeamPageData> {
   await new Promise((resolve) => setTimeout(resolve, 600));
-  return TEAM_DATA;
+  const members = colleaguesAtFacility(TEAM_DATA.members);
+  return {
+    facility: CURRENT_FACILITY,
+    members,
+    relevant: members.length > 1,
+  };
 }

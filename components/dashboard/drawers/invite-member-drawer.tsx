@@ -6,7 +6,7 @@ import {
   DrawerCancelButton,
   DrawerPrimaryCloseButton,
 } from "@/components/dashboard/drawers/dashboard-drawer";
-import type { TeamMember } from "@/lib/dashboard/team-data";
+import { CURRENT_FACILITY, type TeamMember } from "@/lib/dashboard/team-data";
 import { Pencil, Plus } from "@gravity-ui/icons";
 import { Button } from "@heroui/react";
 import type { ReactNode } from "react";
@@ -27,8 +27,8 @@ export function InviteMemberDrawer({
     <DashboardDrawer
       description={
         isEdit
-          ? "Update role and facility access for this team member."
-          : "Send an invite with a role. Access is limited to your facilities."
+          ? `Update this colleague's role at ${CURRENT_FACILITY}.`
+          : `Invite a billing colleague to ${CURRENT_FACILITY}. They will not see other facilities.`
       }
       footer={
         <>
@@ -67,14 +67,11 @@ export function InviteMemberDrawer({
         defaultValue={member?.role}
         label="Role"
         name="memberRole"
-        placeholder="Billing coordinator"
+        placeholder="Billing manager"
       />
-      <AuthTextField
-        defaultValue={member?.facility}
-        label="Facility access"
-        name="memberFacility"
-        placeholder="All facilities"
-      />
+      <p className="rounded-xl border border-border bg-surface-secondary px-3 py-3 text-sm font-semibold text-muted">
+        Facility: {CURRENT_FACILITY}
+      </p>
     </DashboardDrawer>
   );
 }

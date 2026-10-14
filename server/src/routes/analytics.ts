@@ -7,12 +7,12 @@ export const analyticsRouter = Router();
 analyticsRouter.use(requireAuth);
 
 const STATUS_COLORS: Record<string, string> = {
-  "In Progress": "var(--warning)",
-  "Missing Docs": "var(--danger)",
-  "Ready for Review": "var(--accent)",
-  Submitted: "var(--success)",
-  Denied: "var(--danger)",
-  Paid: "var(--success)",
+  "In Progress": "var(--signal-amber)",
+  "Missing Docs": "var(--signal-red)",
+  "Ready for Review": "var(--signal-blue)",
+  Submitted: "var(--signal-green)",
+  Denied: "var(--signal-rose)",
+  Paid: "var(--signal-green)",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -156,7 +156,7 @@ analyticsRouter.get("/summary", async (req, res, next) => {
           label: "Revenue Tracked",
           value: formatMoney(revenue),
           change: "+8.4%",
-          tone: "success",
+          tone: "purple",
         },
       ],
       statusBreakdown,

@@ -1,3 +1,5 @@
+import type { SignalName } from "@/lib/dashboard/signal-colors";
+
 export type InvoiceStatus = "matched" | "pending-review" | "missing" | "overdue";
 
 export type Invoice = {
@@ -15,7 +17,7 @@ export type InvoiceStat = {
   id: string;
   label: string;
   value: number;
-  tone: "accent" | "success" | "warning" | "danger" | "default";
+  tone: "accent" | "success" | "warning" | "danger" | "orange" | "default";
 };
 
 export type InvoicesPageData = {
@@ -25,12 +27,12 @@ export type InvoicesPageData = {
 
 export const INVOICE_STATUS_CONFIG: Record<
   InvoiceStatus,
-  { label: string; color: "success" | "warning" | "danger" | "accent" }
+  { label: string; signal: SignalName }
 > = {
-  matched: { label: "Matched", color: "success" },
-  "pending-review": { label: "Pending Review", color: "warning" },
-  missing: { label: "Missing", color: "danger" },
-  overdue: { label: "Overdue", color: "danger" },
+  matched: { label: "Matched", signal: "green" },
+  "pending-review": { label: "Pending Review", signal: "amber" },
+  missing: { label: "Missing", signal: "red" },
+  overdue: { label: "Overdue", signal: "orange" },
 };
 
 export const INVOICES_DATA: InvoicesPageData = {
@@ -39,7 +41,7 @@ export const INVOICES_DATA: InvoicesPageData = {
     { id: "matched", label: "Matched to Claims", value: 42, tone: "success" },
     { id: "pending", label: "Pending Review", value: 12, tone: "warning" },
     { id: "missing", label: "Missing Invoices", value: 10, tone: "danger" },
-    { id: "overdue", label: "Overdue Invoices", value: 3, tone: "danger" },
+    { id: "overdue", label: "Overdue Invoices", value: 3, tone: "orange" },
   ],
   invoices: [
     {

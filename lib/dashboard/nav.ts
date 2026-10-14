@@ -1,3 +1,4 @@
+import { teamSectionRelevant } from "@/lib/dashboard/team-data";
 import {
   ArrowRightFromSquare,
   Briefcase,
@@ -30,6 +31,12 @@ export const HOSPITAL_DASHBOARD_NAV: DashboardNavItem[] = [
 ];
 
 export const DASHBOARD_NAV = HOSPITAL_DASHBOARD_NAV;
+
+export function visibleDashboardNav() {
+  return HOSPITAL_DASHBOARD_NAV.filter(
+    (item) => item.href !== "/staff" || teamSectionRelevant(),
+  );
+}
 
 export const DASHBOARD_LOGOUT = {
   href: "/login",
