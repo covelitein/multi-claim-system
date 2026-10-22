@@ -158,8 +158,8 @@ export function ClaimUploadPage() {
                   <p className="text-sm font-bold">Upload model (Gen 1)</p>
                   <p className="mt-1 text-sm font-medium text-muted">
                     Facilities upload documents. Helix reviews and completes LTC
-                    claim paperwork. In-app CMR walkthrough arrives after CMR
-                    templates are loaded.
+                    claim paperwork. To answer the monthly CMR questions in the app
+                    instead, use Monthly form (CMR) from the Claims page.
                   </p>
                 </div>
               </div>

@@ -697,3 +697,16 @@
     animation: none;
   }
 }
+
+/* Printable CMR form: plain white letter page, no app chrome. */
+@media print {
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+}

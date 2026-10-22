@@ -21,7 +21,7 @@ export const CLAIM_UPLOAD_FLOW: ClaimUploadFlowData = {
   title: "Claim for existing resident",
   modeLabel: "Upload for review",
   subtitle:
-    "Long-term care packets only. Upload documents for Helix review — interactive CMR walkthrough forms will be available once insurer templates are loaded.",
+    "Long-term care packets only. Upload documents for Helix review — or answer the monthly CMR questions in the app with Monthly form (CMR).",
   phases: [
     { id: "basics", label: "Claim basics" },
     { id: "documents", label: "Upload documents" },
@@ -71,7 +71,7 @@ export const CLAIM_UPLOAD_FLOW: ClaimUploadFlowData = {
     {
       id: "cmr",
       label: "CMR / monthly residence form",
-      description: "Upload completed paper CMR until in-app walkthrough ships.",
+      description: "Upload a completed paper CMR, or answer it in the app with Monthly form (CMR).",
       required: true,
     },
     {

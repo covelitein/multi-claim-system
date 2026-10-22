@@ -1,4 +1,4 @@
-export type ChartTone = "accent" | "warning" | "success" | "danger";
+export type ChartTone = "accent" | "warning" | "success" | "danger" | "purple";
 
 export type HomeKpiIcon =
   | "submitted"
@@ -193,6 +193,14 @@ export const DASHBOARD_HOME: DashboardHomeData = {
       description: "Upload LTC claim packet for review",
       href: "/billing/new",
       tone: "accent",
+    },
+    {
+      id: "cmr",
+      label: "Monthly form (CMR)",
+      description: "Answer this month's questions",
+      href: "/billing/cmr",
+      tone: "purple",
+      requiresResident: true,
     },
     {
       id: "upload-invoice",

@@ -23,7 +23,7 @@ const CLIENT_REFERENCE = RESIDENTS_DATA.residents.map((r) => ({
   residentId: r.residentId,
   name: `${r.firstName} ${r.lastName}`,
   billTo: `${r.facility}, Austin, TX`,
-  room: r.id === "r1" ? "214-B" : r.id === "r2" ? "108-A" : "301-C",
+  room: r.room,
   payer: r.payer,
 }));
 

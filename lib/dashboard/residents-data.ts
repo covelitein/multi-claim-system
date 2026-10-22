@@ -4,6 +4,7 @@ export type Resident = {
   id: string;
   residentId: string;
   policyId: string;
+  room: string;
   firstName: string;
   lastName: string;
   dob: string;
@@ -49,6 +50,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
       id: "r1",
       residentId: "RES-2048",
       policyId: "POL-GNW-2048",
+      room: "214-B",
       firstName: "Mary",
       lastName: "Johnson",
       dob: "1945-03-12",
@@ -68,6 +70,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
       id: "r2",
       residentId: "RES-1982",
       policyId: "POL-JHN-1982",
+      room: "108-A",
       firstName: "Robert",
       lastName: "Williams",
       dob: "1941-08-24",
@@ -87,6 +90,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
       id: "r3",
       residentId: "RES-2110",
       policyId: "POL-ILM-2110",
+      room: "205-A",
       firstName: "Gloria",
       lastName: "Chen",
       dob: "1944-02-28",
@@ -106,6 +110,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
       id: "r4",
       residentId: "RES-1875",
       policyId: "POL-JHN-1875",
+      room: "112-B",
       firstName: "Harold",
       lastName: "Freeman",
       dob: "1942-01-07",
@@ -125,6 +130,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
       id: "r5",
       residentId: "RES-1760",
       policyId: "POL-GNW-1760",
+      room: "118-A",
       firstName: "Lara",
       lastName: "Mensah",
       dob: "1949-06-30",
@@ -144,6 +150,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
       id: "r6",
       residentId: "RES-1654",
       policyId: "POL-GNW-1654",
+      room: "224-C",
       firstName: "Amanda",
       lastName: "Brown",
       dob: "1945-03-12",
@@ -163,6 +170,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
       id: "r7",
       residentId: "RES-1540",
       policyId: "POL-JHN-1540",
+      room: "301-C",
       firstName: "Chidi",
       lastName: "Okonkwo",
       dob: "1941-08-24",
@@ -182,6 +190,7 @@ export const RESIDENTS_DATA: ResidentsPageData = {
       id: "r8",
       residentId: "RES-1422",
       policyId: "POL-ILM-1422",
+      room: "305-A",
       firstName: "Sofia",
       lastName: "Alvarez",
       dob: "1950-09-22",

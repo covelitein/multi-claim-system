@@ -4,7 +4,7 @@ import { ClaimsStatusTabs } from "@/components/dashboard/claims/claims-status-ta
 import { ClaimsTable } from "@/components/dashboard/claims/claims-table";
 import { NewClaimDrawer } from "@/components/dashboard/drawers/new-claim-drawer";
 import { fetchClaims, type ClaimsPageData } from "@/lib/dashboard/claims-data";
-import { Plus } from "@gravity-ui/icons";
+import { FileText, Plus } from "@gravity-ui/icons";
 import { Button } from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -33,7 +33,7 @@ export function ClaimsPage() {
             Claims
           </h1>
           <p className="mt-0.5 text-sm font-medium text-muted">
-            Upload LTC packets for Helix review. CMR walkthrough comes later.
+            Upload LTC packets for Helix review, or answer the monthly CMR questions in the app.
           </p>
         </div>
         <div className="flex flex-wrap gap-2.5">
@@ -49,6 +49,13 @@ export function ClaimsPage() {
               </Button>
             }
           />
+          <Link
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border-2 border-signal-purple/40 bg-signal-purple-soft px-4 text-sm font-bold text-signal-purple-ink hover:bg-signal-purple hover:text-white"
+            href="/billing/cmr"
+          >
+            <FileText className="size-4" />
+            Monthly form (CMR)
+          </Link>
           <Link
             className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-accent px-4 text-sm font-bold text-accent-foreground shadow-sm hover:opacity-95"
             href="/billing/new"

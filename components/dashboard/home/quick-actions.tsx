@@ -41,7 +41,7 @@ export function QuickActions({
               </span>
             </>
           ) : (
-            "Select a resident to see invoice actions."
+            "Select a resident to see their monthly form and invoice actions."
           )}
         </p>
       </Card.Header>

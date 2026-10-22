@@ -94,7 +94,7 @@ export function NewClaimDrawer({
           />
           <DocumentUploadZone
             files={files}
-            hint="Upload invoices and supporting docs. CMR walkthrough forms will arrive once templates are loaded — for now, upload only."
+            hint="Upload invoices and supporting docs. To answer the monthly CMR questions instead, use Monthly form (CMR) on the Claims page."
             title="Claim documents"
             onAdd={(next) => setFiles((prev) => [...prev, ...next])}
             onRemove={(id) =>

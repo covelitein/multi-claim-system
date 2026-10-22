@@ -4,28 +4,32 @@ import {
   fetchClaimWalkthrough,
   type ClaimWalkthroughData,
   type WalkthroughPhase,
+  type WalkthroughQuestion,
 } from "@/lib/dashboard/claim-walkthrough-data";
+import { useCmrDraft, useCmrDraftReady } from "@/lib/dashboard/cmr-draft-store";
 import { useEffect, useState } from "react";
 
 export type WalkthroughAnswers = Record<string, string>;
 
-/** Plug point: replace fetch + local answers with claim draft API later. */
+export type WalkthroughStep =
+  | { kind: "question"; id: string; label: string; question: WalkthroughQuestion }
+  | { kind: "phase"; id: WalkthroughPhase; label: string };
+
+/** Plug point: replace fetch + local draft with claim draft API later. */
 export function useClaimWalkthrough() {
   const [data, setData] = useState<ClaimWalkthroughData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [phaseIndex, setPhaseIndex] = useState(0);
-  const [questionIndex, setQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<WalkthroughAnswers>({
-    "claim-from": "2026-08-01",
-    "claim-to": "2026-08-31",
-  });
+  const [stepIndex, setStepIndex] = useState(0);
+  const [maxReached, setMaxReached] = useState(0);
   const [checklist, setChecklist] = useState<Record<string, boolean>>({});
+
+  const draftReady = useCmrDraftReady();
+  const answers = useCmrDraft((s) => s.answers);
+  const setAnswer = useCmrDraft((s) => s.setAnswer);
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    setError(null);
     fetchClaimWalkthrough()
       .then((result) => {
         if (!active) return;
@@ -45,74 +49,70 @@ export function useClaimWalkthrough() {
     };
   }, []);
 
-  const phase: WalkthroughPhase | undefined = data?.phases[phaseIndex]?.id;
-  const question = data?.questions[questionIndex];
-  const questionCount = data?.questions.length ?? 0;
+  // Questions first, then every later phase, as one flat list of steps.
+  const steps: WalkthroughStep[] = data
+    ? [
+        ...data.questions.map(
+          (question): WalkthroughStep => ({
+            kind: "question",
+            id: question.id,
+            label: `Question ${question.number}`,
+            question,
+          }),
+        ),
+        ...data.phases
+          .filter((phase) => phase.id !== "form-questions")
+          .map((phase): WalkthroughStep => ({ kind: "phase", ...phase })),
+      ]
+    : [];
 
-  function setAnswer(fieldId: string, value: string) {
-    setAnswers((prev) => ({ ...prev, [fieldId]: value }));
+  const step = steps[stepIndex];
+  const lastIndex = steps.length - 1;
+
+  function goTo(index: number) {
+    if (index < 0 || index > maxReached) return;
+    setStepIndex(index);
+  }
+
+  function goNext() {
+    if (stepIndex >= lastIndex) return;
+    const next = stepIndex + 1;
+    setStepIndex(next);
+    setMaxReached((m) => Math.max(m, next));
+  }
+
+  function goBack() {
+    setStepIndex((i) => Math.max(0, i - 1));
   }
 
   function toggleChecklistItem(item: string) {
     setChecklist((prev) => ({ ...prev, [item]: !prev[item] }));
   }
 
-  function goNext() {
-    if (!data) return;
-
-    if (phase === "form-questions") {
-      if (questionIndex < questionCount - 1) {
-        setQuestionIndex((i) => i + 1);
-        return;
-      }
-      setPhaseIndex(1);
-      return;
-    }
-
-    if (phaseIndex < data.phases.length - 1) {
-      setPhaseIndex((i) => i + 1);
-    }
-  }
-
-  function goBack() {
-    if (!data) return;
-
-    if (phase === "form-questions") {
-      if (questionIndex > 0) {
-        setQuestionIndex((i) => i - 1);
-        return;
-      }
-      return;
-    }
-
-    if (phaseIndex === 1) {
-      setPhaseIndex(0);
-      setQuestionIndex(questionCount - 1);
-      return;
-    }
-
-    if (phaseIndex > 0) {
-      setPhaseIndex((i) => i - 1);
-    }
-  }
-
   return {
     data,
-    loading,
+    loading: loading || !draftReady,
+    draftReady,
     error,
-    phase,
-    phaseIndex,
-    question,
-    questionIndex,
-    questionCount,
+    steps,
+    step,
+    stepIndex,
+    maxReached,
+    lastIndex,
+    progress:
+      steps.length === 0
+        ? 0
+        : stepIndex === lastIndex
+          ? 100
+          : Math.round((stepIndex / steps.length) * 100),
     answers,
     checklist,
     setAnswer,
     toggleChecklistItem,
+    goTo,
     goNext,
     goBack,
-    canGoBack:
-      phaseIndex > 0 || (phase === "form-questions" && questionIndex > 0),
-    isLastPhase: data ? phaseIndex === data.phases.length - 1 : false,
+    canGoBack: stepIndex > 0,
+    isLast: stepIndex === lastIndex,
   };
 }
