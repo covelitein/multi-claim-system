@@ -1,8 +1,14 @@
 "use client";
 
 import { Button, Drawer, cn } from "@heroui/react";
-import { isValidElement, type ReactNode } from "react";
+import {
+  isValidElement,
+  type ComponentProps,
+  type ReactNode,
+} from "react";
 import { Pressable } from "react-aria-components";
+
+type PressableChild = ComponentProps<typeof Pressable>["children"];
 
 type DashboardDrawerProps = {
   trigger: ReactNode;
@@ -15,12 +21,16 @@ type DashboardDrawerProps = {
   onOpenChange?: (open: boolean) => void;
 };
 
-/** A plain button does not register with the drawer. Pressable does. */
-function asDrawerTrigger(trigger: ReactNode) {
-  if (
+function isDomTrigger(trigger: ReactNode): trigger is PressableChild {
+  return (
     isValidElement(trigger) &&
     (trigger.type === "button" || trigger.type === "a")
-  ) {
+  );
+}
+
+/** A plain button does not register with the drawer. Pressable does. */
+function asDrawerTrigger(trigger: ReactNode) {
+  if (isDomTrigger(trigger)) {
     return <Pressable>{trigger}</Pressable>;
   }
   return trigger;
