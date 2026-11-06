@@ -1,7 +1,7 @@
 "use client";
 
-import { NewClaimDrawer } from "@/components/dashboard/drawers/new-claim-drawer";
+import { CreateClaimDrawer } from "@/components/dashboard/drawers/create-claim-drawer";
 
 export function HeaderNewPatient() {
-  return <NewClaimDrawer mode="new-resident" />;
+  return <CreateClaimDrawer />;
 }

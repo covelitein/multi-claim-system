@@ -2,16 +2,27 @@
 
 import { ClaimsStatusTabs } from "@/components/dashboard/claims/claims-status-tabs";
 import { ClaimsTable } from "@/components/dashboard/claims/claims-table";
+import { RequestsPanel } from "@/components/dashboard/claims/requests-panel";
+import { CreateClaimDrawer } from "@/components/dashboard/drawers/create-claim-drawer";
 import { NewClaimDrawer } from "@/components/dashboard/drawers/new-claim-drawer";
 import { fetchClaims, type ClaimsPageData } from "@/lib/dashboard/claims-data";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 import { FileText, Plus } from "@gravity-ui/icons";
-import { Button } from "@heroui/react";
+import { Button, cn } from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export function ClaimsPage() {
   const [data, setData] = useState<ClaimsPageData | null>(null);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [view, setView] = useState<"claims" | "requests">("claims");
+  const addedClaims = useWorkspace((s) => s.addedClaims);
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("view") === "requests") {
+      setView("requests");
+    }
+  }, []);
 
   useEffect(() => {
     fetchClaims().then(setData);
@@ -56,22 +67,48 @@ export function ClaimsPage() {
             <FileText className="size-4" />
             Monthly form (CMR)
           </Link>
-          <Link
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-accent px-4 text-sm font-bold text-accent-foreground shadow-sm hover:opacity-95"
-            href="/billing/new"
-          >
-            <Plus className="size-4" />
-            Claim for Existing Resident
-          </Link>
+          <CreateClaimDrawer />
         </div>
       </div>
 
-      <ClaimsStatusTabs
-        active={statusFilter}
-        stats={data.stats}
-        onSelect={setStatusFilter}
-      />
-      <ClaimsTable claims={data.claims} statusFilter={statusFilter} />
+      <div className="flex gap-2">
+        {(
+          [
+            ["claims", "Claims"],
+            ["requests", "Request tracker"],
+          ] as const
+        ).map(([id, label]) => (
+          <button
+            key={id}
+            className={cn(
+              "h-10 rounded-xl border px-4 text-sm font-bold",
+              view === id
+                ? "border-foreground bg-foreground text-background"
+                : "border-border bg-surface text-foreground hover:bg-surface-secondary",
+            )}
+            type="button"
+            onClick={() => setView(id)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {view === "claims" ? (
+        <>
+          <ClaimsStatusTabs
+            active={statusFilter}
+            stats={data.stats}
+            onSelect={setStatusFilter}
+          />
+          <ClaimsTable
+            claims={[...addedClaims, ...data.claims]}
+            statusFilter={statusFilter}
+          />
+        </>
+      ) : (
+        <RequestsPanel />
+      )}
     </div>
   );
 }

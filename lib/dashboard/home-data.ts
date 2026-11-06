@@ -25,13 +25,21 @@ export type ClaimsOverviewSlice = {
 
 export type RecentSubmission = {
   id: string;
+  /** Claim number shown on the row and in the details window. */
+  claimId: string;
   residentName: string;
   residentId: string;
   submittedAt: string;
-  status: "approved" | "pending" | "rejected" | "submitted";
+  status: "approved" | "pending" | "missing-docs" | "submitted" | "in-progress";
   amount: string;
   image: string;
   initials: string;
+  claimType: string;
+  period: string;
+  missingItems: number;
+  invoiceId: string | null;
+  /** Shown beside the carrier. Genworth policies are administered by Illumifin. */
+  administrator: string;
 };
 
 export type QuickAction = {
@@ -127,63 +135,99 @@ export const DASHBOARD_HOME: DashboardHomeData = {
   recentSubmissions: [
     {
       id: "rs1",
+      claimId: "CLM-2026-046",
       residentName: "Mary Johnson",
       residentId: "RES-2048",
-      submittedAt: "08/18/2026",
+      submittedAt: "2026-08-18",
       status: "approved",
       amount: "$4,850.00",
       image: "https://i.pravatar.cc/80?img=47",
       initials: "MJ",
+      claimType: "Monthly CMR",
+      period: "2026-08-01 – 2026-08-31",
+      missingItems: 0,
+      invoiceId: "INV-2026-064",
+      administrator: "Illumifin",
     },
     {
       id: "rs2",
+      claimId: "CLM-2026-044",
       residentName: "Robert Williams",
       residentId: "RES-1982",
-      submittedAt: "08/17/2026",
+      submittedAt: "2026-08-17",
       status: "pending",
       amount: "$3,220.00",
       image: "https://i.pravatar.cc/80?img=12",
       initials: "RW",
+      claimType: "Monthly CMR",
+      period: "2026-08-01 – 2026-08-31",
+      missingItems: 1,
+      invoiceId: null,
+      administrator: "John Hancock",
     },
     {
       id: "rs3",
+      claimId: "CLM-2026-042",
       residentName: "Gloria Chen",
       residentId: "RES-2110",
-      submittedAt: "08/16/2026",
-      status: "rejected",
+      submittedAt: "2026-08-16",
+      status: "missing-docs",
       amount: "$2,940.00",
       image: "https://i.pravatar.cc/80?img=5",
       initials: "GC",
+      claimType: "Monthly CMR",
+      period: "2026-08-01 – 2026-08-31",
+      missingItems: 2,
+      invoiceId: null,
+      administrator: "Illumifin",
     },
     {
       id: "rs4",
+      claimId: "CLM-2026-041",
       residentName: "Harold Freeman",
       residentId: "RES-1875",
-      submittedAt: "08/15/2026",
+      submittedAt: "2026-08-15",
       status: "submitted",
       amount: "$5,100.00",
       image: "https://i.pravatar.cc/80?img=57",
       initials: "HF",
+      claimType: "Monthly CMR",
+      period: "2026-08-01 – 2026-08-31",
+      missingItems: 0,
+      invoiceId: null,
+      administrator: "John Hancock",
     },
     {
       id: "rs5",
+      claimId: "CLM-2026-038",
       residentName: "Lara Mensah",
-      residentId: "RES-2201",
-      submittedAt: "08/14/2026",
+      residentId: "RES-1760",
+      submittedAt: "2026-08-14",
       status: "approved",
       amount: "$4,450.00",
       image: "https://i.pravatar.cc/80?img=32",
       initials: "LM",
+      claimType: "Monthly CMR",
+      period: "2026-08-01 – 2026-08-31",
+      missingItems: 0,
+      invoiceId: null,
+      administrator: "Illumifin",
     },
     {
       id: "rs6",
+      claimId: "CLM-2026-035",
       residentName: "William Patterson",
       residentId: "RES-1933",
-      submittedAt: "08/13/2026",
+      submittedAt: "2026-08-13",
       status: "pending",
       amount: "$3,780.00",
       image: "https://i.pravatar.cc/80?img=61",
       initials: "WP",
+      claimType: "Monthly CMR",
+      period: "2026-08-01 – 2026-08-31",
+      missingItems: 1,
+      invoiceId: null,
+      administrator: "Illumifin",
     },
   ],
   quickActions: [
@@ -209,6 +253,13 @@ export const DASHBOARD_HOME: DashboardHomeData = {
       href: "/invoices",
       tone: "success",
       requiresResident: true,
+    },
+    {
+      id: "requests",
+      label: "Request tracker",
+      description: "Next actions and open work",
+      href: "/billing?view=requests",
+      tone: "warning",
     },
     {
       id: "reports",

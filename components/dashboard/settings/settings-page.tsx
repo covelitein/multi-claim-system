@@ -18,6 +18,7 @@ import {
   TextField,
   cn,
 } from "@heroui/react";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 import { useState } from "react";
 
 type SettingsTab = "general" | "notifications" | "security";
@@ -51,6 +52,7 @@ function SettingSwitch({
 }
 
 function GeneralTab() {
+  const showToast = useWorkspace((s) => s.showToast);
   return (
     <div className="grid gap-5">
       <Card className={`${dashboardCardClass} border-2 border-accent/20`}>
@@ -85,7 +87,12 @@ function GeneralTab() {
             </TextField>
           </div>
           <div className="flex justify-end border-t border-separator pt-4">
-            <Button className="font-bold" size="sm" variant="primary">
+            <Button
+              className="font-bold"
+              size="sm"
+              variant="primary"
+              onPress={() => showToast("Settings saved for this demo")}
+            >
               Save changes
             </Button>
           </div>
@@ -203,6 +210,7 @@ function NotificationsTab() {
 }
 
 function SecurityTab() {
+  const showToast = useWorkspace((s) => s.showToast);
   return (
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_280px]">
       <Card className={dashboardCardClass}>
@@ -228,7 +236,12 @@ function SecurityTab() {
             </TextField>
           </div>
           <div className="flex justify-end border-t border-separator pt-4">
-            <Button className="font-bold" size="sm" variant="primary">
+            <Button
+              className="font-bold"
+              size="sm"
+              variant="primary"
+              onPress={() => showToast("Password updated for this demo")}
+            >
               Update password
             </Button>
           </div>
@@ -248,6 +261,32 @@ function SecurityTab() {
             <Lock className="mt-0.5 size-4 shrink-0 text-accent" />
             <p>Sign out of shared devices after updating credentials.</p>
           </div>
+        </Card.Content>
+      </Card>
+      <Card className={`${dashboardCardClass} lg:col-span-2`}>
+        <Card.Header>
+          <Card.Title className="type-card-title">Security and integrations</Card.Title>
+          <Card.Description className="text-sm font-medium text-muted">
+            These connections are shown so the workflow is visible. None of them
+            send data yet.
+          </Card.Description>
+        </Card.Header>
+        <Card.Content className="gap-2">
+          {[
+            ["DocuSign e-signature", "Would start a signature request after CMR review."],
+            ["Carrier / Illumifin integrations", "Real submissions and status sync need an approved connection."],
+            ["Secure file storage", "Production needs protected storage, access controls, and an audit trail."],
+          ].map(([title, detail]) => (
+            <div key={title} className="flex items-center justify-between gap-3 rounded-xl border border-border px-3 py-3">
+              <div>
+                <p className="text-sm font-bold">{title}</p>
+                <p className="text-sm font-medium text-muted">{detail}</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-surface-secondary px-2.5 py-1 text-xs font-bold text-muted">
+                Not connected
+              </span>
+            </div>
+          ))}
         </Card.Content>
       </Card>
     </div>

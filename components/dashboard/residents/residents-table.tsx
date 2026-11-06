@@ -1,11 +1,12 @@
 "use client";
 
 import { EditResidentDrawer } from "@/components/dashboard/drawers/add-resident-drawer";
+import { CreateClaimDrawer } from "@/components/dashboard/drawers/create-claim-drawer";
 import { ViewResidentDrawer } from "@/components/dashboard/residents/view-resident-drawer";
 import { DataTable } from "@/components/ui/data-table";
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
 import type { Resident, ResidentStatus } from "@/lib/dashboard/residents-data";
-import { Funnel, Magnifier } from "@gravity-ui/icons";
+import { Magnifier } from "@gravity-ui/icons";
 import { Avatar, Card, Chip } from "@heroui/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
@@ -23,19 +24,22 @@ const STATUS_CONFIG: Record<
 
 export function ResidentsTable({ residents }: { residents: Resident[] }) {
   const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("");
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return residents;
-    const lower = query.toLowerCase();
-    return residents.filter(
-      (r) =>
+    return residents.filter((r) => {
+      if (status && r.status !== status) return false;
+      if (!query.trim()) return true;
+      const lower = query.toLowerCase();
+      return (
         `${r.firstName} ${r.lastName}`.toLowerCase().includes(lower) ||
         r.residentId.toLowerCase().includes(lower) ||
         r.policyId.toLowerCase().includes(lower) ||
         r.payer.toLowerCase().includes(lower) ||
-        r.facility.toLowerCase().includes(lower),
-    );
-  }, [residents, query]);
+        r.facility.toLowerCase().includes(lower)
+      );
+    });
+  }, [residents, query, status]);
 
   const columns: ColumnDef<Resident>[] = useMemo(
     () => [
@@ -128,6 +132,17 @@ export function ResidentsTable({ residents }: { residents: Resident[] }) {
         cell: ({ row }) => (
           <div className="flex items-center justify-end gap-1">
             <ViewResidentDrawer resident={row.original} />
+            <CreateClaimDrawer
+              resident={row.original}
+              trigger={
+                <button
+                  className="rounded-lg px-2 py-1.5 text-xs font-bold text-accent hover:bg-accent-soft"
+                  type="button"
+                >
+                  + Claim
+                </button>
+              }
+            />
             <EditResidentDrawer resident={row.original} />
           </div>
         ),
@@ -157,13 +172,18 @@ export function ResidentsTable({ residents }: { residents: Resident[] }) {
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
-          <button
-            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-border px-3 text-sm font-medium text-muted transition-colors hover:bg-surface-secondary hover:text-foreground"
-            type="button"
+          <select
+            aria-label="Resident status"
+            className="h-10 shrink-0 rounded-xl border border-border bg-surface px-3 text-sm font-medium"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
           >
-            <Funnel className="size-4" />
-            Filters
-          </button>
+            <option value="">All statuses</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="pending">Pending</option>
+            <option value="on-hold">On hold</option>
+          </select>
         </div>
       </Card.Header>
       <Card.Content className="-mx-5 overflow-x-auto px-0 pb-0">

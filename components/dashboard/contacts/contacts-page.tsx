@@ -1,13 +1,15 @@
 "use client";
 
+import { InfoBanner } from "@/components/dashboard/info-banner";
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 import {
   fetchContacts,
   type ClientContact,
   type ContactsPageData,
 } from "@/lib/dashboard/contacts-data";
 import { Envelope, Magnifier, Smartphone } from "@gravity-ui/icons";
-import { Card, Chip } from "@heroui/react";
+import { Button, Card, Chip } from "@heroui/react";
 import { useEffect, useMemo, useState } from "react";
 
 const ROLE_COLOR: Record<
@@ -24,6 +26,7 @@ const ROLE_COLOR: Record<
 export function ContactsPage() {
   const [data, setData] = useState<ContactsPageData | null>(null);
   const [query, setQuery] = useState("");
+  const showToast = useWorkspace((s) => s.showToast);
 
   useEffect(() => {
     fetchContacts().then(setData);
@@ -62,6 +65,11 @@ export function ContactsPage() {
           Searchable contact list for insurers, family, and facility partners.
         </p>
       </div>
+
+      <InfoBanner tone="amber">
+        Confirm each carrier’s live submission instructions before sending real
+        records. Use contact copies the email into this session only.
+      </InfoBanner>
 
       <div className="flex w-full max-w-md items-center gap-2 rounded-lg border border-border bg-surface px-2.5 py-1.5 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20">
         <Magnifier className="size-3.5 shrink-0 text-muted" />
@@ -111,6 +119,17 @@ export function ContactsPage() {
               <p className="text-xs font-bold text-muted">
                 Last contacted {contact.lastContacted}
               </p>
+              <Button
+                className="mt-1 h-9 w-fit font-bold"
+                size="sm"
+                variant="outline"
+                onPress={() => {
+                  void navigator.clipboard?.writeText(contact.email);
+                  showToast("Contact details copied in demo");
+                }}
+              >
+                Use contact
+              </Button>
             </Card.Content>
           </Card>
         ))}

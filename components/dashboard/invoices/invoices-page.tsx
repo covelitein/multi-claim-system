@@ -6,10 +6,12 @@ import { InvoicesStatCards } from "@/components/dashboard/invoices/invoices-stat
 import { InvoicesTable } from "@/components/dashboard/invoices/invoices-table";
 import { residentByKey } from "@/lib/dashboard/residents-data";
 import { useInvoices } from "@/lib/dashboard/use-invoices";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 import { useEffect, useState } from "react";
 
 export function InvoicesPage() {
   const { data, loading } = useInvoices();
+  const addedInvoices = useWorkspace((s) => s.addedInvoices);
   const [residentKey, setResidentKey] = useState<string | null>(null);
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export function InvoicesPage() {
       </div>
 
       <InvoicesStatCards stats={data.stats} />
-      <InvoicesTable invoices={data.invoices} />
+      <InvoicesTable invoices={[...addedInvoices, ...data.invoices]} />
     </div>
   );
 }

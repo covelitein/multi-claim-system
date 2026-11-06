@@ -1,7 +1,8 @@
 "use client";
 
 import { Button, Drawer, cn } from "@heroui/react";
-import type { ReactNode } from "react";
+import { isValidElement, type ReactNode } from "react";
+import { Pressable } from "react-aria-components";
 
 type DashboardDrawerProps = {
   trigger: ReactNode;
@@ -11,7 +12,19 @@ type DashboardDrawerProps = {
   footer?: ReactNode;
   /** Applied to the drawer panel (Dialog), not the full-screen content wrapper. */
   sizeClassName?: string;
+  onOpenChange?: (open: boolean) => void;
 };
+
+/** A plain button does not register with the drawer. Pressable does. */
+function asDrawerTrigger(trigger: ReactNode) {
+  if (
+    isValidElement(trigger) &&
+    (trigger.type === "button" || trigger.type === "a")
+  ) {
+    return <Pressable>{trigger}</Pressable>;
+  }
+  return trigger;
+}
 
 export function DashboardDrawer({
   trigger,
@@ -20,10 +33,11 @@ export function DashboardDrawer({
   children,
   footer,
   sizeClassName = "sm:max-w-md",
+  onOpenChange,
 }: DashboardDrawerProps) {
   return (
-    <Drawer>
-      {trigger}
+    <Drawer onOpenChange={onOpenChange}>
+      {asDrawerTrigger(trigger)}
       <Drawer.Backdrop>
         <Drawer.Content placement="right">
           <Drawer.Dialog className={cn("w-full max-w-[85vw]", sizeClassName)}>

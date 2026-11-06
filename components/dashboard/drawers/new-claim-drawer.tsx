@@ -4,13 +4,13 @@ import { AuthTextField } from "@/components/auth/fields/auth-text-field";
 import {
   DashboardDrawer,
   DrawerCancelButton,
-  DrawerPrimaryCloseButton,
 } from "@/components/dashboard/drawers/dashboard-drawer";
 import {
   DocumentUploadZone,
   type UploadedDocument,
 } from "@/components/dashboard/drawers/document-upload-zone";
 import { LTC_INSURERS } from "@/lib/dashboard/claims-data";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 import { Plus } from "@gravity-ui/icons";
 import { Button, Label } from "@heroui/react";
 import Link from "next/link";
@@ -27,6 +27,13 @@ export function NewClaimDrawer({
   mode = "existing",
 }: NewClaimDrawerProps) {
   const [files, setFiles] = useState<UploadedDocument[]>([]);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [period, setPeriod] = useState("");
+  const [insurer, setInsurer] = useState<string>(LTC_INSURERS[0]);
+  const addRequest = useWorkspace((s) => s.addRequest);
+  const addClaim = useWorkspace((s) => s.addClaim);
+  const showToast = useWorkspace((s) => s.showToast);
   const isNewResident = mode === "new-resident";
 
   return (
@@ -40,7 +47,40 @@ export function NewClaimDrawer({
         <>
           <DrawerCancelButton />
           {isNewResident ? (
-            <DrawerPrimaryCloseButton label="Submit for review" />
+            <Button
+              isDisabled={!firstName.trim() || !lastName.trim()}
+              slot="close"
+              variant="primary"
+              onPress={() => {
+                const residentName = `${firstName.trim()} ${lastName.trim()}`;
+                const policyId = "POL-PENDING";
+                addClaim({
+                  id: `c-${Date.now()}`,
+                  policyId,
+                  residentName,
+                  residentImage: "",
+                  residentInitials: `${firstName.trim()[0] ?? ""}${lastName.trim()[0] ?? ""}`.toUpperCase(),
+                  insurer,
+                  billingPeriod: period.trim() || "Period pending",
+                  status: "in-progress",
+                  missingItems: 0,
+                  lastUpdated: new Date().toISOString().slice(0, 10),
+                  facility: "Sunrise Assisted Living",
+                  notes: "Created in this session.",
+                });
+                const requestId = addRequest({
+                  residentId: "new",
+                  residentName,
+                  type: "CMR",
+                  status: "In Progress",
+                  next: "Answer CMR questions",
+                  policyId,
+                });
+                showToast(`Created claim and ${requestId}`);
+              }}
+            >
+              Submit for review
+            </Button>
           ) : (
             <Button variant="primary">
               <Link href="/billing/new">Open upload flow</Link>
@@ -66,8 +106,20 @@ export function NewClaimDrawer({
     >
       {isNewResident ? (
         <>
-          <AuthTextField label="First name" name="firstName" placeholder="Ada" />
-          <AuthTextField label="Last name" name="lastName" placeholder="Okoye" />
+          <AuthTextField
+            label="First name"
+            name="firstName"
+            placeholder="Ada"
+            value={firstName}
+            onChange={setFirstName}
+          />
+          <AuthTextField
+            label="Last name"
+            name="lastName"
+            placeholder="Okoye"
+            value={lastName}
+            onChange={setLastName}
+          />
           <AuthTextField
             label="Phone"
             name="phone"
@@ -77,8 +129,9 @@ export function NewClaimDrawer({
             <Label className="text-sm font-bold">Client / Insurer</Label>
             <select
               className="h-11 rounded-xl border border-border bg-surface px-3 text-sm font-semibold"
-              defaultValue={LTC_INSURERS[0]}
               name="insurer"
+              value={insurer}
+              onChange={(e) => setInsurer(e.target.value)}
             >
               {LTC_INSURERS.map((insurer) => (
                 <option key={insurer} value={insurer}>
@@ -91,6 +144,8 @@ export function NewClaimDrawer({
             label="Billing period"
             name="billingPeriod"
             placeholder="08/01/2026 – 08/31/2026"
+            value={period}
+            onChange={setPeriod}
           />
           <DocumentUploadZone
             files={files}

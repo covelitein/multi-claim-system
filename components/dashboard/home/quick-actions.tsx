@@ -19,6 +19,7 @@ const ACTION_ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   cmr: FileText,
   "upload-invoice": Receipt,
   reports: ChartColumn,
+  requests: FileText,
 };
 
 export function QuickActions({

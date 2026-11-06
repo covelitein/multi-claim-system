@@ -1,6 +1,7 @@
 "use client";
 
 import { HeaderMenuPopover } from "@/components/dashboard/header/header-menu-popover";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 import { Bell } from "@gravity-ui/icons";
 import { Dropdown } from "@heroui/react";
 
@@ -11,6 +12,7 @@ const NOTIFICATIONS = [
 ];
 
 export function HeaderNotifications() {
+  const showToast = useWorkspace((s) => s.showToast);
   return (
     <Dropdown>
       <Dropdown.Trigger
@@ -24,7 +26,12 @@ export function HeaderNotifications() {
         <div className="px-3.5 pt-3 pb-1 text-xs font-medium text-muted">
           Notifications
         </div>
-        <Dropdown.Menu>
+        <Dropdown.Menu
+          onAction={(key) => {
+            const item = NOTIFICATIONS.find((entry) => entry.id === key);
+            showToast(item ? item.title : "You are all caught up.");
+          }}
+        >
           {NOTIFICATIONS.map((item) => (
             <Dropdown.Item key={item.id} id={item.id} textValue={item.title}>
               <div className="flex min-w-0 flex-col gap-0.5">

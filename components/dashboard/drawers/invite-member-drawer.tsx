@@ -4,12 +4,12 @@ import { AuthTextField } from "@/components/auth/fields/auth-text-field";
 import {
   DashboardDrawer,
   DrawerCancelButton,
-  DrawerPrimaryCloseButton,
 } from "@/components/dashboard/drawers/dashboard-drawer";
 import { CURRENT_FACILITY, type TeamMember } from "@/lib/dashboard/team-data";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 import { Pencil, Plus } from "@gravity-ui/icons";
 import { Button } from "@heroui/react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 type InviteMemberDrawerProps = {
   trigger?: ReactNode;
@@ -22,6 +22,13 @@ export function InviteMemberDrawer({
   member,
 }: InviteMemberDrawerProps) {
   const isEdit = Boolean(member);
+  const inviteMember = useWorkspace((s) => s.inviteMember);
+  const showToast = useWorkspace((s) => s.showToast);
+  const [name, setName] = useState(
+    member ? `${member.firstName} ${member.lastName}` : "",
+  );
+  const [email, setEmail] = useState(member?.email ?? "");
+  const [role, setRole] = useState(member?.role ?? "Billing Manager");
 
   return (
     <DashboardDrawer
@@ -33,9 +40,24 @@ export function InviteMemberDrawer({
       footer={
         <>
           <DrawerCancelButton />
-          <DrawerPrimaryCloseButton
-            label={isEdit ? "Save changes" : "Send invite"}
-          />
+          <Button
+            slot="close"
+            variant="primary"
+            onPress={() => {
+              if (!email.includes("@")) {
+                showToast("Enter a valid email address");
+                return;
+              }
+              if (!isEdit) {
+                inviteMember({ name: name.trim() || email, email, role });
+              }
+              showToast(
+                isEdit ? "Member updated for this demo" : "Invitation prepared",
+              );
+            }}
+          >
+            {isEdit ? "Save changes" : "Prepare invite"}
+          </Button>
         </>
       }
       title={isEdit ? "Edit team member" : "Invite team member"}
@@ -49,28 +71,35 @@ export function InviteMemberDrawer({
       }
     >
       <AuthTextField
-        defaultValue={
-          member ? `${member.firstName} ${member.lastName}` : undefined
-        }
         label="Full name"
         name="memberName"
         placeholder="Jordan Lee"
+        value={name}
+        onChange={setName}
       />
       <AuthTextField
-        defaultValue={member?.email}
         label="Email"
         name="memberEmail"
         placeholder="jordan@facility.com"
         type="email"
+        value={email}
+        onChange={setEmail}
       />
-      <AuthTextField
-        defaultValue={member?.role}
-        label="Role"
-        name="memberRole"
-        placeholder="Billing manager"
-      />
+      <label className="flex flex-col gap-1.5 text-sm font-bold">
+        Role
+        <select
+          className="h-11 rounded-xl border border-border bg-surface px-3 font-semibold"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <option>Billing Manager</option>
+          <option>Claims Specialist</option>
+          <option>Read-only</option>
+        </select>
+      </label>
       <p className="rounded-xl border border-border bg-surface-secondary px-3 py-3 text-sm font-semibold text-muted">
-        Facility: {CURRENT_FACILITY}
+        Facility: {CURRENT_FACILITY}. Invitation email is not sent. This confirms
+        the invite in the workspace only.
       </p>
     </DashboardDrawer>
   );

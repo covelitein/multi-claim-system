@@ -1,5 +1,6 @@
 "use client";
 
+import { ToastHost } from "@/components/dashboard/toast-host";
 import { DashboardHeader } from "@/components/protected_dashboard/header";
 import { DashboardSidebar } from "@/components/protected_dashboard/sidebar";
 import { ScrollShadow } from "@heroui/react";
@@ -21,6 +22,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </ScrollShadow>
         </main>
       </div>
+      <ToastHost />
     </div>
   );
 }

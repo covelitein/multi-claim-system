@@ -4,9 +4,11 @@ import { AddResidentDrawer } from "@/components/dashboard/drawers/add-resident-d
 import { ResidentsStatCards } from "@/components/dashboard/residents/residents-stat-cards";
 import { ResidentsTable } from "@/components/dashboard/residents/residents-table";
 import { useResidents } from "@/lib/dashboard/use-residents";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 
 export function ResidentsPage() {
   const { data, loading } = useResidents();
+  const addedResidents = useWorkspace((s) => s.addedResidents);
 
   if (loading || !data) {
     return (
@@ -31,7 +33,7 @@ export function ResidentsPage() {
       </div>
 
       <ResidentsStatCards stats={data.stats} />
-      <ResidentsTable residents={data.residents} />
+      <ResidentsTable residents={[...addedResidents, ...data.residents]} />
     </div>
   );
 }

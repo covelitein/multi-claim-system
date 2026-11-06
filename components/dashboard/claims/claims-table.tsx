@@ -1,13 +1,27 @@
 "use client";
 
-import type { Claim, ClaimStatus } from "@/lib/dashboard/claims-data";
+import { ClaimDetailDrawer } from "@/components/dashboard/claims/claim-detail-drawer";
+import type { Claim } from "@/lib/dashboard/claims-data";
 import { STATUS_CONFIG } from "@/lib/dashboard/claims-data";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
 import { Magnifier } from "@gravity-ui/icons";
 import { Avatar, Card, Chip } from "@heroui/react";
 import { useMemo, useState } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { ColumnDef } from "@tanstack/react-table";
+
+function ClaimStatusCell({ claim }: { claim: Claim }) {
+  const status = useWorkspace(
+    (s) => s.claimStatusByResident[claim.residentName] ?? claim.status,
+  );
+  const statusCfg = STATUS_CONFIG[status];
+  return (
+    <Chip color={statusCfg.color} size="sm" variant="soft">
+      <Chip.Label>{statusCfg.label}</Chip.Label>
+    </Chip>
+  );
+}
 
 export function ClaimsTable({
   claims,
@@ -41,11 +55,7 @@ export function ClaimsTable({
       {
         accessorKey: "policyId",
         header: "Policy ID",
-        cell: ({ row }) => (
-          <span className="font-mono text-xs font-semibold text-accent">
-            {row.original.policyId}
-          </span>
-        ),
+        cell: ({ row }) => <ClaimDetailDrawer claim={row.original} />,
       },
       {
         accessorKey: "resident",
@@ -83,14 +93,7 @@ export function ClaimsTable({
       {
         accessorKey: "status",
         header: "Status",
-        cell: ({ row }) => {
-          const statusCfg = STATUS_CONFIG[row.original.status as ClaimStatus];
-          return (
-            <Chip color={statusCfg.color} size="sm" variant="soft">
-              <Chip.Label>{statusCfg.label}</Chip.Label>
-            </Chip>
-          );
-        },
+        cell: ({ row }) => <ClaimStatusCell claim={row.original} />,
       },
       {
         accessorKey: "missingItems",

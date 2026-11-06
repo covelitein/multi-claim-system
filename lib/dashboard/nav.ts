@@ -3,6 +3,7 @@ import {
   ArrowRightFromSquare,
   Briefcase,
   Circles4Square,
+  Envelope,
   FileText,
   Gear,
   Persons,
@@ -25,7 +26,9 @@ export const HOSPITAL_DASHBOARD_NAV: DashboardNavItem[] = [
   { href: "/patients", label: "Residents", icon: FileText },
   { href: "/billing", label: "Claims", icon: Briefcase },
   { href: "/invoices", label: "Invoices", icon: Receipt },
+  { href: "/documents", label: "Documents", icon: FileText },
   { href: "/locations", label: "Contacts", icon: Handset },
+  { href: "/messages", label: "Messages", icon: Envelope },
   { href: "/staff", label: "Team", icon: Persons },
   { href: "/settings", label: "Settings", icon: Gear },
 ];

@@ -14,19 +14,42 @@ import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+function downloadInvoiceRecord(invoice: Invoice) {
+  const content = [
+    "RCS DEMO INVOICE RECORD",
+    `Invoice: ${invoice.invoiceId}`,
+    `Resident: ${invoice.residentName}`,
+    `Invoice date: ${invoice.invoiceDate}`,
+    `Service period: ${invoice.servicePeriod}`,
+    `Amount: ${invoice.amount}`,
+    `Status: ${INVOICE_STATUS_CONFIG[invoice.status].label}`,
+    `Matched claim: ${invoice.matchedClaim ?? "Not linked"}`,
+    "",
+    "Sample data only.",
+  ].join("\n");
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob([content], { type: "text/plain" }));
+  link.download = `${invoice.invoiceId}.txt`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
 export function InvoicesTable({ invoices }: { invoices: Invoice[] }) {
   const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("");
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return invoices;
-    const lower = query.toLowerCase();
-    return invoices.filter(
-      (invoice) =>
+    return invoices.filter((invoice) => {
+      if (status && invoice.status !== status) return false;
+      if (!query.trim()) return true;
+      const lower = query.toLowerCase();
+      return (
         invoice.invoiceId.toLowerCase().includes(lower) ||
         invoice.residentName.toLowerCase().includes(lower) ||
-        (invoice.matchedClaim?.toLowerCase().includes(lower) ?? false),
-    );
-  }, [invoices, query]);
+        (invoice.matchedClaim?.toLowerCase().includes(lower) ?? false)
+      );
+    });
+  }, [invoices, query, status]);
 
   const columns: ColumnDef<Invoice>[] = useMemo(
     () => [
@@ -95,6 +118,7 @@ export function InvoicesTable({ invoices }: { invoices: Invoice[] }) {
               aria-label="Download invoice"
               className="rounded-lg p-1.5 text-accent hover:bg-accent-soft"
               type="button"
+              onClick={() => downloadInvoiceRecord(row.original)}
             >
               <ArrowDownToLine className="size-4" />
             </button>
@@ -124,12 +148,18 @@ export function InvoicesTable({ invoices }: { invoices: Invoice[] }) {
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
-          <button
-            className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-border px-3 text-sm font-medium text-muted transition-colors hover:bg-surface-secondary hover:text-foreground"
-            type="button"
+          <select
+            aria-label="Invoice status"
+            className="h-9 shrink-0 rounded-lg border border-border bg-surface px-3 text-sm font-medium"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
           >
-            Filters
-          </button>
+            <option value="">All statuses</option>
+            <option value="matched">Matched</option>
+            <option value="pending-review">Pending review</option>
+            <option value="missing">Missing</option>
+            <option value="overdue">Overdue</option>
+          </select>
         </div>
       </Card.Header>
       <Card.Content className="-mx-5 overflow-x-auto px-0 pb-0">

@@ -13,7 +13,7 @@ import { TipsColumn } from "@/components/dashboard/claims/walkthrough/tips-colum
 import { WalkthroughStepper } from "@/components/dashboard/claims/walkthrough/walkthrough-stepper";
 import type { TipCard } from "@/lib/dashboard/claim-walkthrough-data";
 import { useCmrDraft } from "@/lib/dashboard/cmr-draft-store";
-import { isQuestionComplete } from "@/lib/dashboard/cmr-form";
+import { isQuestionComplete, optionLabel } from "@/lib/dashboard/cmr-form";
 import { residentByKey } from "@/lib/dashboard/residents-data";
 import { useClaimWalkthrough } from "@/lib/dashboard/use-claim-walkthrough";
 import { ArrowLeft, ArrowRight, CircleInfo, FileText } from "@gravity-ui/icons";
@@ -191,6 +191,12 @@ export function ClaimWalkthroughPage() {
       <div className="grid min-w-0 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[220px_minmax(0,1fr)_300px]">
         <div className="hidden self-start xl:sticky xl:top-2 xl:block">
           <QuestionSidebar
+            answers={Object.fromEntries(
+              data.questions.map((question) => [
+                question.id,
+                optionLabel(question, answers),
+              ]),
+            )}
             done={done}
             maxReached={maxReached}
             stepIndex={stepIndex}

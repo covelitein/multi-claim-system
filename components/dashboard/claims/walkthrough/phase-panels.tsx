@@ -14,9 +14,13 @@ import {
 } from "@/lib/dashboard/cmr-form";
 import { SIGNAL } from "@/lib/dashboard/signal-colors";
 import type { WalkthroughAnswers } from "@/lib/dashboard/use-claim-walkthrough";
+import { useCmrDraft } from "@/lib/dashboard/cmr-draft-store";
+import { residentByKey } from "@/lib/dashboard/residents-data";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 import { CircleCheckFill, CircleInfo, Printer } from "@gravity-ui/icons";
 import { Button, Card, cn } from "@heroui/react";
 import Link from "next/link";
+import { useState } from "react";
 
 const dateInputClass =
   "h-11 w-full rounded-xl border border-border bg-surface px-3 text-sm font-medium outline-none focus:border-accent focus:ring-2 focus:ring-accent/20";
@@ -218,6 +222,12 @@ export function ReviewPanel({
 }
 
 export function ReadyPanel({ complete }: { complete: boolean }) {
+  const residentKey = useCmrDraft((s) => s.residentKey);
+  const reviewed = useWorkspace((s) => Boolean(s.reviewedResidents[residentKey]));
+  const markCmrReviewed = useWorkspace((s) => s.markCmrReviewed);
+  const [signNote, setSignNote] = useState(false);
+  const resident = residentByKey(residentKey);
+
   return (
     <div className="flex flex-col items-center gap-4 py-6 text-center">
       <span
@@ -239,13 +249,58 @@ export function ReadyPanel({ complete }: { complete: boolean }) {
         </p>
       </div>
       {complete ? (
-        <Link
-          className="inline-flex h-11 items-center gap-2 rounded-xl border border-border bg-surface px-4 type-body hover:bg-surface-secondary"
-          href="/cmr-form"
-        >
-          <Printer className="size-4" />
-          View & print form
-        </Link>
+        <div className="flex w-full max-w-md flex-col gap-3 text-left">
+          {reviewed ? (
+            <InfoBanner tone="green">
+              CMR marked reviewed. The open request for this resident is now
+              ready for review.
+            </InfoBanner>
+          ) : null}
+          <div className="flex flex-wrap justify-center gap-2">
+            <Link
+              className="inline-flex h-11 items-center gap-2 rounded-xl border border-border bg-surface px-4 type-body hover:bg-surface-secondary"
+              href="/cmr-form"
+            >
+              <Printer className="size-4" />
+              View & print form
+            </Link>
+            <Button
+              className="h-11 px-4 type-body"
+              isDisabled={reviewed || !resident}
+              variant="primary"
+              onPress={() => {
+                if (!resident) return;
+                markCmrReviewed(
+                  resident.residentId,
+                  `${resident.firstName} ${resident.lastName}`,
+                );
+              }}
+            >
+              {reviewed ? "CMR reviewed" : "Mark CMR reviewed"}
+            </Button>
+          </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            <Link
+              className="inline-flex h-11 items-center gap-2 rounded-xl border border-border bg-surface px-4 type-body hover:bg-surface-secondary"
+              href={`/invoices?resident=${residentKey}`}
+            >
+              Add invoice
+            </Link>
+            <Button
+              className="h-11 px-4 type-body"
+              variant="outline"
+              onPress={() => setSignNote(true)}
+            >
+              Sign CMR (DocuSign)
+            </Button>
+          </div>
+          {signNote ? (
+            <InfoBanner>
+              DocuSign is not connected. A signature request would start here
+              after review. This does not create a signed form.
+            </InfoBanner>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );

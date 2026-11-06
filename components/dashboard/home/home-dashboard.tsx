@@ -53,9 +53,7 @@ export function HomeDashboard() {
           <RecentSubmissions
             items={data.recentSubmissions}
             selectedId={selectedId}
-            onSelect={(id) =>
-              setSelectedId((current) => (current === id ? null : id))
-            }
+            onSelect={setSelectedId}
           />
         </div>
         <div className="min-w-0 xl:col-span-4">

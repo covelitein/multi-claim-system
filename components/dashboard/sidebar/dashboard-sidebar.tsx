@@ -6,6 +6,9 @@ import { SidebarDrawerClose } from "@/components/dashboard/sidebar/sidebar-drawe
 import { SidebarNavItem } from "@/components/dashboard/sidebar/sidebar-nav-item";
 import { DASHBOARD_LOGOUT, visibleDashboardNav } from "@/lib/dashboard/nav";
 import { useSidebarStore } from "@/lib/dashboard/sidebar-store";
+import { useCmrDraft } from "@/lib/dashboard/cmr-draft-store";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
+import { ArrowUturnCcwLeft } from "@gravity-ui/icons";
 import { cn } from "@heroui/react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -17,6 +20,8 @@ export function DashboardSidebar() {
   const toggle = useSidebarStore((state) => state.toggle);
   const closeMobile = useSidebarStore((state) => state.closeMobile);
   const showLabels = expanded || mobileOpen;
+  const resetDemo = useWorkspace((s) => s.resetDemo);
+  const resetDraft = useCmrDraft((s) => s.reset);
 
   useEffect(() => {
     closeMobile();
@@ -95,7 +100,24 @@ export function DashboardSidebar() {
             ))}
           </nav>
 
-          <div className="w-full">
+          <div className="flex w-full flex-col items-center gap-1">
+            <button
+              aria-label={showLabels ? undefined : "Reset demo"}
+              className={cn(
+                "flex w-full items-center rounded-2xl text-[15px] font-medium text-muted hover:bg-surface-secondary hover:text-foreground",
+                showLabels ? "h-10 justify-start gap-3 px-3" : "size-11 justify-center",
+              )}
+              type="button"
+              onClick={() => {
+                if (window.confirm("Reset all demo changes?")) {
+                  resetDemo();
+                  resetDraft();
+                }
+              }}
+            >
+              <ArrowUturnCcwLeft className="size-5 shrink-0" />
+              {showLabels ? <span className="truncate">Reset demo</span> : null}
+            </button>
             <SidebarNavItem
               collapsed={!showLabels}
               href={DASHBOARD_LOGOUT.href}

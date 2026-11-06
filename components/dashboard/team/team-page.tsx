@@ -4,11 +4,13 @@ import { InviteMemberDrawer } from "@/components/dashboard/drawers/invite-member
 import { dashboardCardClass } from "@/components/dashboard/home/dashboard-card";
 import { TeamTable } from "@/components/dashboard/team/team-table";
 import { fetchTeam, type TeamPageData } from "@/lib/dashboard/team-data";
+import { useWorkspace } from "@/lib/dashboard/workspace-store";
 import { Card } from "@heroui/react";
 import { useEffect, useState } from "react";
 
 export function TeamPage() {
   const [data, setData] = useState<TeamPageData | null>(null);
+  const invites = useWorkspace((s) => s.invites);
 
   useEffect(() => {
     fetchTeam().then(setData);
@@ -36,6 +38,27 @@ export function TeamPage() {
         </div>
         <InviteMemberDrawer />
       </div>
+
+      {invites.length > 0 ? (
+        <Card className={dashboardCardClass}>
+          <Card.Header>
+            <Card.Title className="type-card-title">Prepared invites</Card.Title>
+            <Card.Description className="type-meta text-muted">
+              Email is not sent. These invites exist for this session only.
+            </Card.Description>
+          </Card.Header>
+          <Card.Content className="gap-2">
+            {invites.map((invite) => (
+              <div key={invite.id} className="rounded-xl border border-border px-3 py-3">
+                <p className="type-body">{invite.name}</p>
+                <p className="type-meta text-muted">
+                  {invite.email} · {invite.role}
+                </p>
+              </div>
+            ))}
+          </Card.Content>
+        </Card>
+      ) : null}
 
       {data.relevant ? (
         <TeamTable facility={data.facility} members={data.members} />

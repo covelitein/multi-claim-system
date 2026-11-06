@@ -9,12 +9,15 @@ export function QuestionSidebar({
   stepIndex,
   maxReached,
   done,
+  answers,
   onSelect,
 }: {
   steps: WalkthroughStep[];
   stepIndex: number;
   maxReached: number;
   done: boolean[];
+  /** Shown once a question is answered, e.g. "Yes". */
+  answers: Record<string, string | undefined>;
   onSelect: (index: number) => void;
 }) {
   const questions = steps.flatMap((step, index) =>
@@ -67,8 +70,8 @@ export function QuestionSidebar({
                   >
                     {current
                       ? "In Progress"
-                      : done[index]
-                        ? "Completed"
+                      : answers[step.question.id]
+                        ? `Answered: ${answers[step.question.id]}`
                         : "Not started"}
                   </span>
                 </span>
